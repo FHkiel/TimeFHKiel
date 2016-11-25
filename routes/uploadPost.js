@@ -43,7 +43,7 @@ router.post('/', function(req, res) {
                         });
                         pdfParser.loadPDF('./Schedules/'+ origFileName);
 
-                        setTimeout(toJSONRefine, 4000);
+                        setTimeout(toJSONRefine, 6000);
 
                        // if(timetable.length > 4)
                         setTimeout(insertToDB, 18000);
