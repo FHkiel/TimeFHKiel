@@ -81,20 +81,14 @@ function insertToDB(){
         var Schema = mongoose.Schema;
         var klassSchema = new Schema({
 
-                "date": String,
-                "sTime": String,
-                "eTime": String,
+
+                "start": String,
+                "end": String,
                 "name": String,
                 "detail": String
         });
         var klassMod = mongoose.model('fhcalendars', klassSchema);
-        var klass2 = new klassMod({
-                "date": "2016-12-1996",
-                "sTime": "08:15",
-                "eTime": "11:30",
-                "name": "MI121-Lab Auditory_Analysis and_Audio_Coding ",
-                "detail": "Mo Dr. Taghipour C12-2.69 "
-        });
+
 
         for (var temp=0; temp < timetable.length; temp++) {
                 var klass = new klassMod(timetable[temp]);
