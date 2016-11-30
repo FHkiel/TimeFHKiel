@@ -3,9 +3,18 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link href='/stylesheets/chat.css' rel='stylesheet' />
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+
+  <div class="bodyWrap">
+   <div class="chatWrap">
+    <% include chat.ejs%>
+
+
+   </div>
+
+
+  </div>
   </body>
 </html>

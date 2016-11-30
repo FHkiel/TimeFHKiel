@@ -1,17 +1,12 @@
+/**
+ * Created by moham on 11/20/2016.
+ */
 var express = require('express');
 var router = express.Router();
 
-var app = require('express')();
-
-var data;
-var fs = require('fs');
-
-
+/* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+    res.render('uploadpdf', { title: 'Express' });
 });
 
-
-
 module.exports = router;
-
