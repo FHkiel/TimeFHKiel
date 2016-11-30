@@ -88,7 +88,13 @@ function insertToDB(){
                 "detail": String
         });
         var klassMod = mongoose.model('fhcalendars', klassSchema);
+        var klass2 = new klassMod({
 
+                "start": "08:15",
+                "end": "11:30",
+                "name": "MI121-Lab Auditory_Analysis and_Audio_Coding ",
+                "detail": "Mo Dr. Taghipour C12-2.69 "
+        });
 
         for (var temp=0; temp < timetable.length; temp++) {
                 var klass = new klassMod(timetable[temp]);

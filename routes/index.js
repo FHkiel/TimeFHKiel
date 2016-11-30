@@ -8,7 +8,7 @@ var fs = require('fs');
 
 
 router.get('/', function(req, res, next) {
-  res.render('chat', { title: 'Express' });
+  res.render('index', { title: 'Express' });
 });
 
 
