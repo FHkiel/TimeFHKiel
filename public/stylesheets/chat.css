@@ -1,0 +1,64 @@
+.button {
+    border: outset;
+    margin-left: 120px;
+    margin-right: 0px;
+}
+
+#contentWrap {
+    display: none;
+    border-style: none;
+    width: 370px;
+    height: 360px;
+    margin-top: 150px;
+    position: absolute;
+}
+
+#chatWrap {
+    height: 360px;
+    width: 370px;
+    border: none;
+
+}
+
+.chat {
+    width: 242px;
+    margin-top: 0px;
+    margin-left: 120px;
+    height: 320px;
+    overflow-y: auto;
+    border: outset;
+}
+
+.chatrib {
+    text-align: center;
+    width: 242px;
+    height: 44px;
+    color: white;
+    background-color: #006600;
+}
+
+.usersrib {
+    color: white;
+    text-align: center;
+    height: 44px;
+    width: 95px;
+    background-color: #006600;
+    border: inset;
+}
+
+.usrlist {
+    text-align: center;
+    width: 105px;
+    margin-top: 0px;
+    height: 347px;
+    overflow-y: auto;
+    border: outset;
+    position: absolute;
+}
+
+.nickWrap {
+    border: none;
+    width: 330px;
+    height: 100px;
+}
+
