@@ -2,13 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1d564d4e-eab3-4604-863b-473e4f47bfa4" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/TimeFHKiel.iml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/runConfigurations/bin_www.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="TimeFHKiel.iws" />
@@ -403,7 +396,7 @@
       <workItem from="1479743537473" duration="17717000" />
       <workItem from="1479905532560" duration="9275000" />
       <workItem from="1480060867132" duration="4557000" />
-      <workItem from="1480413588534" duration="29380000" />
+      <workItem from="1480413588534" duration="29393000" />
     </task>
     <task id="LOCAL-00001" summary="Committing logic code for converting pdf timetable to json">
       <created>1479639073316</created>
@@ -510,11 +503,18 @@
       <option name="project" value="LOCAL" />
       <updated>1480468635248</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="committing serveral files">
+      <created>1480469425109</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1480469425109</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="113172000" />
+    <option name="totallyTimeSpent" value="113185000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
