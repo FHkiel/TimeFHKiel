@@ -4,7 +4,9 @@
     margin-right: 0px;
     width: 245px;
 }
-
+.pChat{
+    overflow: ;
+}
 #contentWrap {
     display: none;
     border-style: none;
@@ -35,7 +37,7 @@
     width: 105px;
     margin-top: 0px;
     height: 347px;
-    overflow-y: auto;
+    overflow:auto;
     border: outset;
     position: absolute;
 }
@@ -52,7 +54,7 @@
 }
 
 .nickWrap {
-    border: solid;
+    border: none;
     width: 350px;
     height: 150px;
 }
