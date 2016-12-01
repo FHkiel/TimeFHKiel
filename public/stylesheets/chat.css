@@ -1,7 +1,8 @@
 .button {
     border: outset;
-    margin-left: 120px;
+    margin-left: 0px;
     margin-right: 0px;
+    width: 245px;
 }
 
 #contentWrap {
@@ -23,27 +24,10 @@
 .chat {
     width: 242px;
     margin-top: 0px;
-    margin-left: 120px;
+    margin-left: 0px;
     height: 320px;
     overflow-y: auto;
     border: outset;
-}
-
-.chatrib {
-    text-align: center;
-    width: 242px;
-    height: 44px;
-    color: white;
-    background-color: #006600;
-}
-
-.usersrib {
-    color: white;
-    text-align: center;
-    height: 44px;
-    width: 95px;
-    background-color: #006600;
-    border: inset;
 }
 
 .usrlist {
@@ -55,10 +39,21 @@
     border: outset;
     position: absolute;
 }
+.contact{
+    display: none;
+}
+.usrlisthead{
+    background-color: cadetblue;
+    text-decoration-color: black;
+    text-align:center;
+    font-weight: bold;
+    font-size: 110%;
+    border:darkcyan;
+}
 
 .nickWrap {
-    border: none;
-    width: 330px;
-    height: 100px;
+    border: solid;
+    width: 350px;
+    height: 150px;
 }
 
