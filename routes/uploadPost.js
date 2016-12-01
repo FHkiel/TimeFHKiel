@@ -67,8 +67,8 @@ function toJSONRefine(){
 
 function insertToDB(){
 
-        mongoose.connect('mongodb://localhost/calendar');
-        fs3.appendFile('./rude.txt',"Function accessed", 'utf-8');
+        mongoose.createConnection('mongodb://localhost/calendar');
+
         var db = mongoose.connection;
 
         db.on('error', function (err) {
@@ -78,13 +78,14 @@ function insertToDB(){
                 console.log('connected.');
         });
 
+
         var Schema = mongoose.Schema;
         var klassSchema = new Schema({
 
 
                 "start": String,
                 "end": String,
-                "name": String,
+                "title": String,
                 "detail": String
         });
         var klassMod = mongoose.model('fhcalendars', klassSchema);
@@ -92,7 +93,7 @@ function insertToDB(){
 
                 "start": "08:15",
                 "end": "11:30",
-                "name": "MI121-Lab Auditory_Analysis and_Audio_Coding ",
+                "title": "MI121-Lab Auditory_Analysis and_Audio_Coding ",
                 "detail": "Mo Dr. Taghipour C12-2.69 "
         });
 
@@ -100,9 +101,11 @@ function insertToDB(){
                 var klass = new klassMod(timetable[temp]);
                 klass.save(function (err, data) {
                         if (err) {
-                                fs3.appendFile('./rude.txt',err.message, 'utf-8');
+                                console.log(err)
                         }
-                        else {}
+                        else {
+
+                        }
                 });
         }
 

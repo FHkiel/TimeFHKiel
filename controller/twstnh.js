@@ -1,5 +1,8 @@
+/**
+ * Created by moham on 12/1/2016.
+ */
 var express = require('express');
-var router = express.Router();
+
 var moment = require('moment');
 
 var fs = require('fs');
@@ -9,8 +12,9 @@ var pages = [];
 
 var timetable = [];
 
+var objdata = require(path.join(__dirname + '/../Schedules/Master_MIE_A.json'));
 
-
+convertPDF2JSON(objdata);
 
 function convertPDF2JSON(objdata) {
 
@@ -65,6 +69,7 @@ function convertPDF2JSON(objdata) {
                     endTime = tempDate.toISOString().substr(11,8);
 
 
+
                     for (var s = 0, t = getCalWeeks(pages[p].Texts); s < t.length; s++) {
                         var date = getDateOfISOWeek(Number(t[s]), getYear(pages[p].Texts));
                         var classDetail = getClassDetails(pages[p].Texts, lines[w].x, Number(lines[w].x + classLineIntervels), lines[w].y, Number(lines[w].y + lineHeight));
@@ -77,11 +82,12 @@ function convertPDF2JSON(objdata) {
                         //console.log(date+"."+startTime +"-" + endTime);
                         //console.log(getCalWeeks(pages[p].Texts)[n]);
                         timetable.push({
-                            "start": date+"T"+startTime,
-                            "end": date+"T"+endTime,
+                            "start": date+" "+startTime,
+                            "end": date+" "+endTime,
                             "title": classDetail[0],
                             "detail": classDetail[1]
                         });
+                        console.log(date + "     " + startTime + "     "+ endTime );
                     }
 
 
@@ -185,7 +191,7 @@ function getClassDetails(txt, x1, x2, y1, y2){
     var classDetail = ["",""];
 
     for(var i=0, n= txt.length; i< n;i++){
-        if(( Number(txt[i].y + 0.2) >= y1) && (Number(txt[i].y +0.128) <= y2) && (txt[i].x >= x1) && ( txt[i].x <= x2)){
+        if(( Number(txt[i].y + 0.2) >= y1) && (Number(txt[i].y +0.128) <= y2) && (txt[i].x >= x1) && (txt[i].x <= x2)){
 
             if( Number(txt[i].R[0].T) != 0) {
                 if(txt[i].R[0].TS[2] == 1){
@@ -254,5 +260,3 @@ function getYear(txt){
 
 /* GET home page. */
 
-
-module.exports = convertPDF2JSON;
