@@ -3,12 +3,9 @@
     margin-left: 0px;
     margin-right: 0px;
     width: 245px;
-}
-.pChat{
-    overflow: ;
+
 }
 #contentWrap {
-    display: none;
     border-style: none;
     width: 370px;
     height: 360px;
@@ -34,28 +31,29 @@
 
 .usrlist {
     text-align: center;
-    width: 105px;
+    width: 140px;
     margin-top: 0px;
     height: 347px;
     overflow:auto;
-    border: outset;
+    border: inset;
     position: absolute;
 }
 .contact{
     display: none;
 }
-.usrlisthead{
-    background-color: cadetblue;
+.chatHeads{
+    background-color:#f2f2f2;
     text-decoration-color: black;
     text-align:center;
     font-weight: bold;
     font-size: 110%;
-    border:darkcyan;
+    border:outset;
+    margin-top: 0px;
 }
 
 .nickWrap {
     border: none;
-    width: 350px;
+    width: 250px;
     height: 150px;
 }
-
+li:nth-child(odd){background:lightgray; }
