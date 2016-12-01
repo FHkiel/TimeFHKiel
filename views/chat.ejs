@@ -2,17 +2,17 @@
     <p> Enter your name:</p>
     <p id="nickError"></p>
     <form id="setNick">
-        <input size="35" id="nickname">
+        <input size="10" id="nickname">
         <input type="submit">
     </form>
 </div>
 <div id="contentWrap">
     <div id="chatWrap">
         <div data-role="main" class="ui-content">
-            <a href="#myPopup" data-rel="popup" class="ui-btn ui-btn-inline ui-corner-all ui-icon-check ui-btn-icon-left">Open Chat</a>
-            <div data-role="popup" id="myPopup" class="ui-content" style="min-width:250px;">
-                <div class="chat">
-                    <div class="chatrib">Public Chat</div>
+            <a href="#myPopup" data-rel="popup" class="ui-btn ui-btn-inline ui-corner-all ui-icon-check ui-btn-icon-left"style="min-width:40px;border:outset; margin-top: 0px">Open Chat</a>
+            <div data-role="popup" id="myPopup" class="ui-content" style="min-width:240px;border:whitesmoke">
+                <div style="border: inset;" class="chat">
+                    <div class="usrlisthead">Public Chat</div>
                     <ul id="messages"></ul>
                 </div>
                 <div class="button">
@@ -22,12 +22,15 @@
                     </form>
                 </div>
             </div>
-            <div id="user" class="usrlist">
-                <div id="users"></div>
+
+            <div class="usrlist">
+               <div><p class="usrlisthead"> Online Users</p></div>
+            <div id="users"></div>
             </div>
         </div>
     </div>
-</div>
+    </div>
+
 <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 <script>
