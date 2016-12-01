@@ -1,0 +1,322 @@
+
+<div class="taskparent">
+    <p>To Do List</p>
+
+    <ul class="tab">
+        <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'ShowTaskPage')">Tasks</a></li>
+        <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Paris')">Paris</a></li>
+        <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'SharedTaskPage')">Shared Tasks</a></li>
+    </ul>
+
+
+    <div class="tabcontent" id="ShowTaskPage" style="display: block;" ng-app="myApp" ng-controller="myCtrl">
+        <form method="post">
+            <!-- LOOP OVER THE TODOS IN $scope.todos -->
+            <table style="width:50%" id="myTbl2">
+
+                <%include myTaskData.ejs %>
+                window.alert(" ssd");
+
+                <%
+                    var myData = getMyDatas();
+                    var myData2 = myData.myData2;
+                    var user = myData.user;
+
+                for (i=0;i<myData2.length;i++){%>
+                <%if(myData2[i].Status == 'NotYet'){%>
+                <tr id="Row_<%= myData2[i].TaskId %>">
+                    <td align="left" name="NameTask2_td_<%= myData2[i].TaskId %>">
+                        <label style="cursor:pointer" name="NameTask2_<%= myData2[i].TaskId %>" id="NameTask2_<%= myData2[i].TaskId %>">
+                            <%= myData2[i].NameTask %>
+                        </label></td>
+                    <td align="left" name="delete_td_<%= myData2[i].TaskId %>">
+                        <button type="button" id="delete_<%= myData2[i].TaskId %>">Delete</button>
+                    </td>
+                    <td align="left" name="modify_td_<%= myData2[i].TaskId %>">
+                        <div data-role="main" class="ui-content">
+                            <a href="#myPopup" data-rel="popup" class="ui-btn ui-btn-inline ui-corner-all">Modify</a>
+
+                            <div data-role="popup" id="myPopup" class="ui-content" style="min-width:250px;">
+                                <form method="post" action="demoform.asp">
+                                    Start time of task <div><input type="time" id="STime_modify_<%= myData2[i].TaskId %>" name="STime" value="<%= myData2[i].startTime %>"></div><br>
+                                    Start date of task <div><input type="date" id="SDate_modify_<%= myData2[i].TaskId %>" name="SDate" value="<%= myData2[i].startDate %>"></div><br>
+                                    Finish time of task <div><input type="time" id="FTime_modify_<%= myData2[i].TaskId %>" name="FTime" value="<%= myData2[i].finishTime %>"></div><br>
+                                    Finish date of task <div><input type="date" id="FDate_modify_<%= myData2[i].TaskId %>" name="FDate" value="<%= myData2[i].finishDate %>"></div><br>
+                                    <script>
+                                        var today = new Date();
+                                        var dd = today.getDate();
+                                        var mm = today.getMonth()+1; //January is 0!
+                                        var yyyy = today.getFullYear();
+                                        if(dd<10){
+                                            dd='0'+dd
+                                        }
+                                        if(mm<10){
+                                            mm='0'+mm
+                                        }
+
+                                        today = yyyy+'-'+mm+'-'+dd;
+                                        document.getElementById("SDate").setAttribute("min", today);
+                                        document.getElementById("FDate").setAttribute("min", today);
+                                    </script>
+                                    <br>
+                                    Name of task <div><input type="text" id="NameTask_modify_<%= myData2[i].TaskId %>" name="NameTask" value="<%= myData2[i].NameTask %>"></div><br>
+                                    Priority<br>
+                                    <span style="margin-left:2em">
+		                                <input type="radio" id="priority_task_modify_<%= myData2[i].TaskId %>" name="priority_task_modify_<%= myData2[i].TaskId %>" value="1" <% if(myData2[i].priorityTask == 1){ %><%= "checked" %> <%}%>> Urgent</span><br>
+                                    <span style="margin-left:2em">
+		                                <input type="radio" id="priority_task_modify_<%= myData2[i].TaskId %>" name="priority_task_modify_<%= myData2[i].TaskId %>" value="2" <% if(myData2[i].priorityTask == 2){ %><%= "checked" %> <%}%>> Pressing </span><br>
+                                    <span style="margin-left:2em">
+		                                <input type="radio" id="priority_task_modify_<%= myData2[i].TaskId %>" name="priority_task_modify_<%= myData2[i].TaskId %>" value="3" <% if(myData2[i].priorityTask == 3){ %><%= "checked" %> <%}%>> Normal </span><br>
+                                    <span style="margin-left:2em">
+		                                <input type="radio" id="priority_task_modify_<%= myData2[i].TaskId %>" name="priority_task_modify_<%= myData2[i].TaskId %>" value="4" <% if(myData2[i].priorityTask == 4){ %><%= "checked"%> <%}%>> Moderate </span><br>
+                                    Note <br>
+                                    <div><textarea id="NoteTask_modify_<%= myData2[i].TaskId %>" name="NoteTask_modify_<%= myData2[i].TaskId %>" rows=4 cols=50><%= myData2[i].NoteTask %></textarea></div><br>
+                                    <br>
+                                    <button type="button" class="modify" id="modify_<%= myData2[i].TaskId %>" onclick="myModify(this.id)">Modify task</button>
+                                </form>
+                            </div>
+                        </div>
+                        <button type="button" class="modify" id="modify_<%= myData2[i].TaskId %>" onclick="myModify(this.id)">Modify</button>
+                    </td>
+                    <td align="left" name="done_td_<%= myData2[i].TaskId %>">
+                        <button type="button" class="done" id="done_<%= myData2[i].TaskId %>" onclick="myDone(this.id)">Done</button>
+                    </td>
+                </tr>
+                <%}%>
+                <%}%>
+            </table>
+        </form>
+    </div>
+
+    <div class="tabcontent" id="Paris">
+
+    </div>
+    <div class="tabcontent" id="SharedTaskPage">
+        <div class="classsharedtasks">
+            <!-- LOOP OVER THE TODOS IN $scope.todos -->
+            <table style="width:50%" id="myTbl">
+                <%for (i=0;i<myData.length;i++){%>
+                <tr>
+                        <td align="left" name="NameTask_td_<%= myData[i].TaskId %>">
+                        <label style="cursor:pointer" id="NameTask_<%= myData[i].TaskId %>">
+                            <%= myData[i].NameTask %>
+                        </label></td>
+                        <td align="left"><span class="star-rating">
+                              <a name="one_star" value="1" href="javascript: submitRating(<%= myData[i].TaskId %>,1, <%= user %>)"><img src="http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png" alt="Smiley face" height="10" width="10"></a>
+                              <a class="two_star" href="javascript: submitRating(<%= myData[i].TaskId %>,2, <%= user %>)"><img src="http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png" alt="Smiley face"   height="10"   width="10"></a>
+                              <a class="three_star" href="javascript: submitRating(<%= myData[i].TaskId %>,3, <%= user %>)"><img src="http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png" alt="Smiley face" height="10"   width="10"></a>
+                              <a class="four_star" href="javascript: submitRating(<%= myData[i].TaskId %>,4, <%= user %>)"><img src="http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png" alt="Smiley face"  height="10" width="10"></a>
+                              <a class="fives_star" href="javascript: submitRating(<%= myData[i].TaskId %>,5, <%= user %>)"><img src="http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png" alt="Smiley face" height="10"   width="10"></a>
+                            </span></td>
+                </tr>
+                <tr>
+                    <td></br><b>Comments</b></td>
+                </tr>
+                <tr>
+                    <td>
+                        <table id="show_comment_<%= myData[i].TaskId %>">
+                            <% for(j=0;j < myComments.length; j++){
+                            for(k=0;k<myComments[j].length;k++){%><td><tr>
+                                    <%if(myComments[j][k].TaskId == myData[i].TaskId){
+                                    %>
+                                    <%= myComments[j][k].Comment %></br>
+                                    <%}%></tr></td><%}}%>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left" colspan="2" id="comment_td_<%= myData[i].TaskId %>" name="comment_td_<%= myData[i].TaskId %>">
+                        <input type="text" id="comment_<%= myData[i].TaskId %>" width="200px"/>
+                    </td>
+                </tr>
+                <%}%>
+            </table>
+        </div>
+        <p id="demo"></p>
+    </div>
+</div>
+
+<script>
+
+    function getMyData(){
+
+        return
+    }
+</script>
+<script>
+    $(document).ready(function(){
+        try {
+            var table = document.getElementById("myTbl");
+            var tds = table.getElementsByTagName("td");
+            var matchingTds = [];
+            var myNameTasks = [];
+
+            for (var i = 0, len = tds.length, td, tdName; i < len; ++i) {
+                td = tds[i];
+                tdName = td.getAttribute("name");
+                if (tdName && tdName.indexOf("NameTask_td_") == 0) {
+                    myNameTasks.push(td.getElementsByTagName("label")[0]);
+                }
+                else if (tdName && tdName.indexOf("comment_td_") == 0) {
+                    matchingTds.push(td.getElementsByTagName("input")[0]);
+                }
+            }
+            for (var j = 0; j < matchingTds.length; j++) {
+                var myStr = "#" + matchingTds[j].id;
+                $(myStr).keydown(function (e) {
+                    if (e.which == 13) {
+                        submitComment($(this).attr('id'), $(this).val(), <%= user %>);
+                        $(this).val("");
+                    }
+                });
+            }
+            for (var k = 0; k < myNameTasks.length; k++) {
+                var myStr = "#" + myNameTasks[k].id;
+                $(myStr).click(function () {
+                    submitSuggestion($(this).attr('id'), $(this).text().trim());
+                });
+            }
+
+            var table2 = document.getElementById("myTbl2");
+            var tds2 = table2.getElementsByTagName("td");
+            var DeleteBtns = [];
+            var myNameTasks2 = [];
+            for (var i2 = 0, len2 = tds2.length, td2, tdName2; i2 < len2; ++i2) {
+                td2 = tds2[i2];
+                tdName2 = td2.getAttribute("name");
+                if (tdName2 && tdName2.indexOf("NameTask2_td_") == 0) {
+                    myNameTasks2.push(td2.getElementsByTagName("label")[0]);
+                }
+                else if (tdName2 && tdName2.indexOf("delete_td_") == 0) {
+                    DeleteBtns.push(td2.getElementsByTagName("button")[0]);
+                }
+            }
+            for (var j2 = 0; j2 < DeleteBtns.length; j2++) {
+                var myStr2 = "#" + DeleteBtns[j2].id;
+                $(myStr2).click(function () {
+                    myDelete($(this).attr('id'));
+                });
+            }
+            for (var k2 = 0; k2 < myNameTasks2.length; k2++) {
+                var myStr2 = "#" + myNameTasks2[k2].id;
+                $(myStr2).click(function () {
+                    submitSuggestion($(this).attr('id'), $(this).text().trim());
+                });
+            }
+        }catch(ex){alert(ex);}
+    });
+</script>
+<script>
+    function myDelete(id){
+        id = id.split('_');
+        id = id[id.length - 1];
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var row = document.getElementById("Row_" + id);
+                row.parentNode.removeChild(row);
+            }
+        };
+        xhttp.open("POST", "ShowTask?id=" + id, true);
+
+        xhttp.send();
+    }
+
+    function myModify(id) {
+        var myId = id.split('_')[1];
+        var STime = $("#STime_modify_"+myId).val();
+        var SDate = $("#SDate_modify_"+myId).val();
+        var FTime = $("#FTime_modify_"+myId).val();
+        var FDate = $("#FDate_modify_"+myId).val();
+        var NameTask = $("#NameTask_modify_"+myId).val();
+        var NoteTask = $("#NoteTask_modify_"+myId).val();
+        var priority = $(".priority_task_modify_"+myId+":checked").val();
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                // TODO modify task
+                try {
+                    $("#NameTask2_" + myId).val(NameTask);
+                    $("#myPopup").popup("close");
+                }
+                catch(ex){
+                    alert(ex);
+                }
+            }
+        };
+        xhttp.open("POST", "ModifyTask", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("id="+myId+"&STime="+STime+"&SDate="+SDate+"&FTime="+FTime+"&FDate="+FDate+"&NameTask="+NameTask+"&NoteTask="+NoteTask+"&priority="+priority);
+    }
+
+    function myDone(id) {
+        var myId = id.split('_')[1];
+        document.location.href = 'DoneTask?id=' + myId;
+    }
+
+    function submitRating(id, star, user)
+    {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                // TO DO: insert image of star
+
+            }
+        };
+        xhttp.open("POST", "SharedTasks?id=" + id + "&star=" + star + "&user=" + user, true);
+        xhttp.send();
+    }
+
+    function submitComment(id, cmmt, user){
+        id = id.split('_');
+        id = id[id.length - 1];
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                // alert("OK");
+                // document.getElementById("demo").innerHTML = cmmt;
+                var tableCmmt = document.getElementById("show_comment_" + id);
+                var rowCmmt = tableCmmt.insertRow(-1);
+                var cellCmmt = rowCmmt.insertCell(0);
+                cellCmmt.innerHTML = cmmt;
+            }
+        };
+        xhttp.open("POST", "CommentTask?id=" + id + "&cmmt=" + cmmt + "&user=" + user, true);
+
+        xhttp.send();
+    }
+
+    function submitSuggestion(id, sug){
+        id = id.split('_');
+        id = id[id.length - 1];
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                // alert("OK");
+                // document.getElementById("demo").innerHTML = cmmt;
+            }
+        };
+        xhttp.open("POST", "SuggestTask?id=" + id + "&sug=" + sug, true);
+
+        xhttp.send();
+    }
+</script>
+
+<script>
+    function openCity(evt, cityName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(cityName).style.display = "block";
+
+
+        evt.currentTarget.className += " active";
+    }
+</script>
+
