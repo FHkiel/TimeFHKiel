@@ -15,6 +15,7 @@ var getTimesPost = require('./routes/timetablepost');
 var chats =  require('./routes/chat');
 var getClassesName = require('./routes/getClassesName');
 var getTaskData = require('./routes/getTaskData');
+var getClassesByName = require('./routes/getClassesByName');
 var app = express();
 
 var busboy = require('connect-busboy');
@@ -40,7 +41,7 @@ app.use('/getTimes', getTimesPost);
 app.use('/chat',chats);
 app.use('/getClassesName', getClassesName);
 app.use('/getTaskData' ,getTaskData);
-
+app.use('/', getClassesByName);
 
 
 
