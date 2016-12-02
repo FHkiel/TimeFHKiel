@@ -10,86 +10,274 @@
 
 
     <div class="tabcontent" id="ShowTaskPage" style="display: block;" ng-app="myApp" ng-controller="myCtrl">
-        <form method="post">
-            <!-- LOOP OVER THE TODOS IN $scope.todos -->
-            <table style="width:50%" id="myTbl2">
+        <p id="demo"></p>
+        <!-- LOOP OVER THE TODOS IN $scope.todos -->
+        <table style="width:50%" id="myTbl2">
 
-                <%include myTaskData.ejs %>
-                window.alert(" ssd");
+            <%include myTaskData.ejs %>
+            <%
 
-                <%
-                    var myData = getMyDatas();
-                    var myData2 = myData.myData2;
-                    var user = myData.user;
+                var myData = getMyDatas();
+                var myData2 = myData.myData2;
+                var user = myData.user;
 
-                for (i=0;i<myData2.length;i++){%>
-                <%if(myData2[i].Status == 'NotYet'){%>
-                <tr id="Row_<%= myData2[i].TaskId %>">
-                    <td align="left" name="NameTask2_td_<%= myData2[i].TaskId %>">
-                        <label style="cursor:pointer" name="NameTask2_<%= myData2[i].TaskId %>" id="NameTask2_<%= myData2[i].TaskId %>">
-                            <%= myData2[i].NameTask %>
-                        </label></td>
-                    <td align="left" name="delete_td_<%= myData2[i].TaskId %>">
-                        <button type="button" id="delete_<%= myData2[i].TaskId %>">Delete</button>
-                    </td>
-                    <td align="left" name="modify_td_<%= myData2[i].TaskId %>">
-                        <div data-role="main" class="ui-content">
-                            <a href="#myPopup" data-rel="popup" class="ui-btn ui-btn-inline ui-corner-all">Modify</a>
+            for (i=0;i<myData2.length;i++){%>
+            <%if(myData2[i].Status == 'NotYet'){%>
+            <tr id="Row_<%= myData2[i].TaskId %>">
+                <td align="left" style="cursor:pointer" name="NameTask2_<%= myData2[i].TaskId %>" id="NameTask2_<%= myData2[i].TaskId %>">
+                    <%= myData2[i].NameTask %>
+                 </td>
+                <td align="left" name="delete_td_<%= myData2[i].TaskId %>">
+                    <button type="button" id="delete_<%= myData2[i].TaskId %>">Delete</button>
+                </td>
+                <td align="left" name="modify_td_<%= myData2[i].TaskId %>">
+                    <div data-role="main" class="ui-content">
+                        <a href="#myPopup" data-rel="popup" class="ui-btn ui-btn-inline ui-corner-all">Modify</a>
 
-                            <div data-role="popup" id="myPopup" class="ui-content" style="min-width:250px;">
-                                <form method="post" action="demoform.asp">
-                                    Start time of task <div><input type="time" id="STime_modify_<%= myData2[i].TaskId %>" name="STime" value="<%= myData2[i].startTime %>"></div><br>
-                                    Start date of task <div><input type="date" id="SDate_modify_<%= myData2[i].TaskId %>" name="SDate" value="<%= myData2[i].startDate %>"></div><br>
-                                    Finish time of task <div><input type="time" id="FTime_modify_<%= myData2[i].TaskId %>" name="FTime" value="<%= myData2[i].finishTime %>"></div><br>
-                                    Finish date of task <div><input type="date" id="FDate_modify_<%= myData2[i].TaskId %>" name="FDate" value="<%= myData2[i].finishDate %>"></div><br>
-                                    <script>
-                                        var today = new Date();
-                                        var dd = today.getDate();
-                                        var mm = today.getMonth()+1; //January is 0!
-                                        var yyyy = today.getFullYear();
-                                        if(dd<10){
-                                            dd='0'+dd
-                                        }
-                                        if(mm<10){
-                                            mm='0'+mm
-                                        }
+                        <div data-role="popup" id="myPopup" class="ui-content" style="min-width:250px;">
+                            <form method="post" action="ModifyTask.js">
+                                Start time of task <div><input type="time" id="STime_modify_<%= myData2[i].TaskId %>" name="STime" value="<%= myData2[i].startTime %>"></div><br>
+                                Start date of task <div><input type="date" id="SDate_modify_<%= myData2[i].TaskId %>" name="SDate" value="<%= myData2[i].startDate %>"></div><br>
+                                Finish time of task <div><input type="time" id="FTime_modify_<%= myData2[i].TaskId %>" name="FTime" value="<%= myData2[i].finishTime %>"></div><br>
+                                Finish date of task <div><input type="date" id="FDate_modify_<%= myData2[i].TaskId %>" name="FDate" value="<%= myData2[i].finishDate %>"></div><br>
+                                <script>
+                                    var today = new Date();
+                                    var dd = today.getDate();
+                                    var mm = today.getMonth()+1; //January is 0!
+                                    var yyyy = today.getFullYear();
+                                    if(dd<10){
+                                        dd='0'+dd
+                                    }
+                                    if(mm<10){
+                                        mm='0'+mm
+                                    }
 
-                                        today = yyyy+'-'+mm+'-'+dd;
-                                        document.getElementById("SDate").setAttribute("min", today);
-                                        document.getElementById("FDate").setAttribute("min", today);
-                                    </script>
-                                    <br>
-                                    Name of task <div><input type="text" id="NameTask_modify_<%= myData2[i].TaskId %>" name="NameTask" value="<%= myData2[i].NameTask %>"></div><br>
-                                    Priority<br>
-                                    <span style="margin-left:2em">
-		                                <input type="radio" id="priority_task_modify_<%= myData2[i].TaskId %>" name="priority_task_modify_<%= myData2[i].TaskId %>" value="1" <% if(myData2[i].priorityTask == 1){ %><%= "checked" %> <%}%>> Urgent</span><br>
-                                    <span style="margin-left:2em">
-		                                <input type="radio" id="priority_task_modify_<%= myData2[i].TaskId %>" name="priority_task_modify_<%= myData2[i].TaskId %>" value="2" <% if(myData2[i].priorityTask == 2){ %><%= "checked" %> <%}%>> Pressing </span><br>
-                                    <span style="margin-left:2em">
-		                                <input type="radio" id="priority_task_modify_<%= myData2[i].TaskId %>" name="priority_task_modify_<%= myData2[i].TaskId %>" value="3" <% if(myData2[i].priorityTask == 3){ %><%= "checked" %> <%}%>> Normal </span><br>
-                                    <span style="margin-left:2em">
-		                                <input type="radio" id="priority_task_modify_<%= myData2[i].TaskId %>" name="priority_task_modify_<%= myData2[i].TaskId %>" value="4" <% if(myData2[i].priorityTask == 4){ %><%= "checked"%> <%}%>> Moderate </span><br>
-                                    Note <br>
-                                    <div><textarea id="NoteTask_modify_<%= myData2[i].TaskId %>" name="NoteTask_modify_<%= myData2[i].TaskId %>" rows=4 cols=50><%= myData2[i].NoteTask %></textarea></div><br>
-                                    <br>
-                                    <button type="button" class="modify" id="modify_<%= myData2[i].TaskId %>" onclick="myModify(this.id)">Modify task</button>
-                                </form>
-                            </div>
+                                    today = yyyy+'-'+mm+'-'+dd;
+                                    document.getElementById("SDate").setAttribute("min", today);
+                                    document.getElementById("FDate").setAttribute("min", today);
+                                </script>
+                                <br>
+                                Name of task <div><input type="text" id="NameTask_modify_<%= myData2[i].TaskId %>" name="NameTask" value="<%= myData2[i].NameTask %>"></div><br>
+                                Priority<br>
+                                <span style="margin-left:2em">
+                                    <input type="radio" id="priority_task_modify_<%= myData2[i].TaskId %>" name="priority_task_modify_<%= myData2[i].TaskId %>" value="1" <% if(myData2[i].priorityTask == 1){ %><%= "checked" %> <%}%>> Urgent</span><br>
+                                <span style="margin-left:2em">
+                                    <input type="radio" id="priority_task_modify_<%= myData2[i].TaskId %>" name="priority_task_modify_<%= myData2[i].TaskId %>" value="2" <% if(myData2[i].priorityTask == 2){ %><%= "checked" %> <%}%>> Pressing </span><br>
+                                <span style="margin-left:2em">
+                                    <input type="radio" id="priority_task_modify_<%= myData2[i].TaskId %>" name="priority_task_modify_<%= myData2[i].TaskId %>" value="3" <% if(myData2[i].priorityTask == 3){ %><%= "checked" %> <%}%>> Normal </span><br>
+                                <span style="margin-left:2em">
+                                    <input type="radio" id="priority_task_modify_<%= myData2[i].TaskId %>" name="priority_task_modify_<%= myData2[i].TaskId %>" value="4" <% if(myData2[i].priorityTask == 4){ %><%= "checked"%> <%}%>> Moderate </span><br>
+                                Note <br>
+                                <div><textarea id="NoteTask_modify_<%= myData2[i].TaskId %>" name="NoteTask_modify_<%= myData2[i].TaskId %>" rows=4 cols=50><%= myData2[i].NoteTask %></textarea></div><br>
+                                <br>
+                                <button type="button" class="modify" id="modify_<%= myData2[i].TaskId %>" onclick="myModify(this.id)">Modify task</button>
+                            </form>
                         </div>
-                        <button type="button" class="modify" id="modify_<%= myData2[i].TaskId %>" onclick="myModify(this.id)">Modify</button>
-                    </td>
-                    <td align="left" name="done_td_<%= myData2[i].TaskId %>">
-                        <button type="button" class="done" id="done_<%= myData2[i].TaskId %>" onclick="myDone(this.id)">Done</button>
-                    </td>
-                </tr>
-                <%}%>
-                <%}%>
-            </table>
-        </form>
+                    </div>
+                </td>
+                <td align="left" name="done_td_<%= myData2[i].TaskId %>">
+                    <button type="button" class="done" id="done_<%= myData2[i].TaskId %>" onclick="myDone(this.id)">Done</button>
+                </td>
+            </tr>
+            <%}%>
+            <%}%>
+        </table>
+        <script>
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var table = document.getElementById("myTbl2");
+                    var obj = JSON.parse(this.responseText);
+                    for(var i in obj.myData2) {
+                        if(obj.myData2[i].Status == 'NotYet') {
+                            var row = table.insertRow(0);
+                            row.setAttribute("name", "Row_" + obj.myData2[i].TaskId);
+                            var NameCell = row.insertCell(0);
+                            NameCell.innerHTML = obj.myData2[i].NameTask;
+                            NameCell.setAttribute("name", "NameTask2_" + obj.myData2[i].TaskId);
+                            NameCell.setAttribute("id", "NameTask2_" + obj.myData2[i].TaskId);
+                            NameCell.setAttribute("style", "cursor:pointer");
+                            var DeleteCell = row.insertCell(1);
+                            var DeleteBtn = document.createElement("BUTTON");
+                            DeleteBtn.innerHTML = "Delete";
+                            DeleteCell.setAttribute("name", "delete_td_" + obj.myData2[i].TaskId);
+                            DeleteBtn.setAttribute("id", "delete_" + obj.myData2[i].TaskId);
+                            DeleteBtn.setAttribute("type", "button");
+                            DeleteCell.appendChild(DeleteBtn);
+
+                            var ModifyCell = row.insertCell(2);
+                            ModifyCell.setAttribute("name", "modify_td_" + obj.myData2[i].TaskId);
+
+                            var MainDiv = document.createElement("DIV");
+                            ModifyCell.appendChild(MainDiv);
+                            MainDiv.setAttribute("data-role", "main");
+                            MainDiv.setAttribute("class", "ui-content");
+
+                            var ModifyButton = document.createElement("A");
+                            MainDiv.appendChild(ModifyButton);
+                            ModifyButton.setAttribute("href", "#myPopup");
+                            ModifyButton.setAttribute("data-rel", "popup");
+                            ModifyButton.setAttribute("class", "ui-btn ui-btn-inline ui-corner-all");
+
+                            var PopupDiv = document.createElement("DIV");
+                            document.appendChild(PopupDiv);
+                            PopupDiv.setAttribute("data-role", "popup");
+                            PopupDiv.setAttribute("id", "myPopup");
+                            PopupDiv.setAttribute("class", "ui-content");
+                            PopupDiv.setAttribute("style", "min-width:250px;");
+
+                            var ModifyForm = document.createElement("FORM");
+                            PopupDiv.appendChild(ModifyForm);
+                            ModifyForm.setAttribute("method", "post");
+                            ModifyForm.setAttribute("action", "ModifyTask.js");
+
+                            var STime_modify_label = document.createElement("LABEL");
+                            ModifyForm.appendChild(STime_modify_label);
+                            STime_modify_label.innerHTML = "Start time of task";
+                            var STime_modify_ = document.createElement("INPUT");
+                            ModifyForm.appendChild(STime_modify_);
+                            STime_modify_.setAttribute("type", "time");
+                            STime_modify_.setAttribute("id", "STime_modify_" + obj.myData2[i].TaskId);
+                            STime_modify_.setAttribute("name", "STime");
+                            STime_modify_.setAttribute("value", obj.myData2[i].startTime);
+
+                            var SDate_modify_label = document.createElement("LABEL");
+                            ModifyForm.appendChild(SDate_modify_label);
+                            SDate_modify_label.innerHTML = "Start date of task";
+                            var SDate_modify_ = document.createElement("INPUT");
+                            ModifyForm.appendChild(SDate_modify_);
+                            SDate_modify_.setAttribute("type", "date");
+                            SDate_modify_.setAttribute("id", "SDate_modify_" + obj.myData2[i].TaskId);
+                            SDate_modify_.setAttribute("name", "SDate");
+                            SDate_modify_.setAttribute("value", obj.myData2[i].startDate);
+
+                            var FTime_modify_label = document.createElement("LABEL");
+                            ModifyForm.appendChild(FTime_modify_label);
+                            FTime_modify_label.innerHTML = "Finish time of task";
+                            var FTime_modify_ = document.createElement("INPUT");
+                            ModifyForm.appendChild(FTime_modify_);
+                            FTime_modify_.setAttribute("type", "time");
+                            FTime_modify_.setAttribute("id", "FTime_modify_" + obj.myData2[i].TaskId);
+                            FTime_modify_.setAttribute("name", "FTime");
+                            FTime_modify_.setAttribute("value", obj.myData2[i].finishTime);
+
+                            var FDate_modify_label = document.createElement("LABEL");
+                            ModifyForm.appendChild(FDate_modify_label);
+                            FDate_modify_label.innerHTML = "Finish date of task";
+                            var FDate_modify_ = document.createElement("INPUT");
+                            ModifyForm.appendChild(FDate_modify_);
+                            FDate_modify_.setAttribute("type", "date");
+                            FDate_modify_.setAttribute("id", "FDate_modify_" + obj.myData2[i].TaskId);
+                            FDate_modify_.setAttribute("name", "FDate");
+                            FDate_modify_.setAttribute("value", obj.myData2[i].finishDate);
+
+                            var today = new Date();
+                            var dd = today.getDate();
+                            var mm = today.getMonth()+1; //January is 0!
+                            var yyyy = today.getFullYear();
+                            if(dd<10){
+                                dd='0'+dd
+                            }
+                            if(mm<10){
+                                mm='0'+mm
+                            }
+
+                            today = yyyy+'-'+mm+'-'+dd;
+                            document.getElementById("SDate").setAttribute("min", today);
+                            document.getElementById("FDate").setAttribute("min", today);
+
+                            var NameTask_modify_label = document.createElement("LABEL");
+                            ModifyForm.appendChild(NameTask_modify_label);
+                            NameTask_modify_label.innerHTML = "Name of task";
+                            var NameTask_modify_ = document.createElement("INPUT");
+                            ModifyForm.appendChild(NameTask_modify_);
+                            NameTask_modify_.setAttribute("type", "text");
+                            NameTask_modify_.setAttribute("id", "NameTask_modify_" + obj.myData2[i].TaskId);
+                            NameTask_modify_.setAttribute("name", "NameTask");
+                            NameTask_modify_.setAttribute("value", obj.myData2[i].NameTask);
+
+                            var priority_task_modify_label = document.createElement("LABEL");
+                            ModifyForm.appendChild(priority_task_modify_label);
+                            priority_task_modify_label.innerHTML = "Priority of task";
+
+                            var priority_1_task_modify_ = document.createElement("INPUT");
+                            ModifyForm.appendChild(priority_1_task_modify_);
+                            priority_1_task_modify_.setAttribute("type", "radio");
+                            priority_1_task_modify_.setAttribute("id", "priority_task_modify_" + obj.myData2[i].TaskId);
+                            priority_1_task_modify_.setAttribute("name", "priority_task_modify_" + obj.myData2[i].TaskId);
+                            priority_1_task_modify_.setAttribute("value", 1);
+                            if(obj.myData2[i].priorityTask == 1)
+                                priority_1_task_modify_.checked = true;
+                            var priority_1_task_modify_label = document.createElement("LABEL");
+                            ModifyForm.appendChild(priority_1_task_modify_label);
+                            priority_1_task_modify_label.innerHTML = "Urgent";
+
+                            var priority_2_task_modify_ = document.createElement("INPUT");
+                            ModifyForm.appendChild(priority_2_task_modify_);
+                            priority_2_task_modify_.setAttribute("type", "radio");
+                            priority_2_task_modify_.setAttribute("id", "priority_task_modify_" + obj.myData2[i].TaskId);
+                            priority_2_task_modify_.setAttribute("name", "priority_task_modify_" + obj.myData2[i].TaskId);
+                            priority_2_task_modify_.setAttribute("value", 2);
+                            if(obj.myData2[i].priorityTask == 2)
+                                priority_2_task_modify_.checked = true;
+                            var priority_2_task_modify_label = document.createElement("LABEL");
+                            ModifyForm.appendChild(priority_2_task_modify_label);
+                            priority_2_task_modify_label.innerHTML = "Pressing";
+
+                            var priority_3_task_modify_ = document.createElement("INPUT");
+                            ModifyForm.appendChild(priority_3_task_modify_);
+                            priority_3_task_modify_.setAttribute("type", "radio");
+                            priority_3_task_modify_.setAttribute("id", "priority_task_modify_" + obj.myData2[i].TaskId);
+                            priority_3_task_modify_.setAttribute("name", "priority_task_modify_" + obj.myData2[i].TaskId);
+                            priority_3_task_modify_.setAttribute("value", 3);
+                            if(obj.myData2[i].priorityTask == 3)
+                                priority_3_task_modify_.checked = true;
+                            var priority_3_task_modify_label = document.createElement("LABEL");
+                            ModifyForm.appendChild(priority_3_task_modify_label);
+                            priority_3_task_modify_label.innerHTML = "Normal";
+
+                            var priority_4_task_modify_ = document.createElement("INPUT");
+                            ModifyForm.appendChild(priority_4_task_modify_);
+                            priority_4_task_modify_.setAttribute("type", "radio");
+                            priority_4_task_modify_.setAttribute("id", "priority_task_modify_" + obj.myData2[i].TaskId);
+                            priority_4_task_modify_.setAttribute("name", "priority_task_modify_" + obj.myData2[i].TaskId);
+                            priority_4_task_modify_.setAttribute("value", 3);
+                            if(obj.myData2[i].priorityTask == 3)
+                                priority_4_task_modify_.checked = true;
+                            var priority_4_task_modify_label = document.createElement("LABEL");
+                            ModifyForm.appendChild(priority_4_task_modify_label);
+                            priority_4_task_modify_label.innerHTML = "Moderate";
+
+                            var NoteTask_modify_label = document.createElement("LABEL");
+                            ModifyForm.appendChild(NoteTask_modify_label);
+                            NoteTask_modify_label.innerHTML = "Note of task";
+                            var NoteTask_modify_ = document.createElement("textarea");
+                            ModifyForm.appendChild(NoteTask_modify_);
+                            NoteTask_modify_.setAttribute("id", "NoteTask_modify_" + obj.myData2[i].TaskId);
+                            NoteTask_modify_.setAttribute("name", "NoteTask_modify_" + obj.myData2[i].TaskId);
+                            NoteTask_modify_.setAttribute("rows", 4);
+                            NoteTask_modify_.setAttribute("cols", 50);
+                            NoteTask_modify_.value = obj.myData2[i].NoteTask;
+
+                            var SubmitModify = document.createElement("BUTTON");
+                            ModifyForm.appendChild(SubmitModify);
+                            SubmitModify.innerHTML = "Modify task";
+                            SubmitModify.setAttribute("type", "button");
+                            SubmitModify.setAttribute("class", "modify");
+                            SubmitModify.setAttribute("id", "modify_" + obj.myData2[i].TaskId);
+                            SubmitModify.setAttribute("onclick", "myModify(this.id)");
+                        }
+                    }
+                    setFunction();
+                }
+            };
+            xhttp.open("GET", "getTaskData", true);
+
+            xhttp.send();
+        </script>
     </div>
 
     <div class="tabcontent" id="Paris">
-
     </div>
     <div class="tabcontent" id="SharedTaskPage">
         <div class="classsharedtasks">
@@ -132,19 +320,11 @@
                 <%}%>
             </table>
         </div>
-        <p id="demo"></p>
     </div>
 </div>
 
 <script>
-
-    function getMyData(){
-
-        return
-    }
-</script>
-<script>
-    $(document).ready(function(){
+    function setFunction(){
         try {
             var table = document.getElementById("myTbl");
             var tds = table.getElementsByTagName("td");
@@ -184,8 +364,8 @@
             for (var i2 = 0, len2 = tds2.length, td2, tdName2; i2 < len2; ++i2) {
                 td2 = tds2[i2];
                 tdName2 = td2.getAttribute("name");
-                if (tdName2 && tdName2.indexOf("NameTask2_td_") == 0) {
-                    myNameTasks2.push(td2.getElementsByTagName("label")[0]);
+                if (tdName2 && tdName2.indexOf("NameTask2_") == 0) {
+                    myNameTasks2.push(td2);
                 }
                 else if (tdName2 && tdName2.indexOf("delete_td_") == 0) {
                     DeleteBtns.push(td2.getElementsByTagName("button")[0]);
@@ -204,7 +384,7 @@
                 });
             }
         }catch(ex){alert(ex);}
-    });
+    }
 </script>
 <script>
     function myDelete(id){
@@ -250,8 +430,7 @@
     }
 
     function myDone(id) {
-        var myId = id.split('_')[1];
-        document.location.href = 'DoneTask?id=' + myId;
+
     }
 
     function submitRating(id, star, user)

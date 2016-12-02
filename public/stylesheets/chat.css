@@ -1,11 +1,11 @@
 .button {
     border: outset;
-    margin-left: 120px;
+    margin-left: 0px;
     margin-right: 0px;
-}
+    width: 245px;
 
+}
 #contentWrap {
-    display: none;
     border-style: none;
     width: 370px;
     height: 360px;
@@ -23,42 +23,37 @@
 .chat {
     width: 242px;
     margin-top: 0px;
-    margin-left: 120px;
+    margin-left: 0px;
     height: 320px;
     overflow-y: auto;
     border: outset;
 }
 
-.chatrib {
-    text-align: center;
-    width: 242px;
-    height: 44px;
-    color: white;
-    background-color: #006600;
-}
-
-.usersrib {
-    color: white;
-    text-align: center;
-    height: 44px;
-    width: 95px;
-    background-color: #006600;
-    border: inset;
-}
-
 .usrlist {
     text-align: center;
-    width: 105px;
+    width: 140px;
     margin-top: 0px;
     height: 347px;
-    overflow-y: auto;
-    border: outset;
+    overflow:auto;
+    border: inset;
     position: absolute;
+}
+.contact{
+    display: none;
+}
+.chatHeads{
+    background-color:#f2f2f2;
+    text-decoration-color: black;
+    text-align:center;
+    font-weight: bold;
+    font-size: 110%;
+    border:outset;
+    margin-top: 0px;
 }
 
 .nickWrap {
     border: none;
-    width: 330px;
-    height: 100px;
+    width: 250px;
+    height: 150px;
 }
-
+li:nth-child(odd){background:lightgray; }

@@ -1,0 +1,79 @@
+<div id="nickWrap" class="nickWrap">
+    <p> Enter your name:</p>
+    <p id="nickError"></p>
+    <form id="setNick">
+        <input size="10" id="nickname">
+        <input type="submit" value="Submit">
+    </form>
+</div>
+<div id="contentWrap">
+    <div id="chatWrap">
+        <div data-role="main" class="ui-content">
+            <a href="#myPopup" data-rel="popup" class="ui-btn ui-btn-inline ui-corner-all ui-icon-check ui-btn-icon-left"style="min-width:20px;border:outset; margin-top: 0px">Open Chat</a>
+            <div data-role="popup" id="myPopup" class="ui-content" style="min-width:240px;border:whitesmoke">
+                <div style="border: inset;" class="chat">
+                    <div class="chatHeads">Public Chat</div>
+                    <div>
+                        <ul id="messages"></ul>
+                    </div>
+                </div>
+                <div class="button">
+                    <form action="">
+                        <input size="24" id="m" autocomplete="off"/>
+                        <button>Send</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="usrlist">
+               <div><p class="chatHeads"> Online Users</p></div>
+            <div id="users"></div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+    var socket = io();
+    var $nickForm = $('#setNick');
+    var $nickError = $('#nickError');
+    var $users = $('#users');
+    var $nickBox = $('#nickname');
+    $nickForm.submit(function (e) {
+        e.preventDefault();
+        socket.emit('new user', $nickBox.val(), function (data) {
+            if (data) {
+                $('#nickWrap').hide()
+                $('#contentWrap').show();
+            } else {
+                $nickError.html('This name is already taken. Please try again with different user name!');
+            }
+        });
+        $nickBox.val('');
+    });
+    socket.on('usernames', function (data) {
+        var html = '';
+        for (i = 0; i < data.length; i++) {
+            html += data[i] + "<span style='color:blue; font-weight: bold;'><br/></span>"
+        }
+        $users.html(html);
+    });
+    function updateNicknames() {
+        io.sockets.emit('usernames', nicknames);
+    }
+    socket.on('disconnect', function (data) {
+        if (!socket.nickname) return;
+        nicknames.slice(nicknames.indexOf(socket.nickname), -1);
+        updateNickNaames();
+    });
+    $('form').submit(function () {
+        socket.emit('chat message', $('#m').val());
+        $('#m').val('');
+        return false;
+    });
+    socket.on('chat message', function (msg) {
+        $('#messages').append($('<li>').html("<span style='color:blue;  font-weight: bold;'>" + msg.name + ':</span>' + msg.message));
+    });
+</script>
