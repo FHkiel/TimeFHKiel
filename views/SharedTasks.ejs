@@ -49,7 +49,7 @@
                     Note <br>
                     <div><textarea id="NoteTask_modify_" name="NoteTask_modify_" rows=4 cols=50></textarea></div><br>
                     <br>
-                    <button type="button" class="modify" id="modify_">Modify task</button>
+                    <a href="#" data-rel="back" data-role="button" data-theme="a" class="modify" id="modify_">Modify task</a>
                 </form>
             </div>
             <div data-role="popup" id="done_todo_popup" class="ui-content" style="min-width:250px;">
@@ -59,7 +59,7 @@
                     <br>
                     <input type="checkbox" id="IsShareTask" name="IsShareTask" value="public">Do you want to share this task?<br>
                     <br>
-                    <button type="button" class="done" id="done_btn_">Done task</button>
+                    <a href="#" data-rel="back" data-role="button" data-theme="a" class="done" id="done_btn_">Done task</a>
                 </form>
             </div>
             <%include myTaskData.ejs %>
@@ -301,6 +301,7 @@
 
             var SubmitModify = document.getElementById("modify_");
             SubmitModify.setAttribute("onclick", "myModify(" + response_my_todo.myData2[ParaSet].TaskId + ")");
+            //SubmitModify.setAttribute("data-rel", "back");
 
             var priority_1_task_modify_ = document.getElementById("priority_1_task_modify_");
             if (response_my_todo.myData2[ParaSet].priorityTask == 1)
@@ -363,10 +364,10 @@
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                // TODO modify task and close popup
+                // TODO modify task
                 try {
                     $("#NameTask2_" + myId).val(NameTask);
-                    //$("#modify_todo_popup").popup("close");
+                    //$("#modify_todo_popup").close();
                 }
                 catch(ex){
                     alert(ex);
@@ -386,7 +387,7 @@
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                // TODO done task and close popup
+                // TODO done task
                 try {
                 }
                 catch(ex){
