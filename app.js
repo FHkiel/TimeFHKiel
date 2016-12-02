@@ -17,6 +17,8 @@ var getClassesName = require('./routes/getClassesName');
 var getTaskData = require('./routes/getTaskData');
 var getClassesByName = require('./routes/getClassesByName');
 var login = require('./routes/login');
+var doneTask = require('./routes/DoneTask');
+var ModifyTask = require('./routes/ModifyTask');
 var app = express();
 
 
@@ -43,6 +45,9 @@ app.use('/getTimes', getTimesPost);
 app.use('/chat',chats);
 app.use('/getClassesName', getClassesName);
 app.use('/getTaskData' ,getTaskData);
+app.use('/DoneTask' ,doneTask);
+app.use('/ModifyTask' ,ModifyTask);
+
 app.use('/', getClassesByName);
 app.use('/login', login);
 
