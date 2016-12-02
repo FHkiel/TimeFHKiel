@@ -77,7 +77,7 @@
                  <span class="close">×</span>
                  <div ng-app="myApp" ng-controller="myCtrl">
                      <div ng-repeat="x in classes" style="align:right;">
-                         <input type="checkbox" id="{{x}} "name="{{x}}" ng-change="myFunc(x)" ng-model="myValue">{{x}}
+                         <input type="checkbox" id="{{x}} "name="{{x}}" ng-change="myFunc(x,$index,sts)" ng-model='sts' >{{x}}
                      </div>
                  </div>
 
@@ -98,11 +98,16 @@
                 .then(function(response) {
                     $scope.classes = response.data;
                 });
-        $scope.myFunc = function(x) {
-            $http.get("getClassesByName/"+x)
-                    .then(function(response) {
-                        pushEvents( response.data);
+        $scope.myFunc = function(x,id, status) {
+            if (status){
+                console.log(id + " is " + status);
+            $http.get("getClassesByName/" + x)
+                    .then(function (response) {
+                        pushEvents(response.data, id);
                     });
+            }else{
+                removeEvents(id);
+            }
         };
 
 
@@ -112,14 +117,18 @@
 
 <script>
 
-function pushEvents(newEvents) {
+function pushEvents(newEvents,id) {
+
      for(var i = 0; i< newEvents.length; i++){
-         console.log(JSON.stringify(newEvents[i]));
-         $('#calendar').fullCalendar( 'renderEvent',newEvents[i]);
+
+         var newObject = newEvents[i];
+         newObject["id"] = id;
+         console.log(JSON.stringify(newObject));
+         $('#calendar').fullCalendar( 'renderEvent',newObject);
      }
-
-
-
+}
+function removeEvents(id){
+    $('#calendar').fullCalendar( 'removeEvents',id );
 }
 </script>
 <style>
