@@ -56,7 +56,7 @@
     socket.on('usernames', function (data) {
         var html = '';
         for (i = 0; i < data.length; i++) {
-            html += data[i] + '<br/>'
+            html += data[i] + "<span style='color:blue; font-weight: bold;'><br/></span>"
         }
         $users.html(html);
     });
@@ -74,6 +74,6 @@
         return false;
     });
     socket.on('chat message', function (msg) {
-        $('#messages').append($('<li>').html("<span style='color:blue'>" + msg.name + ':</span>' + msg.message));
+        $('#messages').append($('<li>').html("<span style='color:blue;  font-weight: bold;'>" + msg.name + ':</span>' + msg.message));
     });
 </script>
