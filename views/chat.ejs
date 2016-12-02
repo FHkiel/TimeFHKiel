@@ -13,8 +13,8 @@
             <div data-role="popup" id="myPopup" class="ui-content" style="min-width:240px;border:whitesmoke">
                 <div style="border: inset;" class="chat">
                     <div class="chatHeads">Public Chat</div>
-                    <div>
-                        <ul id="messages"></ul>
+                    <div class="testt">
+                        <ul class="pChatscrl" id="messages"></ul>
                     </div>
                 </div>
                 <div class="button">
@@ -74,6 +74,6 @@
         return false;
     });
     socket.on('chat message', function (msg) {
-        $('#messages').append($('<li>').html("<span style='color:blue;  font-weight: bold;'>" + msg.name + ':</span>' + msg.message));
+        $('#messages').append($('<li class="pChatscrl">').html("<span class='pChatscrl' style='color:blue;  font-weight: bold;'>" + msg.name + ':</span>' + msg.message));
     });
 </script>
