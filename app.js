@@ -16,7 +16,9 @@ var chats =  require('./routes/chat');
 var getClassesName = require('./routes/getClassesName');
 var getTaskData = require('./routes/getTaskData');
 var getClassesByName = require('./routes/getClassesByName');
+var login = require('./routes/login');
 var app = express();
+
 
 var busboy = require('connect-busboy');
 
@@ -42,8 +44,7 @@ app.use('/chat',chats);
 app.use('/getClassesName', getClassesName);
 app.use('/getTaskData' ,getTaskData);
 app.use('/', getClassesByName);
-
-
+app.use('/login', login);
 
 
 // catch 404 and forward to error handler
