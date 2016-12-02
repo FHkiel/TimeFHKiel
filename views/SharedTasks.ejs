@@ -10,7 +10,6 @@
 
 
     <div class="tabcontent" id="ShowTaskPage" style="display: block;" ng-app="myApp" ng-controller="myCtrl">
-        <p id="demo"></p>
         <!-- LOOP OVER THE TODOS IN $scope.todos -->
         <table style="width:50%" id="myTbl_todo_2">
             <div data-role="popup" id="modify_todo_popup" class="ui-content" style="min-width:250px;">
@@ -97,6 +96,7 @@
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     var table = document.getElementById("myTbl_todo_2");
+                    var Newtable = document.getElementById("myTbl_todo_1");
                     response_my_todo = JSON.parse(this.responseText);
                     for(var i in response_my_todo.myData2) {
                         if(response_my_todo.myData2[i].Status == 'NotYet') {
@@ -158,6 +158,109 @@
                         }
                     }
                     setFunction();
+
+                    for(var i in response_my_todo.myData) {
+                        try {
+                            var row2 = Newtable.insertRow(0);
+                            // Task Infor field
+                            var NameCell2 = row2.insertCell(0);
+                            NameCell2.innerHTML = response_my_todo.myData[i].NameTask;
+                            NameCell2.setAttribute("name", "NameTask_" + response_my_todo.myData[i].TaskId);
+                            NameCell2.setAttribute("id", "NameTask_" + response_my_todo.myData[i].TaskId);
+                            NameCell2.setAttribute("style", "cursor:pointer");
+                            // Star field
+                            var StarCell = row2.insertCell(1);
+                            var StarSpan = document.createElement("span");
+                            StarSpan.setAttribute("class", "star-rating");
+                            StarCell.appendChild(StarSpan);
+
+                            var Star1 = document.createElement("a");
+                            Star1.setAttribute("href", "javascript: submitRating(" + response_my_todo.myData[i].TaskId + ",1, "+ response_my_todo.user +")");
+                            StarSpan.appendChild(Star1);
+                            var StarImg1 = document.createElement("img");
+                            StarImg1.setAttribute("src", "http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png");
+                            StarImg1.setAttribute("alt", "star1");
+                            StarImg1.setAttribute("height", "10");
+                            StarImg1.setAttribute("width", "10");
+                            Star1.appendChild(StarImg1);
+
+                            var Star4 = document.createElement("a");
+                            Star4.setAttribute("href", "javascript: submitRating(" + response_my_todo.myData[i].TaskId + ",4, "+ response_my_todo.user+")");
+                            StarSpan.appendChild(Star4);
+                            var StarImg4 = document.createElement("img");
+                            StarImg4.setAttribute("src", "http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png");
+                            StarImg4.setAttribute("alt", "star4");
+                            StarImg4.setAttribute("height", "10");
+                            StarImg4.setAttribute("width", "10");
+                            Star4.appendChild(StarImg4);
+
+                            var Star5 = document.createElement("a");
+                            Star5.setAttribute("href", "javascript: submitRating(" + response_my_todo.myData[i].TaskId + ",5, "+ response_my_todo.user+")");
+                            StarSpan.appendChild(Star5);
+                            var StarImg5 = document.createElement("img");
+                            StarImg5.setAttribute("src", "http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png");
+                            StarImg5.setAttribute("alt", "star5");
+                            StarImg5.setAttribute("height", "10");
+                            StarImg5.setAttribute("width", "10");
+                            Star5.appendChild(StarImg5);
+
+                            var Star2 = document.createElement("a");
+                            Star2.setAttribute("href", "javascript: submitRating(" + response_my_todo.myData[i].TaskId + ",2, "+ response_my_todo.user+")");
+                            StarSpan.appendChild(Star2);
+                            var StarImg2 = document.createElement("img");
+                            StarImg2.setAttribute("src", "http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png");
+                            StarImg2.setAttribute("alt", "star2");
+                            StarImg2.setAttribute("height", "10");
+                            StarImg2.setAttribute("width", "10");
+                            Star2.appendChild(StarImg2);
+
+                            var Star3 = document.createElement("a");
+                            Star3.setAttribute("href", "javascript: submitRating(" + response_my_todo.myData[i].TaskId + ",3, "+ response_my_todo.user+")");
+                            StarSpan.appendChild(Star3);
+                            var StarImg3 = document.createElement("img");
+                            StarImg3.setAttribute("src", "http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png");
+                            StarImg3.setAttribute("alt", "star3");
+                            StarImg3.setAttribute("height", "10");
+                            StarImg3.setAttribute("width", "10");
+                            Star3.appendChild(StarImg3);
+                            // Label field
+                            var Labelrow = Newtable.insertRow(1);
+                            var LabelCell = Labelrow.insertCell(0);
+                            var LabelCmm = document.createElement("b");
+                            LabelCmm.innerHTML = "Comments";
+                            LabelCell.appendChild(LabelCmm);
+                            // Comment field
+                            var Cmmrow = Newtable.insertRow(2);
+                            var CmmCell = Cmmrow.insertCell(0);
+                            var CmmTable = document.createElement("table");
+                            CmmTable.setAttribute("id", "show_comment_" + response_my_todo.myData[i].TaskId);
+                            CmmCell.appendChild(CmmTable);
+                            for(var j=0;j < response_my_todo.myComments.length; j++){
+                                for(var k=0;k<response_my_todo.myComments[j].length;k++){
+                                    if(response_my_todo.myComments[j][k].TaskId == response_my_todo.myData[i].TaskId){
+                                        var SubCmmrow = CmmTable.insertRow(0);
+                                        var SubCmmCell = SubCmmrow.insertCell(0);
+                                        SubCmmCell.innerHTML = response_my_todo.myComments[j][k].Comment;
+                                    }
+                                }
+                            }
+                            // Post field
+                            var Postrow = Newtable.insertRow(3);
+                            var PostCell = Postrow.insertCell(0);
+                            PostCell.setAttribute("colspan", "2");
+                            PostCell.setAttribute("id", "comment_td_" + response_my_todo.myData[i].TaskId);
+                            PostCell.setAttribute("name", "comment_td_" + response_my_todo.myData[i].TaskId);
+                            var PostInput = document.createElement("input");
+                            PostCell.appendChild(PostInput);
+                            PostInput.setAttribute("type", "text");
+                            PostInput.setAttribute("width", "200px");
+                            PostInput.setAttribute("id", "comment_" + response_my_todo.myData[i].TaskId);
+                        }
+                        catch(ex){
+                            alert(ex);
+                        }
+                    }
+                    setFunctionForSharedField();
                 }
             };
             xhttp.open("GET", "getTaskData", true);
@@ -169,80 +272,81 @@
     <div class="tabcontent" id="Paris">
     </div>
     <div class="tabcontent" id="SharedTaskPage">
-        <div class="classsharedtasks">
-            <!-- LOOP OVER THE TODOS IN $scope.todos -->
-            <table style="width:50%" id="myTbl">
-                <%for (i=0;i<myData.length;i++){%>
-                <tr>
-                        <td align="left" name="NameTask_td_<%= myData[i].TaskId %>">
-                        <label style="cursor:pointer" id="NameTask_<%= myData[i].TaskId %>">
-                            <%= myData[i].NameTask %>
-                        </label></td>
-                        <td align="left"><span class="star-rating">
-                              <a name="one_star" value="1" href="javascript: submitRating(<%= myData[i].TaskId %>,1, <%= user %>)"><img src="http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png" alt="Smiley face" height="10" width="10"></a>
-                              <a class="two_star" href="javascript: submitRating(<%= myData[i].TaskId %>,2, <%= user %>)"><img src="http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png" alt="Smiley face"   height="10"   width="10"></a>
-                              <a class="three_star" href="javascript: submitRating(<%= myData[i].TaskId %>,3, <%= user %>)"><img src="http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png" alt="Smiley face" height="10"   width="10"></a>
-                              <a class="four_star" href="javascript: submitRating(<%= myData[i].TaskId %>,4, <%= user %>)"><img src="http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png" alt="Smiley face"  height="10" width="10"></a>
-                              <a class="fives_star" href="javascript: submitRating(<%= myData[i].TaskId %>,5, <%= user %>)"><img src="http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png" alt="Smiley face" height="10"   width="10"></a>
-                            </span></td>
-                </tr>
-                <tr>
-                    <td></br><b>Comments</b></td>
-                </tr>
-                <tr>
-                    <td>
-                        <table id="show_comment_<%= myData[i].TaskId %>">
-                            <% for(j=0;j < myComments.length; j++){
-                            for(k=0;k<myComments[j].length;k++){%><td><tr>
-                                    <%if(myComments[j][k].TaskId == myData[i].TaskId){
-                                    %>
-                                    <%= myComments[j][k].Comment %></br>
-                                    <%}%></tr></td><%}}%>
-                        </table>
+        <!-- LOOP OVER THE TODOS IN $scope.todos -->
+        <table style="width:50%" id="myTbl_todo_1">
+            <%for (i=0;i<myData.length;i++){%>
+            <tr>
+                    <td align="left" style="cursor:pointer" name="NameTask_<%= myData[i].TaskId %>">
+                        <%= myData[i].NameTask %>
                     </td>
-                </tr>
-                <tr>
-                    <td align="left" colspan="2" id="comment_td_<%= myData[i].TaskId %>" name="comment_td_<%= myData[i].TaskId %>">
-                        <input type="text" id="comment_<%= myData[i].TaskId %>" width="200px"/>
-                    </td>
-                </tr>
-                <%}%>
-            </table>
-        </div>
+                    <td align="left"><span class="star-rating">
+                          <a name="one_star" value="1" href="javascript: submitRating(<%= myData[i].TaskId %>,1, <%= user %>)"><img src="http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png" alt="Smiley face" height="10" width="10"></a>
+                          <a class="two_star" href="javascript: submitRating(<%= myData[i].TaskId %>,2, <%= user %>)"><img src="http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png" alt="Smiley face"   height="10"   width="10"></a>
+                          <a class="three_star" href="javascript: submitRating(<%= myData[i].TaskId %>,3, <%= user %>)"><img src="http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png" alt="Smiley face" height="10"   width="10"></a>
+                          <a class="four_star" href="javascript: submitRating(<%= myData[i].TaskId %>,4, <%= user %>)"><img src="http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png" alt="Smiley face"  height="10" width="10"></a>
+                          <a class="fives_star" href="javascript: submitRating(<%= myData[i].TaskId %>,5, <%= user %>)"><img src="http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png" alt="Smiley face" height="10"   width="10"></a>
+                        </span></td>
+            </tr>
+            <tr>
+                <td></br><b>Comments</b></td>
+            </tr>
+            <tr>
+                <td>
+                    <table id="show_comment_<%= myData[i].TaskId %>">
+                        <% for(j=0;j < myComments.length; j++){
+                        for(k=0;k<myComments[j].length;k++){%><td><tr>
+                                <%if(myComments[j][k].TaskId == myData[i].TaskId){
+                                %>
+                                <%= myComments[j][k].Comment %></br>
+                                <%}%></tr></td><%}}%>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" colspan="2" id="comment_td_<%= myData[i].TaskId %>" name="comment_td_<%= myData[i].TaskId %>">
+                    <input type="text" id="comment_<%= myData[i].TaskId %>" width="200px"/>
+                </td>
+            </tr>
+            <%}%>
+        </table>
     </div>
 </div>
 
 <script>
     function setFunctionForSharedField(){
-        var table = document.getElementById("myTbl");
-        var tds = table.getElementsByTagName("td");
-        var matchingTds = [];
-        var myNameTasks = [];
+        try {
+            var table = document.getElementById("myTbl_todo_1");
+            var tds = table.getElementsByTagName("td");
+            var matchingTds = [];
+            var myNameTasks = [];
 
-        for (var i = 0, len = tds.length, td, tdName; i < len; ++i) {
-            td = tds[i];
-            tdName = td.getAttribute("name");
-            if (tdName && tdName.indexOf("NameTask_td_") == 0) {
-                myNameTasks.push(td.getElementsByTagName("label")[0]);
-            }
-            else if (tdName && tdName.indexOf("comment_td_") == 0) {
-                matchingTds.push(td.getElementsByTagName("input")[0]);
-            }
-        }
-        for (var j = 0; j < matchingTds.length; j++) {
-            var myStr = "#" + matchingTds[j].id;
-            $(myStr).keydown(function (e) {
-                if (e.which == 13) {
-                    submitComment($(this).attr('id'), $(this).val(), <%= user %>);
-                    $(this).val("");
+            for (var i = 0, len = tds.length, td, tdName; i < len; ++i) {
+                td = tds[i];
+                tdName = td.getAttribute("name");
+                if (tdName && tdName.indexOf("NameTask_") == 0) {
+                    myNameTasks.push(td);
                 }
-            });
-        }
-        for (var k = 0; k < myNameTasks.length; k++) {
-            var myStr = "#" + myNameTasks[k].id;
-            $(myStr).click(function () {
-                submitSuggestion($(this).attr('id'), $(this).text().trim());
-            });
+                else if (tdName && tdName.indexOf("comment_td_") == 0) {
+                    matchingTds.push(td.getElementsByTagName("input")[0]);
+                }
+            }
+            for (var j = 0; j < matchingTds.length; j++) {
+                var myStr = "#" + matchingTds[j].id;
+                $(myStr).keydown(function (e) {
+                    if (e.which == 13) {
+                        submitComment($(this).attr('id'), $(this).val(), response_my_todo.user);
+                        $(this).val("");
+                    }
+                });
+            }
+            for (var k = 0; k < myNameTasks.length; k++) {
+                var myStr = "#" + myNameTasks[k].id;
+                $(myStr).click(function () {
+                    submitSuggestion($(this).attr('id'), $(this).text().trim());
+                });
+            }
+        }catch(ex){
+            alert(ex);
         }
     }
 
