@@ -6,7 +6,6 @@ var router = express.Router();
 var path = require('path');
 var fs = require('fs');
 var fs2 = require('fs');
-var fs3 = require('fs');
 var PDFParser = require("pdf2json");
 var pdfParser = new PDFParser();
 var theFileName ='';
@@ -14,10 +13,10 @@ var origFileName = '';
 var theFileExt = '';
 var timetable = [];
 var mongoose = require('mongoose');
-mongoose.Promise = global.Promise;
+//mongoose.Promise = global.Promise;
 
 var converPDF2JSON = require('../controller/fhkielpdftojson');
-//var objdata = require(path.join(__dirname, '../Schedules/Master_MIE_C.json'));
+
 var objdata;
 var namees = "<b> Already Uploaded </b>";
 /* GET home page. */
@@ -37,23 +36,25 @@ router.post('/', function(req, res) {
 
                         res.redirect('back');
                 });
-                if(theFileExt.indexOf('pdf') != -1) {
-                        pdfParser.on("pdfParser_dataReady", function (pdfData) {
-                                fs2.writeFile('./Schedules/'+theFileName, JSON.stringify(pdfData));
-                        });
-                        pdfParser.loadPDF('./Schedules/'+ origFileName);
 
-                        setTimeout(toJSONRefine, 6000);
+                pdfParser.on("pdfParser_dataReady", function (pdfData) {
+                        fs2.writeFile('./Schedules/'+theFileName, JSON.stringify(pdfData));
+                        console.log("this was compiled");
+                });
+                pdfParser.loadPDF('./Schedules/'+ origFileName);
 
-                       // if(timetable.length > 4)
-                        setTimeout(insertToDB, 18000);
+                setTimeout(toJSONRefine, 3000);
 
-                }
+                // if(timetable.length > 4)
+                setTimeout(insertToDB, 4000);
 
+                 //insertToDB(function () {
+                //         toJSONRefine(function(){
+                //                 pdfParser.loadPDF('./Schedules/'+ origFileName);
+                //         });
+
+                       // });
         });
-
-
-
 });
 
 function toJSONRefine(){
@@ -79,31 +80,22 @@ function insertToDB(){
         });
 
 
-        var Schema = mongoose.Schema;
-        var klassSchema = new Schema({
-
-
-                "start": String,
-                "end": String,
-                "title": String,
-                "detail": String
-        });
-        var klassMod = mongoose.model('fhcalendars', klassSchema);
-        var klass2 = new klassMod({
-
-                "start": "08:15",
-                "end": "11:30",
-                "title": "MI121-Lab Auditory_Analysis and_Audio_Coding ",
-                "detail": "Mo Dr. Taghipour C12-2.69 "
-        });
+        var KlassModel;
+        if(KlassModel) {
+                KlassModel =  mongoose.model('fhcalendars');
+        }else{
+                KlassModel =  mongoose.model('fhcalendars');
+        }
 
         for (var temp=0; temp < timetable.length; temp++) {
-                var klass = new klassMod(timetable[temp]);
+                console.log(timetable[temp]);
+                var klass = new KlassModel(timetable[temp]);
                 klass.save(function (err, data) {
                         if (err) {
                                 console.log(err)
                         }
                         else {
+
 
                         }
                 });
