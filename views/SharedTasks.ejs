@@ -61,35 +61,6 @@
                     <a href="#" data-rel="back" data-role="button" data-theme="a" class="done" id="done_btn_">Done task</a>
                 </form>
             </div>
-            <%include myTaskData.ejs %>
-            <%
-
-                var myData = getMyDatas();
-                var myData2 = myData.myData2;
-                var user = myData.user;
-
-            for (i=0;i<myData2.length;i++){%>
-            <%if(myData2[i].Status == 'Not'){%>
-            <tr id="Row_<%= myData2[i].TaskId %>">
-                <td align="left" style="cursor:pointer" name="NameTask2_<%= myData2[i].TaskId %>" id="NameTask2_<%= myData2[i].TaskId %>">
-                    <%= myData2[i].NameTask %>
-                 </td>
-                <td align="left" name="delete_td_<%= myData2[i].TaskId %>">
-                    <button type="button" id="delete_<%= myData2[i].TaskId %>">Delete</button>
-                </td>
-                <td align="left" name="modify_td_<%= myData2[i].TaskId %>">
-                    <div data-role="main" class="ui-content">
-                        <a href="#modify_todo_popup" data-rel="popup" class="ui-btn ui-btn-inline ui-corner-all">Modify</a>
-
-
-                    </div>
-                </td>
-                <td align="left" name="done_td_<%= myData2[i].TaskId %>">
-                    <button type="button" class="done" id="done_<%= myData2[i].TaskId %>" onclick="myDone(this.id)">Done</button>
-                </td>
-            </tr>
-            <%}%>
-            <%}%>
         </table>
         <script>
             var xhttp = new XMLHttpRequest();
@@ -274,40 +245,6 @@
     <div class="tabcontent" id="SharedTaskPage">
         <!-- LOOP OVER THE TODOS IN $scope.todos -->
         <table style="width:50%" id="myTbl_todo_1">
-            <%for (i=0;i<myData.length;i++){%>
-            <tr>
-                    <td align="left" style="cursor:pointer" name="NameTask_<%= myData[i].TaskId %>">
-                        <%= myData[i].NameTask %>
-                    </td>
-                    <td align="left"><span class="star-rating">
-                          <a name="one_star" value="1" href="javascript: submitRating(<%= myData[i].TaskId %>,1, <%= user %>)"><img src="http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png" alt="Smiley face" height="10" width="10"></a>
-                          <a class="two_star" href="javascript: submitRating(<%= myData[i].TaskId %>,2, <%= user %>)"><img src="http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png" alt="Smiley face"   height="10"   width="10"></a>
-                          <a class="three_star" href="javascript: submitRating(<%= myData[i].TaskId %>,3, <%= user %>)"><img src="http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png" alt="Smiley face" height="10"   width="10"></a>
-                          <a class="four_star" href="javascript: submitRating(<%= myData[i].TaskId %>,4, <%= user %>)"><img src="http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png" alt="Smiley face"  height="10" width="10"></a>
-                          <a class="fives_star" href="javascript: submitRating(<%= myData[i].TaskId %>,5, <%= user %>)"><img src="http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png" alt="Smiley face" height="10"   width="10"></a>
-                        </span></td>
-            </tr>
-            <tr>
-                <td></br><b>Comments</b></td>
-            </tr>
-            <tr>
-                <td>
-                    <table id="show_comment_<%= myData[i].TaskId %>">
-                        <% for(j=0;j < myComments.length; j++){
-                        for(k=0;k<myComments[j].length;k++){%><td><tr>
-                                <%if(myComments[j][k].TaskId == myData[i].TaskId){
-                                %>
-                                <%= myComments[j][k].Comment %></br>
-                                <%}%></tr></td><%}}%>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <td align="left" colspan="2" id="comment_td_<%= myData[i].TaskId %>" name="comment_td_<%= myData[i].TaskId %>">
-                    <input type="text" id="comment_<%= myData[i].TaskId %>" width="200px"/>
-                </td>
-            </tr>
-            <%}%>
         </table>
     </div>
 </div>
