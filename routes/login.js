@@ -1,6 +1,4 @@
-/**
- * Created by moham on 12/2/2016.
- */
+
 var express = require('express');
 var router = express.Router();
 
@@ -9,12 +7,46 @@ var app = require('express')();
 var data;
 var fs = require('fs');
 
+var isAuthenticated=require('../middleware/authentication');
+module.exports = function(passport){
 
-router.get('/', function(req, res, next) {
-    res.render('login.ejs', { title: 'Express' });
-});
+    /* GET login page. */
+    router.get('/', function(req, res) {
+        // Display the Login page with any flash message, if any
+        res.render('login', { message: req.flash('message') });
+    });
+
+    /* Handle Login POST */
+    router.post('/login', passport.authenticate('login', {
+        successRedirect: '/upload',
+        failureRedirect: '/',
+        failureFlash : true
+    }));
+
+
+    router.get('/signup', function(req, res) {
+        // Display the Login page with any flash message, if any
+        res.render('signup', { message: req.flash('message') });
+    });
+
+    /* Handle Registration POST */
+    router.post('/signup',passport.authenticate('signup',{
+        successRedirect: '/upload',
+        failureRedirect: '/signup',
+        failureFlash : true
+    }));
 
 
 
-module.exports = router;
+    /* Handle Logout */
+    router.get('/signout', function(req, res) {
+        req.logout();
+        res.redirect('/');
+    });
+
+    return router;
+}
+
+
+
 
