@@ -25,7 +25,7 @@
     margin-top: 0px;
     margin-left: 0px;
     height: 320px;
-    overflow-y: auto;
+    overflow :auto;
     border: outset;
 }
 
@@ -38,8 +38,11 @@
     border: inset;
     position: absolute;
 }
-.contact{
-    display: none;
+.new1{
+    overflow: auto;
+}
+.new2{
+    overflow: auto;
 }
 .chatHeads{
     background-color:#f2f2f2;
@@ -49,6 +52,19 @@
     font-size: 110%;
     border:outset;
     margin-top: 0px;
+    position: fixed;
+    width: 9%;
+}
+.chatHeads2{
+    background-color:#f2f2f2;
+    text-decoration-color: black;
+    text-align:center;
+    font-weight: bold;
+    font-size: 110%;
+    border:outset;
+    margin-top: 0px;
+    position: fixed;
+    width: 15.7%;
 }
 
 .nickWrap {
