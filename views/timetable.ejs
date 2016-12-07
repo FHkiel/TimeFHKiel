@@ -1,216 +1,221 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="MyApp">
 <head>
     <meta charset='utf-8' />
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/stylesheets/font-awesome.min.css" rel="stylesheet"/>
 
-    <script src='/javascripts/jquery.js'></script>
+    <script src='/javascripts/jquery.min.js'></script>
     <script src='/javascripts/jquery-ui.min.js'></script>
-    <script src='/javascripts/moment.js'></script>
+    <script src="/javscripts/bootstrap.min.js"></script>
+    <script src='/javascripts/moment.min.js'></script>
     <link href='/stylesheets/jquery-ui.min.css' rel='stylesheet' />
+
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-    <script src='/javascripts/fullcalendar.js'></script>
+    <script src="/javascripts/calendar.js"></script>
+    <script src='/javascripts/fullcalendar.min.js'></script>
     <link href='/stylesheets/fullcalendar.css' rel='stylesheet' />
     <link href='/stylesheets/fullcalendar.print.css' rel='stylesheet' media='print' />
     <link href='/stylesheets/style.css' rel='stylesheet' />
+    <style>
+
+        body{
+            padding-top:60px;
+            background:none;
+        }
+        .date{
+            font-size: 85%;
+            letter-spacing: 1px;
+            color: #bbb;
+            font-size: 10px;
+            font-family: "Lucida Grande", Verdana, Helvetica, Arial, sans-serif;
+            font-weight: 100;
+        }
+
+
+        .headline{
+            font: bold 18px "Century Schoolbook", Georgia, Times, serif;
+            color: #333;
+            line-height: 90%;
+
+            letter-spacing: -2px;
+        }
+
+
+        .tag{
+            color: #76879b;
+            font-family: "Lucida Grande", Verdana, Helvetica, Arial, sans-serif;
+            font-size: 11px;
+        }
+
+
+    </style>
+    <script>
+        var module=angular.module('MyApp',['ui.calendar']);
+        module.controller('MainCtrl',CalendarCtrl);
+        function CalendarCtrl($scope,$compile,uiCalendarConfig,$http) {
+            var date = new Date();
+            var d = date.getDate();
+            var m = date.getMonth();
+            var y = date.getFullYear();
+            $scope.events=[];
+            $http({
+                method:"GET",url:"/getClassesName"
+            }).then(function(response){
+                $scope.eventsData=response.data;
+            },function(error){
+                alert('Error Occurs try after some time');
+            })
+
+            /* event source that pulls from google.com */
+            $scope.eventSource = {
+                url: "http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic"
+            }
+            /* event source that contains custom events on the scope */
+
+            /* event source that calls a function on every view switch */
+            $scope.eventsF = function (start, end, timezone, callback) {
+                var s = new Date(start).getTime() / 1000;
+                var e = new Date(end).getTime() / 1000;
+                var m = new Date(start).getMonth();
+                var events = [{title: 'Feed Me ' + m,start: s + (50000),end: s + (100000),allDay: false, className: ['customFeed']}];
+                callback(events);
+            };
+
+            $scope.calEventsExt = {
+                color: '#f00',
+                textColor: 'yellow',
+                events: [
+                    {type:'party',title: 'Lunch',start: new Date(y, m, d, 12, 0),end: new Date(y, m, d, 14, 0),allDay: false},
+                    {type:'party',title: 'Lunch 2',start: new Date(y, m, d, 12, 0),end: new Date(y, m, d, 14, 0),allDay: false},
+                    {type:'party',title: 'Click for Google',start: new Date(y, m, 28),end: new Date(y, m, 29),url: 'http://google.com/'}
+                ]
+            };
+            /* alert on eventClick */
+            $scope.alertOnEventClick = function( date, jsEvent, view){
+
+                $scope.alertMessage = (date.title + ' was clicked ');
+            };
+            /* alert on Drop */
+
+            /* add custom event*/
+            $scope.addEvent = function(event) {
+                $http({url:"getClassesByName",method:"GET",params:{title:event}}).then(function(response){
+                    try{
+
+                        var json = $.parseJSON(JSON.stringify(response.data));
+                    }catch(e){
+                        console.log(e);
+                    }
+                    for(var i=0;i<json.length;i++){
+                        $scope.events.push(json[i]);
+                    }
+                },function(error){
+                    alert('error occurs please try after some time');
+                })
+
+
+            };
+            /* remove event */
+            $scope.removeEvent = function(event) {
+
+                newArray=$scope.events.filter(function(value){
+
+                    return value.title!==event;
+                })
+                $scope.events.length=0;
+                Array.prototype.push.apply($scope.events,newArray);
+
+            };
+            /* event source that calls a function on every view switch */
+            $scope.eventsF = function (start, end, timezone, callback) {
+                var s = new Date(start).getTime() / 1000;
+                var e = new Date(end).getTime() / 1000;
+                var m = new Date(start).getMonth();
+                var events = [{title: 'Feed Me ' + m,start: s + (50000),end: s + (100000),allDay: false, className: ['customFeed']}];
+                callback(events);
+            };
+            /* config object */
+            $scope.uiConfig = {
+                calendar:{
+                    height: 450,
+                    editable: true,
+                    header:{
+                        left: 'title',
+                        center: '',
+                        right: 'today prev,next'
+                    },
+                    eventClick: $scope.alertOnEventClick,
+                    eventDrop: $scope.alertOnDrop,
+                    eventResize: $scope.alertOnResize,
+                    eventRender: $scope.eventRender
+                }
+            };
+            /* add and removes an event source of choice */
+            $scope.addRemoveEventSource = function(sources,source) {
+                var canAdd = 0;
+                angular.forEach(sources,function(value, key){
+                    if(sources[key] === source){
+                        sources.splice(key,1);
+                        canAdd = 1;
+                    }
+                });
+                if(canAdd === 0){
+                    sources.push(source);
+                }
+
+            };
+
+            $scope.stateChanged=function(checkStatus,data) {
+
+                if(checkStatus){
+                    $scope.addEvent(data);
+                }else{
+                    $scope.removeEvent(data);
+                }
+
+            }
+
+            /* event sources array*/
+            $scope.eventSources = [$scope.events, $scope.eventSource, $scope.eventsF];
+            $scope.eventSources2 = [$scope.calEventsExt, $scope.eventsF, $scope.events];
+        }
+    </script>
 
 
 
 
-  <script>
-      $(document).ready(function() {
-
-          var events = [];
-          $('#calendar').fullCalendar({
-
-
-
-              header: {
-                  left: 'prev,next today',
-                  center: 'title',
-                  right: 'month,agendaWeek,agendaDay,listWeek'
-              },
-              defaultDate: '2016-12-02',
-              navLinks: true, // can click day/week names to navigate views
-
-              weekNumbers: true,
-              weekNumbersWithinDays: true,
-              weekNumberCalculation: 'ISO',
-              weekNumberTitle: "W",
-              allDaySlot:false,
-              slotDuration: '00:30:00',
-              minTime: "08:00:00",
-              maxTime: "21:00:00",
-
-
-
-              editable: true,
-          })
-
-      });
-  </script>
 
 
 </head>
- <body>
-
-
-
-
-
- <div class="upperCalWrap">
-
-
-
-        <div id='wrap'>
-            <div id="calendar"></div>
-
+<body ng-controller="MainCtrl">
+<div class="container">
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="navbar-header">
+            <a href="#" class="navbar-brand headline">AWYHH</a>
         </div>
-
-     <div class="classList">
-         <button id="myBtn">Classes</button>
-
-         <!-- The Modal -->
-         <div id="myModal" class="modal">
-
-             <!-- Modal content -->
-
-                 <span class="close">×</span>
-                 <div ng-app="myApp" ng-controller="myCtrl">
-                     <div ng-repeat="x in classes" style="align:right;">
-                         <input type="checkbox" id="{{x}} "name="{{x}}" ng-change="myFunc(x,$index,sts)" ng-model='sts' >{{x}}
-                     </div>
-                 </div>
+        <div>
+        </div>
+    </div>
 
 
-         </div>
-     </div>
+    <div class="row">
+        <div class="col-md-9">
+            <div ui-calendar="uiConfig.calendar" class="span8 calendar" ng-model="eventSources"></div>
+        </div>
+        <div class="col-md-3">
 
-     </div>
-
-
-
-
-<script>
-    //.fullCalendar( 'removeEvents' [, idOrFilter ] )
-    var app = angular.module('myApp', []);
-    app.controller('myCtrl', function($scope, $http) {
-        $http.get("getClassesName")
-                .then(function(response) {
-                    $scope.classes = response.data;
-                });
-        $scope.myFunc = function(x,id, status) {
-            if (status){
-                console.log(id + " is " + status);
-            $http.get("getClassesByName/" + x)
-                    .then(function (response) {
-                        pushEvents(response.data, id);
-                    });
-            }else{
-                removeEvents(id);
-            }
-        };
-
-
-
-    });
-</script>
-
-<script>
-
-function pushEvents(newEvents,id) {
-
-     for(var i = 0; i< newEvents.length; i++){
-
-         var newObject = newEvents[i];
-         newObject["id"] = id;
-         console.log(JSON.stringify(newObject));
-         $('#calendar').fullCalendar( 'renderEvent',newObject);
-     }
-}
-function removeEvents(id){
-    $('#calendar').fullCalendar( 'removeEvents',id );
-}
-</script>
-<style>
-
-    .classList{
-        position: absolute;
-        right:10px;
-        top:10px;
-    }
-        /* The Modal (background) */
-    .modal {
-        display: none; /* Hidden by default */
-        position: fixed; /* Stay in place */
-        z-index: 1; /* Sit on top */
-        padding-top: 100px; /* Location of the box */
-        right: 10px;
-        top: 10px;
-        width: 400px; /* Full width */
-        height: 100%; /* Full height */
-        overflow: auto; /* Enable scroll if needed */
-        background-color: rgb(0,0,0); /* Fallback color */
-        background-color: rgba(211,211,211,0.95); /* Black w/ opacity */
-    }
-        #myBtn{
-            right:0px;
-            color:blue;
-            top:0px;
-
-        }
-
-    /* Modal Content */
-    .modal-content {
-        background-color: #fefefe;
-        margin: auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%;
-    }
-
-    /* The Close Button */
-    .close {
-        color: #aaaaaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-    }
-
-    .close:hover,
-    .close:focus {
-        color: #000;
-        text-decoration: none;
-        cursor: pointer;
-    }
-</style>
- <script>
-     // Get the modal
-     var modal = document.getElementById('myModal');
-
-     // Get the button that opens the modal
-     var btn = document.getElementById("myBtn");
-
-     // Get the <span> element that closes the modal
-     var span = document.getElementsByClassName("close")[0];
-
-     // When the user clicks the button, open the modal
-     btn.onclick = function() {
-         modal.style.display = "block";
-     }
-
-     // When the user clicks on <span> (x), close the modal
-     span.onclick = function() {
-         modal.style.display = "none";
-     }
-
-     // When the user clicks anywhere outside of the modal, close it
-     window.onclick = function(event) {
-         if (event.target == modal) {
-             modal.style.display = "none";
-         }
-     }
- </script>
-
+            <div class="list-group" style="height:450px;overflow-y: scroll">
+                <a href="javascript:void(0)" class="list-group-item active">
+                    <h2 class="list-group-item-heading tag">Event</h2>
+                </a>
+                <a href="javascript:void(0)" class="list-group-item" ng-repeat="event in eventsData">
+                    <h2 class="list-group-item-heading tag"> <input type="checkbox" ng-init="checkStatus=false" ng-model="checkStatus" ng-change="stateChanged(checkStatus,event)"/>&nbsp;{{event}}</h2>
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
- </body>
+</div>
+</body>
 </html>
