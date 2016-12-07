@@ -21,7 +21,7 @@ var doneTask = require('./routes/DoneTask');
 var ModifyTask = require('./routes/ModifyTask');
 var app = express();
 var isAuthenticated=require('./middleware/authentication');
-var myTaskData = ('/routes/DoneTask');
+var suggestTask = ('./routes/suggestTask');
 
 
 var busboy = require('connect-busboy');
@@ -68,6 +68,7 @@ app.use('/getClassesName',isAuthenticated(), getClassesName);
 app.use('/getTaskData',isAuthenticated() ,getTaskData);
 app.use('/DoneTask',isAuthenticated() ,doneTask);
 app.use('/ModifyTask',isAuthenticated() ,ModifyTask);
+app.use('/suggestTask',isAuthenticated() ,suggestTask);
 app.use('/', getClassesByName);
 
 
