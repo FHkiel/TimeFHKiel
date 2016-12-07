@@ -21,9 +21,7 @@ var doneTask = require('./routes/DoneTask');
 var ModifyTask = require('./routes/ModifyTask');
 var app = express();
 var isAuthenticated=require('./middleware/authentication');
-
-
-
+var myTaskData = ('/routes/DoneTask');
 
 
 var busboy = require('connect-busboy');
