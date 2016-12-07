@@ -46,7 +46,7 @@ angular
             console.info('onProgressAll', progress);
         };
         uploader.onSuccessItem = function(fileItem, response, status, headers) {
-            window.location.href="/timetable";
+            window.location.href="/calendar";
             console.info('onSuccessItem', fileItem, response, status, headers);
 
         };

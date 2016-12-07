@@ -18,7 +18,7 @@ module.exports = function(passport){
 
     /* Handle Login POST */
     router.post('/login', passport.authenticate('login', {
-        successRedirect: '/upload',
+        successRedirect: '/calendar',
         failureRedirect: '/',
         failureFlash : true
     }));
@@ -31,7 +31,7 @@ module.exports = function(passport){
 
     /* Handle Registration POST */
     router.post('/signup',passport.authenticate('signup',{
-        successRedirect: '/upload',
+        successRedirect: '/calendar',
         failureRedirect: '/signup',
         failureFlash : true
     }));
