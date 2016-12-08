@@ -15,7 +15,14 @@ var getTimesPost = require('./routes/timetablepost');
 var chats =  require('./routes/chat');
 var getClassesName = require('./routes/getClassesName');
 var getTaskData = require('./routes/getTaskData');
+var getClassesByName = require('./routes/getClassesByName');
+var login = require('./routes/login');
+var doneTask = require('./routes/DoneTask');
+var ModifyTask = require('./routes/ModifyTask');
 var app = express();
+var isAuthenticated=require('./middleware/authentication');
+var suggestTask = require('./routes/SuggestTask');
+var calendar = require('./routes/calendar')
 
 var busboy = require('connect-busboy');
 
@@ -31,17 +38,39 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
-app.use('/users', users);
-app.use('/upload', uploadGet);
-app.use('/upload', uploadPost);
-app.use('/timeTable', timeTable);
-app.use('/getTimes', getTimesPost);
-app.use('/chat',chats);
-app.use('/getClassesName', getClassesName);
-app.use('/getTaskData' ,getTaskData);
+// Using the flash middleware provided by connect-flash to store messages in session
+// and displaying in templates//abhishek//
+var flash = require('connect-flash');
+app.use(flash());
+
+// Configuring Passport abhishek//
+var passport = require('passport');
+var expressSession = require('express-session');
+app.use(expressSession({secret: 'sec7ret',resave:true,saveUninitialized:true}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 
+// Initialize Passport abhishek//
+var initPassport = require('./passport/init');
+initPassport(passport);
+
+// isAuthenticated added by abhishek to protect routes//
+app.use('/', login(passport));
+app.use('/home',isAuthenticated(),index);
+app.use('/users',isAuthenticated(), users);
+app.use('/upload',isAuthenticated(), uploadGet);
+app.use('/upload',isAuthenticated(), uploadPost);
+app.use('/calendar',isAuthenticated(), calendar);
+app.use('/timeTable',isAuthenticated(), timeTable);
+app.use('/getTimes',isAuthenticated(), getTimesPost);
+app.use('/chat',isAuthenticated(),chats);
+app.use('/getClassesName',isAuthenticated(), getClassesName);
+app.use('/getTaskData',isAuthenticated() ,getTaskData);
+app.use('/DoneTask',isAuthenticated() ,doneTask);
+app.use('/ModifyTask',isAuthenticated() ,ModifyTask);
+app.use('/suggestTask',isAuthenticated() ,suggestTask);
+app.use('/', getClassesByName);
 
 
 

@@ -8,7 +8,7 @@ var express = require('express');
 var router = express.Router();
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/calendar');
+mongoose.createConnection('mongodb://localhost/calendar');
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 
@@ -26,22 +26,21 @@ var klassSchema = new Schema({
     "title": String,
     "detail": String
 });
-var klassMod = mongoose.model('fhcalendars', klassSchema);
+var klassMod  = mongoose.model('fhcalendars');
+
 
 var Person = klassMod;
 /* GET home page. */
-router.get('/', function(req, res, next) {
-
-    Person.distinct('title', function (err, docs) {
+router.get('/getClassesByName', function(req, res, next) {
+    console.log(req.query.title);
+    Person.find({'title':unescape(req.query.title)}, function (err, docs) {
         if (!err) {
             res.send(docs);
+
         } else {
             throw err;
         }
-    });
-
-
-
+    }).select({"start":1, "end": 1, "title": 1,"detail":1, "_id": 0});
 
 });
 

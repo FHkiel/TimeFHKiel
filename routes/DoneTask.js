@@ -27,13 +27,17 @@ var add_2_DB = function(){
 }
 
 router.post('/', function(req, res){
-    var myTask = req.body['id'];
-    objData[myTask - 1].Exp = req.body.ExpTask;
-    if(req.body['share'] == 'public')
-        objData[myTask - 1].Shared = "True";
-    objData[myTask - 1].Status = "Done";
-    add_2_DB();
-    res.render('ShowTask', {'myData' : objData});
+    try {
+        var myTask = req.body['id'];
+        objData[myTask - 1].Exp = req.body['exp'];
+        objData[myTask - 1].Shared = req.body['shared'];
+        objData[myTask - 1].Status = "Done";
+        add_2_DB();
+    }catch(ex){
+        console.log(ex);
+    }
+
+    res.send("Ok");
 });
 
 module.exports = router;

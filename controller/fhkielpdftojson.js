@@ -79,8 +79,8 @@ function convertPDF2JSON(objdata) {
                         timetable.push({
                             "start": date+"T"+startTime,
                             "end": date+"T"+endTime,
-                            "title": classDetail[0],
-                            "detail": classDetail[1]
+                            "title": classDetail[0].trim(),
+                            "detail": classDetail[1].trim()
                         });
                     }
 
@@ -93,15 +93,6 @@ function convertPDF2JSON(objdata) {
     //fs.writeFile("../Schedules/" +objdata.formImage.Agency + "json", JSON.stringify(timetable, null, 2), 'utf-8');
     return timetable;
 }
-
-//console.log(timetable.sort(function compare(a,b){ return new Date(a.date).getTime() - new Date(b.date).getTime();}));
-
-
-function round(value, decimals) {
-    return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
-}
-
-
 
 function compare(a, b) {
     if (a.y < b.y)

@@ -3,150 +3,397 @@
     <p>To Do List</p>
 
     <ul class="tab">
-        <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'ShowTaskPage')">Tasks</a></li>
-        <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Paris')">Paris</a></li>
-        <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'SharedTaskPage')">Shared Tasks</a></li>
+        <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'ShowTaskPage')"><img src="https://cdn2.iconfinder.com/data/icons/business-office-icons/256/To-do_List-512.png" height="30" width="30"></img></a></li>
+        <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'SetTaskPage')"><img src="../public/images/NewTask.png" height="20" width="20"></img></a></li>
+        <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'SharedTaskPage')"><img src="https://cdn2.iconfinder.com/data/icons/lightly-icons/30/group-480.png" height="30" width="30"></img></a></li>
     </ul>
 
 
     <div class="tabcontent" id="ShowTaskPage" style="display: block;" ng-app="myApp" ng-controller="myCtrl">
-        <form method="post">
-            <!-- LOOP OVER THE TODOS IN $scope.todos -->
-            <table style="width:50%" id="myTbl2">
+        <!-- LOOP OVER THE TODOS IN $scope.todos -->
+        <table style="width:50%" id="myTbl_todo_2">
+            <div data-role="popup" id="modify_todo_popup" class="ui-content" style="min-width:250px;">
+                <form method="post" action="ModifyTask.js">
+                    Start time of task <div><input type="time" id="STime_modify_" name="STime" ></div><br>
+                    Start date of task <div><input type="date" id="SDate_modify_" name="SDate" ></div><br>
+                    Finish time of task <div><input type="time" id="FTime_modify_" name="FTime" ></div><br>
+                    Finish date of task <div><input type="date" id="FDate_modify_" name="FDate" ></div><br>
+                    <script>
+                        var today = new Date();
+                        var dd = today.getDate();
+                        var mm = today.getMonth()+1; //January is 0!
+                        var yyyy = today.getFullYear();
+                        if(dd<10){
+                            dd='0'+dd
+                        }
+                        if(mm<10){
+                            mm='0'+mm
+                        }
 
-                <%include myTaskData.ejs %>
-                window.alert(" ssd");
+                        today = yyyy+'-'+mm+'-'+dd;
+                        document.getElementById("SDate").setAttribute("min", today);
+                        document.getElementById("FDate").setAttribute("min", today);
+                    </script>
+                    <br>
+                    Name of task <div><input type="text" id="NameTask_modify_" name="NameTask"></div><br>
+                    Priority<br>
+                    <span style="margin-left:2em">
+                                    <input type="radio" id="priority_1_task_modify_" name="priority_task_modify_" value="1"> Urgent</span><br>
+                    <span style="margin-left:2em">
+                                    <input type="radio" id="priority_2_task_modify_" name="priority_task_modify_" value="2"> Pressing </span><br>
+                    <span style="margin-left:2em">
+                                    <input type="radio" id="priority_3_task_modify_" name="priority_task_modify_" value="3"> Normal </span><br>
+                    <span style="margin-left:2em">
+                                    <input type="radio" id="priority_4_task_modify_" name="priority_task_modify_" value="4"> Moderate </span><br>
+                    Note <br>
+                    <div><textarea id="NoteTask_modify_" name="NoteTask_modify_" rows=4 cols=50></textarea></div><br>
+                    <br>
+                    <a href="#" data-rel="back" data-role="button" data-theme="a" class="modify" id="modify_">Modify task</a>
+                </form>
+            </div>
+            <div data-role="popup" id="done_todo_popup" class="ui-content" style="min-width:250px;">
+                <form method="post" action="DoneTask.js">
+                    Experience <br>
+                    <div><textarea id="ExpTask" name="ExpTask" rows=4 cols=50></textarea></div><br>
+                    <br>
+                    <input type="checkbox" id="IsShareTask" name="IsShareTask" value="public">Do you want to share this task?<br>
+                    <br>
+                    <a href="#" data-rel="back" data-role="button" data-theme="a" class="done" id="done_btn_">Done task</a>
+                </form>
+            </div>
+            <div data-role="popup" id="suggestion_todo_popup" class="ui-content" style="min-width:250px;">
+                <form id="sugTbl_todo">
+                </form>
+            </div>
+        </table>
+        <script>
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var table = document.getElementById("myTbl_todo_2");
+                    var Newtable = document.getElementById("myTbl_todo_1");
+                    response_my_todo = JSON.parse(this.responseText);
+                    for(var i in response_my_todo.myData2) {
+                        if(response_my_todo.myData2[i].Status == 'NotYet') {
+                            try {
+                                var row = table.insertRow(0);
+                                row.setAttribute("name", "Row_" + response_my_todo.myData2[i].TaskId);
+                                // Task Infor field
+                                var NameCell = row.insertCell(0);
+                                var NameTab = document.createElement("a");
+                                NameTab.innerHTML = response_my_todo.myData2[i].NameTask;
+                                NameTab.setAttribute("name", "NameTask2_" + response_my_todo.myData2[i].TaskId);
+                                NameTab.setAttribute("id", "NameTask2_" + response_my_todo.myData2[i].TaskId);
+                                NameTab.setAttribute("href", "#suggestion_todo_popup");
+                                NameTab.setAttribute("data-rel", "popup");
+                                NameTab.setAttribute("style", "cursor:pointer");
+                                NameCell.appendChild(NameTab);
+                                // Delete field
+                                var DeleteCell = row.insertCell(1);
+                                var DeleteBtn = document.createElement("BUTTON");
+                                DeleteBtn.innerHTML = "Delete";
+                                DeleteBtn.setAttribute("class", "ui-btn ui-btn-inline ui-corner-all");
+                                DeleteCell.setAttribute("name", "delete_td_" + response_my_todo.myData2[i].TaskId);
+                                DeleteBtn.setAttribute("id", "delete_" + response_my_todo.myData2[i].TaskId);
+                                DeleteBtn.setAttribute("type", "button");
+                                DeleteCell.appendChild(DeleteBtn);
+                                // Modify field
+                                var ModifyCell = row.insertCell(2);
+                                ModifyCell.setAttribute("name", "modify_td_" + response_my_todo.myData2[i].TaskId);
 
-                <%
-                    var myData = getMyDatas();
-                    var myData2 = myData.myData2;
-                    var user = myData.user;
+                                var MainDiv = document.createElement("DIV");
+                                ModifyCell.appendChild(MainDiv);
+                                MainDiv.setAttribute("data-role", "main");
+                                MainDiv.setAttribute("class", "ui-content");
 
-                for (i=0;i<myData2.length;i++){%>
-                <%if(myData2[i].Status == 'NotYet'){%>
-                <tr id="Row_<%= myData2[i].TaskId %>">
-                    <td align="left" name="NameTask2_td_<%= myData2[i].TaskId %>">
-                        <label style="cursor:pointer" name="NameTask2_<%= myData2[i].TaskId %>" id="NameTask2_<%= myData2[i].TaskId %>">
-                            <%= myData2[i].NameTask %>
-                        </label></td>
-                    <td align="left" name="delete_td_<%= myData2[i].TaskId %>">
-                        <button type="button" id="delete_<%= myData2[i].TaskId %>">Delete</button>
-                    </td>
-                    <td align="left" name="modify_td_<%= myData2[i].TaskId %>">
-                        <div data-role="main" class="ui-content">
-                            <a href="#myPopup" data-rel="popup" class="ui-btn ui-btn-inline ui-corner-all">Modify</a>
+                                var ModifyButton = document.createElement("A");
+                                MainDiv.appendChild(ModifyButton);
+                                ModifyButton.innerHTML = "Modify";
+                                ModifyButton.setAttribute("href", "#modify_todo_popup");
+                                ModifyButton.setAttribute("onclick", "setPara2Popup(" + i + ")");
+                                ModifyButton.setAttribute("data-rel", "popup");
+                                ModifyButton.setAttribute("class", "ui-btn ui-btn-inline ui-corner-all");
+                                ModifyButton.setAttribute("id", "modify_button_" + response_my_todo.myData2[i].TaskId);
+                                // Done field
+                                var DoneCell = row.insertCell(3);
+                                DoneCell.setAttribute("name", "done_td_" + response_my_todo.myData2[i].TaskId);
 
-                            <div data-role="popup" id="myPopup" class="ui-content" style="min-width:250px;">
-                                <form method="post" action="demoform.asp">
-                                    Start time of task <div><input type="time" id="STime_modify_<%= myData2[i].TaskId %>" name="STime" value="<%= myData2[i].startTime %>"></div><br>
-                                    Start date of task <div><input type="date" id="SDate_modify_<%= myData2[i].TaskId %>" name="SDate" value="<%= myData2[i].startDate %>"></div><br>
-                                    Finish time of task <div><input type="time" id="FTime_modify_<%= myData2[i].TaskId %>" name="FTime" value="<%= myData2[i].finishTime %>"></div><br>
-                                    Finish date of task <div><input type="date" id="FDate_modify_<%= myData2[i].TaskId %>" name="FDate" value="<%= myData2[i].finishDate %>"></div><br>
-                                    <script>
-                                        var today = new Date();
-                                        var dd = today.getDate();
-                                        var mm = today.getMonth()+1; //January is 0!
-                                        var yyyy = today.getFullYear();
-                                        if(dd<10){
-                                            dd='0'+dd
-                                        }
-                                        if(mm<10){
-                                            mm='0'+mm
-                                        }
+                                var MainDoneDiv = document.createElement("DIV");
+                                DoneCell.appendChild(MainDoneDiv);
+                                MainDoneDiv.setAttribute("data-role", "main");
+                                MainDoneDiv.setAttribute("class", "ui-content");
 
-                                        today = yyyy+'-'+mm+'-'+dd;
-                                        document.getElementById("SDate").setAttribute("min", today);
-                                        document.getElementById("FDate").setAttribute("min", today);
-                                    </script>
-                                    <br>
-                                    Name of task <div><input type="text" id="NameTask_modify_<%= myData2[i].TaskId %>" name="NameTask" value="<%= myData2[i].NameTask %>"></div><br>
-                                    Priority<br>
-                                    <span style="margin-left:2em">
-		                                <input type="radio" id="priority_task_modify_<%= myData2[i].TaskId %>" name="priority_task_modify_<%= myData2[i].TaskId %>" value="1" <% if(myData2[i].priorityTask == 1){ %><%= "checked" %> <%}%>> Urgent</span><br>
-                                    <span style="margin-left:2em">
-		                                <input type="radio" id="priority_task_modify_<%= myData2[i].TaskId %>" name="priority_task_modify_<%= myData2[i].TaskId %>" value="2" <% if(myData2[i].priorityTask == 2){ %><%= "checked" %> <%}%>> Pressing </span><br>
-                                    <span style="margin-left:2em">
-		                                <input type="radio" id="priority_task_modify_<%= myData2[i].TaskId %>" name="priority_task_modify_<%= myData2[i].TaskId %>" value="3" <% if(myData2[i].priorityTask == 3){ %><%= "checked" %> <%}%>> Normal </span><br>
-                                    <span style="margin-left:2em">
-		                                <input type="radio" id="priority_task_modify_<%= myData2[i].TaskId %>" name="priority_task_modify_<%= myData2[i].TaskId %>" value="4" <% if(myData2[i].priorityTask == 4){ %><%= "checked"%> <%}%>> Moderate </span><br>
-                                    Note <br>
-                                    <div><textarea id="NoteTask_modify_<%= myData2[i].TaskId %>" name="NoteTask_modify_<%= myData2[i].TaskId %>" rows=4 cols=50><%= myData2[i].NoteTask %></textarea></div><br>
-                                    <br>
-                                    <button type="button" class="modify" id="modify_<%= myData2[i].TaskId %>" onclick="myModify(this.id)">Modify task</button>
-                                </form>
-                            </div>
-                        </div>
-                        <button type="button" class="modify" id="modify_<%= myData2[i].TaskId %>" onclick="myModify(this.id)">Modify</button>
-                    </td>
-                    <td align="left" name="done_td_<%= myData2[i].TaskId %>">
-                        <button type="button" class="done" id="done_<%= myData2[i].TaskId %>" onclick="myDone(this.id)">Done</button>
-                    </td>
-                </tr>
-                <%}%>
-                <%}%>
-            </table>
+                                var DoneButton = document.createElement("A");
+                                MainDoneDiv.appendChild(DoneButton);
+                                DoneButton.setAttribute("href", "#done_todo_popup");
+                                DoneButton.setAttribute("onclick", "setPara2Popup4DoneButton(" + i + ")");
+                                DoneButton.innerHTML = "Done";
+                                DoneButton.setAttribute("data-rel", "popup");
+                                DoneButton.setAttribute("class", "ui-btn ui-btn-inline ui-corner-all");
+                            }
+                            catch(ex){
+                                alert(ex);
+                            }
+                        }
+                    }
+                    setFunction();
+
+                    for(var i in response_my_todo.myData) {
+                        try {
+                            var row2 = Newtable.insertRow(0);
+                            // Task Infor field
+                            var NameCell2 = row2.insertCell(0);
+                            NameCell2.innerHTML = response_my_todo.myData[i].NameTask;
+                            NameCell2.setAttribute("name", "NameTask_" + response_my_todo.myData[i].TaskId);
+                            NameCell2.setAttribute("id", "NameTask_" + response_my_todo.myData[i].TaskId);
+                            NameCell2.setAttribute("style", "cursor:pointer");
+                            // Star field
+                            var StarCell = row2.insertCell(1);
+                            var StarSpan = document.createElement("span");
+                            StarSpan.setAttribute("class", "star-rating");
+                            StarCell.appendChild(StarSpan);
+
+                            var Star1 = document.createElement("a");
+                            Star1.setAttribute("href", "javascript: submitRating(" + response_my_todo.myData[i].TaskId + ",1, "+ response_my_todo.user +")");
+                            StarSpan.appendChild(Star1);
+                            var StarImg1 = document.createElement("img");
+                            StarImg1.setAttribute("src", "http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png");
+                            StarImg1.setAttribute("alt", "star1");
+                            StarImg1.setAttribute("height", "10");
+                            StarImg1.setAttribute("width", "10");
+                            Star1.appendChild(StarImg1);
+
+                            var Star4 = document.createElement("a");
+                            Star4.setAttribute("href", "javascript: submitRating(" + response_my_todo.myData[i].TaskId + ",4, "+ response_my_todo.user+")");
+                            StarSpan.appendChild(Star4);
+                            var StarImg4 = document.createElement("img");
+                            StarImg4.setAttribute("src", "http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png");
+                            StarImg4.setAttribute("alt", "star4");
+                            StarImg4.setAttribute("height", "10");
+                            StarImg4.setAttribute("width", "10");
+                            Star4.appendChild(StarImg4);
+
+                            var Star5 = document.createElement("a");
+                            Star5.setAttribute("href", "javascript: submitRating(" + response_my_todo.myData[i].TaskId + ",5, "+ response_my_todo.user+")");
+                            StarSpan.appendChild(Star5);
+                            var StarImg5 = document.createElement("img");
+                            StarImg5.setAttribute("src", "http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png");
+                            StarImg5.setAttribute("alt", "star5");
+                            StarImg5.setAttribute("height", "10");
+                            StarImg5.setAttribute("width", "10");
+                            Star5.appendChild(StarImg5);
+
+                            var Star2 = document.createElement("a");
+                            Star2.setAttribute("href", "javascript: submitRating(" + response_my_todo.myData[i].TaskId + ",2, "+ response_my_todo.user+")");
+                            StarSpan.appendChild(Star2);
+                            var StarImg2 = document.createElement("img");
+                            StarImg2.setAttribute("src", "http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png");
+                            StarImg2.setAttribute("alt", "star2");
+                            StarImg2.setAttribute("height", "10");
+                            StarImg2.setAttribute("width", "10");
+                            Star2.appendChild(StarImg2);
+
+                            var Star3 = document.createElement("a");
+                            Star3.setAttribute("href", "javascript: submitRating(" + response_my_todo.myData[i].TaskId + ",3, "+ response_my_todo.user+")");
+                            StarSpan.appendChild(Star3);
+                            var StarImg3 = document.createElement("img");
+                            StarImg3.setAttribute("src", "http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png");
+                            StarImg3.setAttribute("alt", "star3");
+                            StarImg3.setAttribute("height", "10");
+                            StarImg3.setAttribute("width", "10");
+                            Star3.appendChild(StarImg3);
+                            // Label field
+                            var Labelrow = Newtable.insertRow(1);
+                            var LabelCell = Labelrow.insertCell(0);
+                            var LabelCmm = document.createElement("b");
+                            LabelCmm.innerHTML = "Comments";
+                            LabelCell.appendChild(LabelCmm);
+                            // Comment field
+                            var Cmmrow = Newtable.insertRow(2);
+                            var CmmCell = Cmmrow.insertCell(0);
+                            var CmmTable = document.createElement("table");
+                            CmmTable.setAttribute("id", "show_comment_" + response_my_todo.myData[i].TaskId);
+                            CmmCell.appendChild(CmmTable);
+                            for(var j=0;j < response_my_todo.myComments.length; j++){
+                                for(var k=0;k<response_my_todo.myComments[j].length;k++){
+                                    if(response_my_todo.myComments[j][k].TaskId == response_my_todo.myData[i].TaskId){
+                                        var SubCmmrow = CmmTable.insertRow(0);
+                                        var SubCmmCell = SubCmmrow.insertCell(0);
+                                        SubCmmCell.innerHTML = response_my_todo.myComments[j][k].Comment;
+                                    }
+                                }
+                            }
+                            // Post field
+                            var Postrow = Newtable.insertRow(3);
+                            var PostCell = Postrow.insertCell(0);
+                            PostCell.setAttribute("colspan", "2");
+                            PostCell.setAttribute("id", "comment_td_" + response_my_todo.myData[i].TaskId);
+                            PostCell.setAttribute("name", "comment_td_" + response_my_todo.myData[i].TaskId);
+                            var PostInput = document.createElement("input");
+                            PostCell.appendChild(PostInput);
+                            PostInput.setAttribute("type", "text");
+                            PostInput.setAttribute("width", "200px");
+                            PostInput.setAttribute("id", "comment_" + response_my_todo.myData[i].TaskId);
+                        }
+                        catch(ex){
+                            alert(ex);
+                        }
+                    }
+                    setFunctionForSharedField();
+
+                    var Suggesttable = document.getElementById("sugTbl_todo");
+                    for(var i in response_my_todo.myData) {
+                        try {
+                            // Task Infor field
+                            var NameCell2 = document.createElement("label");
+                            NameCell2.innerHTML = response_my_todo.myData[i].NameTask;
+                            NameCell2.setAttribute("name", "sugNameTask_" + response_my_todo.myData[i].TaskId);
+                            NameCell2.setAttribute("id", "sugNameTask_" + response_my_todo.myData[i].TaskId);
+                            Suggesttable.appendChild(NameCell2);
+                            // Star field
+                            var StarSpan = document.createElement("span");
+                            StarSpan.setAttribute("class", "star-rating");
+                            Suggesttable.appendChild(StarSpan);
+
+                            var Star1 = document.createElement("a");
+                            Star1.setAttribute("href", "javascript: submitRating(" + response_my_todo.myData[i].TaskId + ",1, "+ response_my_todo.user +")");
+                            StarSpan.appendChild(Star1);
+                            var StarImg1 = document.createElement("img");
+                            StarImg1.setAttribute("src", "http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png");
+                            StarImg1.setAttribute("alt", "star1");
+                            StarImg1.setAttribute("height", "10");
+                            StarImg1.setAttribute("width", "10");
+                            Star1.appendChild(StarImg1);
+
+                            var Star4 = document.createElement("a");
+                            Star4.setAttribute("href", "javascript: submitRating(" + response_my_todo.myData[i].TaskId + ",4, "+ response_my_todo.user+")");
+                            StarSpan.appendChild(Star4);
+                            var StarImg4 = document.createElement("img");
+                            StarImg4.setAttribute("src", "http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png");
+                            StarImg4.setAttribute("alt", "star4");
+                            StarImg4.setAttribute("height", "10");
+                            StarImg4.setAttribute("width", "10");
+                            Star4.appendChild(StarImg4);
+
+                            var Star5 = document.createElement("a");
+                            Star5.setAttribute("href", "javascript: submitRating(" + response_my_todo.myData[i].TaskId + ",5, "+ response_my_todo.user+")");
+                            StarSpan.appendChild(Star5);
+                            var StarImg5 = document.createElement("img");
+                            StarImg5.setAttribute("src", "http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png");
+                            StarImg5.setAttribute("alt", "star5");
+                            StarImg5.setAttribute("height", "10");
+                            StarImg5.setAttribute("width", "10");
+                            Star5.appendChild(StarImg5);
+
+                            var Star2 = document.createElement("a");
+                            Star2.setAttribute("href", "javascript: submitRating(" + response_my_todo.myData[i].TaskId + ",2, "+ response_my_todo.user+")");
+                            StarSpan.appendChild(Star2);
+                            var StarImg2 = document.createElement("img");
+                            StarImg2.setAttribute("src", "http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png");
+                            StarImg2.setAttribute("alt", "star2");
+                            StarImg2.setAttribute("height", "10");
+                            StarImg2.setAttribute("width", "10");
+                            Star2.appendChild(StarImg2);
+
+                            var Star3 = document.createElement("a");
+                            Star3.setAttribute("href", "javascript: submitRating(" + response_my_todo.myData[i].TaskId + ",3, "+ response_my_todo.user+")");
+                            StarSpan.appendChild(Star3);
+                            var StarImg3 = document.createElement("img");
+                            StarImg3.setAttribute("src", "http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png");
+                            StarImg3.setAttribute("alt", "star3");
+                            StarImg3.setAttribute("height", "10");
+                            StarImg3.setAttribute("width", "10");
+                            Star3.appendChild(StarImg3);
+                            Suggesttable.appendChild(document.createElement("br"));
+                            // Label field
+                            var LabelCmm = document.createElement("b");
+                            LabelCmm.innerHTML = "Comments";
+                            Suggesttable.appendChild(LabelCmm);
+                            // Comment field
+                            var CmmTable = document.createElement("table");
+                            CmmTable.setAttribute("id", "sugshow_comment_" + response_my_todo.myData[i].TaskId);
+                            Suggesttable.appendChild(CmmTable);
+                            for(var j=0;j < response_my_todo.myComments.length; j++){
+                                for(var k=0;k<response_my_todo.myComments[j].length;k++){
+                                    if(response_my_todo.myComments[j][k].TaskId == response_my_todo.myData[i].TaskId){
+                                        var SubCmmrow = CmmTable.insertRow(0);
+                                        var SubCmmCell = SubCmmrow.insertCell(0);
+                                        SubCmmCell.innerHTML = response_my_todo.myComments[j][k].Comment;
+                                    }
+                                }
+                            }
+                            // Post field
+                            var PostInput = document.createElement("input");
+                            PostInput.setAttribute("type", "text");
+                            PostInput.setAttribute("width", "200px");
+                            PostInput.setAttribute("id", "sugcomment_" + response_my_todo.myData[i].TaskId);
+                            PostInput.setAttribute("name", "sugcomment_" + response_my_todo.myData[i].TaskId);
+                            Suggesttable.appendChild(PostInput);
+                            Suggesttable.appendChild(document.createElement("br"));
+                        }
+                        catch(ex){
+                            alert(ex);
+                        }
+                    }
+                    setFunctionForSuggestionField();
+                }
+            };
+            xhttp.open("GET", "getTaskData", true);
+
+            xhttp.send();
+        </script>
+    </div>
+
+    <div class="tabcontent" id="SetTaskPage">
+        <form>
+            Start time of task <div><input type="time" id="STime_done_" name="STime_done_"></div><br>
+            Start date of task <div><input type="date" id="SDate_done_" name="SDate_done_" min="2000-01-02"></div><br>
+            Finish time of task <div><input type="time" id="FTime_done_" name="FTime_done_"></div><br>
+            Finish date of task <div><input type="date" id="FDate_done_" name="FDate_done_" min="2000-01-02"></div><br>
+            <script>
+                var today = new Date();
+                var dd = today.getDate();
+                var mm = today.getMonth()+1; //January is 0!
+                var yyyy = today.getFullYear();
+                if(dd<10){
+                    dd='0'+dd
+                }
+                if(mm<10){
+                    mm='0'+mm
+                }
+
+                today = yyyy+'-'+mm+'-'+dd;
+                document.getElementById("SDate").setAttribute("min", today);
+                document.getElementById("FDate").setAttribute("min", today);
+            </script>
+            <br>
+            Name of task <div><input type="text" id="NameTask_done_" name="NameTask_done_"></div><br>
+            Priority<br>
+            <span style="margin-left:2em">
+		<input type="radio" id="priority_1_task_done_" name="priority_task_1" value="1"> Urgent</span><br>
+            <span style="margin-left:2em">
+		<input type="radio" id="priority_2_task_done_" name="priority_task_1" value="2"> Pressing </span><br>
+            <span style="margin-left:2em">
+		<input type="radio" id="priority_3_task_done_" name="priority_task_1" value="3"> Normal </span><br>
+            <span style="margin-left:2em">
+		<input type="radio" id="priority_4_task_done_" name="priority_task_1" value="4"> Moderate </span><br>
+            Note<br>
+            <div><textarea id="NoteTask_done_" name="NoteTask_done_" rows=4 cols=50></textarea></div><br>
+            <br>
+            <button class="ui-btn ui-btn-inline ui-corner-all" type="button" name="setTask_td_" id="setTask_" onclick="mySetTask()">Add new Task</button>
         </form>
     </div>
-
-    <div class="tabcontent" id="Paris">
-
-    </div>
     <div class="tabcontent" id="SharedTaskPage">
-        <div class="classsharedtasks">
-            <!-- LOOP OVER THE TODOS IN $scope.todos -->
-            <table style="width:50%" id="myTbl">
-                <%for (i=0;i<myData.length;i++){%>
-                <tr>
-                        <td align="left" name="NameTask_td_<%= myData[i].TaskId %>">
-                        <label style="cursor:pointer" id="NameTask_<%= myData[i].TaskId %>">
-                            <%= myData[i].NameTask %>
-                        </label></td>
-                        <td align="left"><span class="star-rating">
-                              <a name="one_star" value="1" href="javascript: submitRating(<%= myData[i].TaskId %>,1, <%= user %>)"><img src="http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png" alt="Smiley face" height="10" width="10"></a>
-                              <a class="two_star" href="javascript: submitRating(<%= myData[i].TaskId %>,2, <%= user %>)"><img src="http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png" alt="Smiley face"   height="10"   width="10"></a>
-                              <a class="three_star" href="javascript: submitRating(<%= myData[i].TaskId %>,3, <%= user %>)"><img src="http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png" alt="Smiley face" height="10"   width="10"></a>
-                              <a class="four_star" href="javascript: submitRating(<%= myData[i].TaskId %>,4, <%= user %>)"><img src="http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png" alt="Smiley face"  height="10" width="10"></a>
-                              <a class="fives_star" href="javascript: submitRating(<%= myData[i].TaskId %>,5, <%= user %>)"><img src="http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png" alt="Smiley face" height="10"   width="10"></a>
-                            </span></td>
-                </tr>
-                <tr>
-                    <td></br><b>Comments</b></td>
-                </tr>
-                <tr>
-                    <td>
-                        <table id="show_comment_<%= myData[i].TaskId %>">
-                            <% for(j=0;j < myComments.length; j++){
-                            for(k=0;k<myComments[j].length;k++){%><td><tr>
-                                    <%if(myComments[j][k].TaskId == myData[i].TaskId){
-                                    %>
-                                    <%= myComments[j][k].Comment %></br>
-                                    <%}%></tr></td><%}}%>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="left" colspan="2" id="comment_td_<%= myData[i].TaskId %>" name="comment_td_<%= myData[i].TaskId %>">
-                        <input type="text" id="comment_<%= myData[i].TaskId %>" width="200px"/>
-                    </td>
-                </tr>
-                <%}%>
-            </table>
-        </div>
-        <p id="demo"></p>
+        <!-- LOOP OVER THE TODOS IN $scope.todos -->
+        <table style="width:50%" id="myTbl_todo_1">
+        </table>
     </div>
 </div>
 
 <script>
-
-    function getMyData(){
-
-        return
-    }
-</script>
-<script>
-    $(document).ready(function(){
+    function setFunctionForSharedField(){
         try {
-            var table = document.getElementById("myTbl");
+            var table = document.getElementById("myTbl_todo_1");
             var tds = table.getElementsByTagName("td");
             var matchingTds = [];
             var myNameTasks = [];
@@ -154,8 +401,8 @@
             for (var i = 0, len = tds.length, td, tdName; i < len; ++i) {
                 td = tds[i];
                 tdName = td.getAttribute("name");
-                if (tdName && tdName.indexOf("NameTask_td_") == 0) {
-                    myNameTasks.push(td.getElementsByTagName("label")[0]);
+                if (tdName && tdName.indexOf("NameTask_") == 0) {
+                    myNameTasks.push(td);
                 }
                 else if (tdName && tdName.indexOf("comment_td_") == 0) {
                     matchingTds.push(td.getElementsByTagName("input")[0]);
@@ -165,7 +412,7 @@
                 var myStr = "#" + matchingTds[j].id;
                 $(myStr).keydown(function (e) {
                     if (e.which == 13) {
-                        submitComment($(this).attr('id'), $(this).val(), <%= user %>);
+                        submitComment($(this).attr('id'), $(this).val(), response_my_todo.user);
                         $(this).val("");
                     }
                 });
@@ -176,16 +423,49 @@
                     submitSuggestion($(this).attr('id'), $(this).text().trim());
                 });
             }
+        }catch(ex){
+            alert(ex);
+        }
+    }
 
-            var table2 = document.getElementById("myTbl2");
+    function setFunctionForSuggestionField(){
+        try {
+            var table = document.getElementById("sugTbl_todo");
+            var tds = table.getElementsByTagName("input");
+            var matchingTds = [];
+
+            for (var i = 0, len = tds.length, td, tdName; i < len; ++i) {
+                td = tds[i];
+                tdName = td.getAttribute("name");
+                if (tdName && tdName.indexOf("sugcomment_") == 0) {
+                    matchingTds.push(td);
+                }
+            }
+            for (var j = 0; j < matchingTds.length; j++) {
+                var myStr = "#" + matchingTds[j].id;
+                $(myStr).keydown(function (e) {
+                    if (e.which == 13) {
+                        submitComment2($(this).attr('id'), $(this).val(), response_my_todo.user);
+                        $(this).val("");
+                    }
+                });
+            }
+        }catch(ex){
+            alert(ex);
+        }
+    }
+
+    function setFunction(){
+        try {
+            var table2 = document.getElementById("myTbl_todo_2");
             var tds2 = table2.getElementsByTagName("td");
             var DeleteBtns = [];
             var myNameTasks2 = [];
             for (var i2 = 0, len2 = tds2.length, td2, tdName2; i2 < len2; ++i2) {
                 td2 = tds2[i2];
                 tdName2 = td2.getAttribute("name");
-                if (tdName2 && tdName2.indexOf("NameTask2_td_") == 0) {
-                    myNameTasks2.push(td2.getElementsByTagName("label")[0]);
+                if (tdName2 && tdName2.indexOf("NameTask2_") == 0) {
+                    myNameTasks2.push(td2.getElementsByTagName("a")[0]);
                 }
                 else if (tdName2 && tdName2.indexOf("delete_td_") == 0) {
                     DeleteBtns.push(td2.getElementsByTagName("button")[0]);
@@ -199,12 +479,64 @@
             }
             for (var k2 = 0; k2 < myNameTasks2.length; k2++) {
                 var myStr2 = "#" + myNameTasks2[k2].id;
-                $(myStr2).click(function () {
-                    submitSuggestion($(this).attr('id'), $(this).text().trim());
-                });
+                /*$(myStr2).click(function () {
+                 submitSuggestion($(this).attr('id'), $(this).text().trim());
+                 });*/
             }
-        }catch(ex){alert(ex);}
-    });
+        }catch(ex){
+            alert(ex);
+        }
+    }
+
+    function setPara2Popup(ParaSet){
+        try {
+            var STime_modify_ = document.getElementById("STime_modify_");
+            STime_modify_.setAttribute("value", response_my_todo.myData2[ParaSet].startTime);
+
+            var SDate_modify_ = document.getElementById("SDate_modify_");
+            SDate_modify_.setAttribute("value", response_my_todo.myData2[ParaSet].startDate);
+
+            var FTime_modify_ = document.getElementById("FTime_modify_");
+            FTime_modify_.setAttribute("value", response_my_todo.myData2[ParaSet].finishTime);
+
+            var FDate_modify_ = document.getElementById("FDate_modify_");
+            FDate_modify_.setAttribute("value", response_my_todo.myData2[ParaSet].finishDate);
+
+            var NameTask_modify_ = document.getElementById("NameTask_modify_");
+            NameTask_modify_.setAttribute("value", response_my_todo.myData2[ParaSet].NameTask);
+
+            var NoteTask_modify_ = document.getElementById("NoteTask_modify_");
+            NoteTask_modify_.value = response_my_todo.myData2[ParaSet].NoteTask;
+
+            var SubmitModify = document.getElementById("modify_");
+            SubmitModify.setAttribute("onclick", "myModify(" + response_my_todo.myData2[ParaSet].TaskId + ")");
+            //SubmitModify.setAttribute("data-rel", "back");
+
+            var priority_1_task_modify_ = document.getElementById("priority_1_task_modify_");
+            if (response_my_todo.myData2[ParaSet].priorityTask == 1)
+                priority_1_task_modify_.checked = true;
+            var priority_2_task_modify_ = document.getElementById("priority_2_task_modify_");
+            if (response_my_todo.myData2[ParaSet].priorityTask == 2)
+                priority_2_task_modify_.checked = true;
+            var priority_3_task_modify_ = document.getElementById("priority_3_task_modify_");
+            if (response_my_todo.myData2[ParaSet].priorityTask == 3)
+                priority_3_task_modify_.checked = true;
+            var priority_4_task_modify_ = document.getElementById("priority_4_task_modify_");
+            if (response_my_todo.myData2[ParaSet].priorityTask == 4)
+                priority_4_task_modify_.checked = true;
+        }catch(ex){
+            alert(ex);
+        }
+    }
+
+    function setPara2Popup4DoneButton(ParaSet){
+        try {
+            var SubmitDone = document.getElementById("done_btn_");
+            SubmitDone.setAttribute("onclick", "myDone(" + response_my_todo.myData2[ParaSet].TaskId + ")");
+        }catch(ex){
+            alert(ex);
+        }
+    }
 </script>
 <script>
     function myDelete(id){
@@ -223,21 +555,28 @@
     }
 
     function myModify(id) {
-        var myId = id.split('_')[1];
-        var STime = $("#STime_modify_"+myId).val();
-        var SDate = $("#SDate_modify_"+myId).val();
-        var FTime = $("#FTime_modify_"+myId).val();
-        var FDate = $("#FDate_modify_"+myId).val();
-        var NameTask = $("#NameTask_modify_"+myId).val();
-        var NoteTask = $("#NoteTask_modify_"+myId).val();
-        var priority = $(".priority_task_modify_"+myId+":checked").val();
+        var myId = id;
+        var STime = $("#STime_modify_").val();
+        var SDate = $("#SDate_modify_").val();
+        var FTime = $("#FTime_modify_").val();
+        var FDate = $("#FDate_modify_").val();
+        var NameTask = $("#NameTask_modify_").val();
+        var NoteTask = $("#NoteTask_modify_").val();
+        var priority = 4;
+        if(document.getElementById("priority_1_task_modify_").checked)
+            priority = 1;
+        else if(document.getElementById("priority_2_task_modify_").checked)
+            priority = 2;
+        if(document.getElementById("priority_3_task_modify_").checked)
+            priority = 3;
+
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 // TODO modify task
                 try {
                     $("#NameTask2_" + myId).val(NameTask);
-                    $("#myPopup").popup("close");
+                    //$("#modify_todo_popup").close();
                 }
                 catch(ex){
                     alert(ex);
@@ -250,12 +589,59 @@
     }
 
     function myDone(id) {
-        var myId = id.split('_')[1];
-        document.location.href = 'DoneTask?id=' + myId;
+        var myId = id;
+        var exp = $("#ExpTask").val();
+        var shared = document.getElementById("IsShareTask").checked;
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                // TODO done task
+                try {
+                }
+                catch(ex){
+                    alert(ex);
+                }
+            }
+        };
+        xhttp.open("POST", "DoneTask", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("id="+myId+"&exp="+exp+"&shared="+shared);
     }
 
-    function submitRating(id, star, user)
-    {
+    function mySetTask(){
+        var STime = $("#STime_done_").val();
+        var SDate = $("#SDate_done_").val();
+        var FTime = $("#FTime_done_").val();
+        var FDate = $("#FDate_done_").val();
+        var NameTask = $("#NameTask_done_").val();
+        var NoteTask = $("#NoteTask_done_").val();
+        var priority = 4;
+        if(document.getElementById("priority_1_task_done_").checked)
+            priority = 1;
+        else if(document.getElementById("priority_2_task_done_").checked)
+            priority = 2;
+        if(document.getElementById("priority_3_task_done_").checked)
+            priority = 3;
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                // TODO set task
+                try {
+
+                }
+                catch(ex){
+                    alert(ex);
+                }
+            }
+        };
+        xhttp.open("POST", "SetTask", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("id="+response_my_todo.user+"&STime="+STime+"&SDate="+SDate+"&FTime="+FTime+"&FDate="+FDate+"&NameTask="+NameTask+"&NoteTask="+NoteTask+"&priority="+priority);
+    }
+
+    function submitRating(id, star, user) {
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
@@ -275,10 +661,45 @@
             if (this.readyState == 4 && this.status == 200) {
                 // alert("OK");
                 // document.getElementById("demo").innerHTML = cmmt;
-                var tableCmmt = document.getElementById("show_comment_" + id);
-                var rowCmmt = tableCmmt.insertRow(-1);
-                var cellCmmt = rowCmmt.insertCell(0);
-                cellCmmt.innerHTML = cmmt;
+                var maintableCmmt = document.getElementById("show_comment_" + id);
+                if (maintableCmmt != null){
+                    var mainrowCmmt = maintableCmmt.insertRow(-1);
+                    var maincellCmmt = mainrowCmmt.insertCell(0);
+                    maincellCmmt.innerHTML = cmmt;
+                }
+                var tableCmmt = document.getElementById("sugshow_comment_" + id);
+                if (tableCmmt != null){
+                    var rowCmmt = tableCmmt.insertRow(-1);
+                    var cellCmmt = rowCmmt.insertCell(0);
+                    cellCmmt.innerHTML = cmmt;
+                }
+            }
+        };
+        xhttp.open("POST", "CommentTask?id=" + id + "&cmmt=" + cmmt + "&user=" + user, true);
+
+        xhttp.send();
+    }
+
+    function submitComment2(id, cmmt, user){
+        id = id.split('_');
+        id = id[id.length - 1];
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                // alert("OK");
+                // document.getElementById("demo").innerHTML = cmmt;
+                var tableCmmt = document.getElementById("sugshow_comment_" + id);
+                if (tableCmmt != null) {
+                    var rowCmmt = tableCmmt.insertRow(-1);
+                    var cellCmmt = rowCmmt.insertCell(0);
+                    cellCmmt.innerHTML = cmmt;
+                }
+                var maintableCmmt = document.getElementById("show_comment_" + id);
+                if (maintableCmmt != null) {
+                    var mainrowCmmt = maintableCmmt.insertRow(-1);
+                    var maincellCmmt = mainrowCmmt.insertCell(0);
+                    maincellCmmt.innerHTML = cmmt;
+                }
             }
         };
         xhttp.open("POST", "CommentTask?id=" + id + "&cmmt=" + cmmt + "&user=" + user, true);
@@ -287,18 +708,7 @@
     }
 
     function submitSuggestion(id, sug){
-        id = id.split('_');
-        id = id[id.length - 1];
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                // alert("OK");
-                // document.getElementById("demo").innerHTML = cmmt;
-            }
-        };
-        xhttp.open("POST", "SuggestTask?id=" + id + "&sug=" + sug, true);
 
-        xhttp.send();
     }
 </script>
 

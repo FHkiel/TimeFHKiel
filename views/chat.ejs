@@ -11,10 +11,10 @@
         <div data-role="main" class="ui-content">
             <a href="#myPopup" data-rel="popup" class="ui-btn ui-btn-inline ui-corner-all ui-icon-check ui-btn-icon-left"style="min-width:20px;border:outset; margin-top: 0px">Open Chat</a>
             <div data-role="popup" id="myPopup" class="ui-content" style="min-width:240px;border:whitesmoke">
-                <div class="chat">
-                    <div class="chatHeads2">Public Chat</div>
-                    <div class="new2">
-                        <p class="new1" id="messages"> </p>
+                <div style="border: inset;" class="chat">
+                    <div class="chatHeads">Public Chat</div>
+                    <div class="testt">
+                        <ul class="pChatscrl" id="messages"></ul>
                     </div>
                 </div>
                 <div class="button">
@@ -74,10 +74,11 @@
         return false;
     });
     socket.on('chat message', function (msg) {
-        $('#messages').append($('<p>').html("<span style='color:blue;  font-weight: bold;'>" + msg.name + ':</span>' + msg.message));
-
+        $('#messages').append($('<li class="pChatscrl">').html("<span class='pChatscrl' style='color:blue;  font-weight: bold;'>" + msg.name + ':</span>' + msg.message));
     });
 
-
-
+    $(document).ready(function(){
+        $('#messages').animate({
+            scrollTop: $('#messages')[0].scrollHeight}, 2000);
+    });
 </script>

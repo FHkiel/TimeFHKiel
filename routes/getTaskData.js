@@ -16,20 +16,30 @@ var myId = 2;
 /* GET home page. */
 
 router.get('/', function(req, res, next){
-    var user = 2;
-    var filtered = _.where(taskData, {Shared: "True"});
-    var filtered2 = _.where(taskData, {Owner: myId});
-    var filteredComments = [];
-    for(i in filtered) {
-        var myChunk = [];
-        for(j in commentData) {
-            if (filtered[i].TaskId == commentData[j].TaskId) {
-                myChunk.push(commentData[j]);
+    try {
+        var user = 2;
+        var filtered = _.where(taskData, {Shared: "True"});
+        var filtered2 = _.where(taskData, {Owner: myId});
+        var filteredComments = [];
+        for (i in filtered) {
+            var myChunk = [];
+            for (j in commentData) {
+                if (filtered[i].TaskId == commentData[j].TaskId) {
+                    myChunk.push(commentData[j]);
+                }
             }
+            filteredComments.push(myChunk);
         }
-        filteredComments.push(myChunk);
     }
+    catch(ex){
+        console.log(ex);
+    }
+    console.log(filtered);
     res.json({'myData' : filtered, 'myData2' : filtered2, 'myComments' : filteredComments, 'user' : user});
+});
+
+router.post('/', function(req, res){
+    res.send('ok');
 });
 
 
