@@ -26,12 +26,12 @@
             </div>
 
             <div class="usrlist">
-               <div><p class="chatHeads"> Online Users</p></div>
-            <div id="users"></div>
+                <div><p class="chatHeads"> Online Users</p></div>
+                <div id="users"></div>
             </div>
         </div>
     </div>
-    </div>
+</div>
 
 <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
@@ -74,13 +74,16 @@
         return false;
     });
     socket.on('chat message', function (msg) {
-        $('#messages').append($('<li class="pChatscrl">').html("<span class='pChatscrl' style='color:blue;  font-weight: bold;'>" + msg.name + ':</span>' + msg.message));
+        $('#messages').append($('<li>').html("<span class='pChatscrl' style='color:blue;  font-weight: bold;'>" + msg.name + ':</span>' + msg.message));
     });
 
+<<<<<<< Updated upstream
     $(document).ready(function(){
         $('#chat').animate({
             scrollTop: $('#chat')[0].scrollHeight}, 2000);
     });
+=======
+>>>>>>> Stashed changes
     function autoScrolls(){
         var elem = document.getElementById('chat');
         elem.scrollTop = elem.scrollHeight;
