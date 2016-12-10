@@ -19,14 +19,17 @@
     border: none;
 
 }
+#messages{
 
-.chat {
+}
+#chat {
     width: 242px;
     margin-top: 0px;
     margin-left: 0px;
     height: 320px;
-    overflow-y: scroll;
+    overflow: auto;
     border: outset;
+    top: 0;
 }
 
 .usrlist {
@@ -57,14 +60,11 @@
     height: 150px;
 }
 .user{
-    overflow: auto;
+
 }
 .pChatscrl{
-    overflow-y:auto;
-    border: solid;
+
 }
 .testt{
-    overflow: scroll;
-    border: dotted;
 }
 li:nth-child(odd){background:lightsteelblue; }
