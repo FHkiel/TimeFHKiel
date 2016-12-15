@@ -31,9 +31,9 @@ var klassMod  = mongoose.model('fhcalendars');
 
 var Person = klassMod;
 /* GET home page. */
-router.get('/getClassesByName', function(req, res, next) {
-    console.log(req.query.title);
-    Person.find({'title':unescape(req.query.title)}, function (err, docs) {
+router.get('/getClassesByName/:title', function(req, res, next) {
+    console.log(req.params.title);
+    Person.find({'title':unescape(req.params.title)}, function (err, docs) {
         if (!err) {
             res.send(docs);
 

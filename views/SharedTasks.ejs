@@ -4,12 +4,12 @@
 
     <ul class="tab">
         <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'ShowTaskPage')"><img src="https://cdn2.iconfinder.com/data/icons/business-office-icons/256/To-do_List-512.png" height="30" width="30"></img></a></li>
-        <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'SetTaskPage')"><img src="../public/images/NewTask.png" height="20" width="20"></img></a></li>
+        <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'SetTaskPage')"><img src="../images/NewTask.png" height="20" width="20"></img></a></li>
         <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'SharedTaskPage')"><img src="https://cdn2.iconfinder.com/data/icons/lightly-icons/30/group-480.png" height="30" width="30"></img></a></li>
     </ul>
 
 
-    <div class="tabcontent" id="ShowTaskPage" style="display: block;" ng-app="myApp" ng-controller="myCtrl">
+    <div class="tabcontent" id="ShowTaskPage" style="display: block;" >
         <!-- LOOP OVER THE TODOS IN $scope.todos -->
         <table style="width:50%" id="myTbl_todo_2">
             <div data-role="popup" id="modify_todo_popup" class="ui-content" style="min-width:250px;">
@@ -31,8 +31,8 @@
                         }
 
                         today = yyyy+'-'+mm+'-'+dd;
-                        document.getElementById("SDate").setAttribute("min", today);
-                        document.getElementById("FDate").setAttribute("min", today);
+                     // change it please   document.getElementById("SDate").setAttribute("min", today);
+                     // change it please   document.getElementById("FDate").setAttribute("min", today);
                     </script>
                     <br>
                     Name of task <div><input type="text" id="NameTask_modify_" name="NameTask"></div><br>
@@ -363,8 +363,8 @@
                 }
 
                 today = yyyy+'-'+mm+'-'+dd;
-                document.getElementById("SDate").setAttribute("min", today);
-                document.getElementById("FDate").setAttribute("min", today);
+               //change it please document.getElementById("SDate").setAttribute("min", today);
+               // change please document.getElementById("FDate").setAttribute("min", today);
             </script>
             <br>
             Name of task <div><input type="text" id="NameTask_done_" name="NameTask_done_"></div><br>

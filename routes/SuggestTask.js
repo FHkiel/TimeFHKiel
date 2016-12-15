@@ -21,7 +21,7 @@ router.get('/', function(req, res, next) {
     var Score = [];
     myName = "i am waking up to the sounds of chainsaws";
     var keyTerms = myName.tokenizeAndStem();
-    console.log(keyTerms);
+    //console.log(keyTerms);
     for(var i = 0; i < filtered.length; i++){
         // TODO measure distance for conditions (>0.7)
         if(filtered[i].TaskId !== myTask && (filtered[i].NameTask.includes(myName) || filtered[i].NoteTask.includes(myName) || filtered[i].Exp.includes(myName))){

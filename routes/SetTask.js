@@ -25,8 +25,8 @@ var add_2_DB = function(input){
 
      fs.writeFile(path.join(__dirname,'tasks.json'), writtenData,  function(err2, bytes2)
      {
-         if (err2)
-            console.error(err2);
+         //if (err2)
+          //  console.error(err2);
      });
 }
 

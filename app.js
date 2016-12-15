@@ -28,6 +28,7 @@ var busboy = require('connect-busboy');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
+
 app.set('view engine', 'ejs');
 app.use(busboy());
 // uncomment after placing your favicon in /public
@@ -66,7 +67,7 @@ app.use('/calendar',isAuthenticated(), calendar);
 app.use('/timeTable',isAuthenticated(), timeTable);
 app.use('/getTimes',isAuthenticated(), getTimesPost);
 app.use('/chat',isAuthenticated(),chats);
-app.use('/getClassesName',isAuthenticated(), getClassesName);
+app.use('/getClassesName', getClassesName);
 app.use('/getTaskData',isAuthenticated() ,getTaskData);
 app.use('/DoneTask',isAuthenticated() ,doneTask);
 app.use('/ModifyTask',isAuthenticated() ,ModifyTask);

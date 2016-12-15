@@ -12,7 +12,6 @@ var theFileName ='';
 var origFileName = '';
 var theFileExt = '';
 var timetable = [];
-var async=require('async')
 var mongoose = require('mongoose');
 //mongoose.Promise = global.Promise;
 
@@ -33,28 +32,21 @@ router.post('/', function(req, res) {
         origFileName =filename;
 
         file.pipe(fstream);
-
         fstream.on('close', function () {
 
-            pdfParser.on("pdfParser_dataReady", function (pdfData) {
-                fs2.writeFile('./Schedules/'+theFileName, JSON.stringify(pdfData),function(error){
-                    toJSONRefine();
-                    insertToDB(function(){
-                        res.send('back');
-                    });
-                });
-
-            });
-            pdfParser.loadPDF('./Schedules/'+ origFileName);
-
+            res.redirect('back');
         });
 
+        pdfParser.on("pdfParser_dataReady", function (pdfData) {
+            fs2.writeFile('./Schedules/'+theFileName, JSON.stringify(pdfData));
+            console.log("this was compiled");
+        });
+        pdfParser.loadPDF('./Schedules/'+ origFileName);
 
-
-            /*setTimeout(toJSONRefine, 3000);*/
+        setTimeout(toJSONRefine, 3000);
 
         // if(timetable.length > 4)
-            /* setTimeout(insertToDB, 4000);*/
+        setTimeout(insertToDB, 4000);
 
         //insertToDB(function () {
         //         toJSONRefine(function(){
@@ -74,7 +66,7 @@ function toJSONRefine(){
 
 
 
-function insertToDB(callback){
+function insertToDB(){
 
     mongoose.createConnection('mongodb://localhost/calendar');
 
@@ -94,10 +86,9 @@ function insertToDB(callback){
     }else{
         KlassModel =  mongoose.model('fhcalendars');
     }
-    var temp=0;
-    async.whilst(function(){
-        return temp<timetable.length;
-    },function(callback){
+
+    for (var temp=0; temp < timetable.length; temp++) {
+        console.log(timetable[temp]);
         var klass = new KlassModel(timetable[temp]);
         klass.save(function (err, data) {
             if (err) {
@@ -107,13 +98,9 @@ function insertToDB(callback){
 
 
             }
-            temp++;
-            callback();
         });
-    },function(err){
+    }
 
-    })
-    callback();
 
 }
 

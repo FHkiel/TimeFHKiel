@@ -75,7 +75,7 @@
                 <span class="close">×</span>
                 <div ng-app="myApp" ng-controller="myCtrl">
                     <div ng-repeat="x in classes" style="align:right;">
-                        <input type="checkbox" id="{{x}} "name="{{x}}" ng-change="myFunc(x)" ng-model="myValue">{{x}}
+                        <input type="checkbox" id="{{x}} "name="{{x}}" ng-change="myFunc1(x,$index,sts)" ng-model='sts'> <div class="subjname">{{x}}</div>
                     </div>
                 </div>
             </div>
@@ -98,21 +98,31 @@
                 .then(function(response) {
                     $scope.classes = response.data;
                 });
-        $scope.myFunc = function(x) {
-            $http.get("getClassesByName/"+x)
-                    .then(function(response) {
-                        pushEvents( response.data);
-                    });
+        $scope.myFunc1 = function(x,id, status) {
+            if (status){
+                console.log(id + " is " + status);
+                $http.get("getClassesByName/" + x)
+                        .then(function (response) {
+                            pushEvents(response.data, id);
+                        });
+            }else{
+                removeEvents(id);
+            }
         };
     });
 </script>
 
 <script>
-    function pushEvents(newEvents) {
+    function pushEvents(newEvents,id) {
         for(var i = 0; i< newEvents.length; i++){
-            console.log(JSON.stringify(newEvents[i]));
-            $('#calendar').fullCalendar( 'renderEvent',newEvents[i]);
+            var newObject = newEvents[i];
+            newObject["id"] = id;
+            console.log(JSON.stringify(newObject));
+            $('#calendar').fullCalendar( 'renderEvent',newObject);
         }
+    }
+    function removeEvents(id){
+        $('#calendar').fullCalendar( 'removeEvents',id );
     }
 </script>
 <style>
@@ -125,7 +135,7 @@
         display: none; /* Hidden by default */
         position: fixed; /* Stay in place */
         z-index: 10; /* Sit on top */
-        padding-top: 100px; /* Location of the box */
+        padding-top: 30px; /* Location of the box */
         right: 10px;
         top: 10px;
         width: 400px; /* Full width */
@@ -133,7 +143,7 @@
         overflow: auto; /* Enable scroll if needed */
         background-color: rgb(0,0,0); /* Fallback color */
         background-color: rgba(211,211,211,0.95); /* Black w/ opacity */
-        left:45%;
+        left:73%;
     }
     #myBtn{
         right:0px;
@@ -153,9 +163,9 @@
 
     /* The Close Button */
     .close {
-        color: #aaaaaa;
+        color: #000;
         float: right;
-        font-size: 28px;
+        font-size: 40px;
         font-weight: bold;
     }
     .close:hover,
@@ -164,6 +174,10 @@
         text-decoration: none;
         cursor: pointer;
     }
+    .subjname{
+        margin: 0 36px 5px;
+    }
+    .ui-checkbox{float: left;}
 </style>
 <script>
     var modal = document.getElementById('myModal');

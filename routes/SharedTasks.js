@@ -51,8 +51,8 @@ router.post('/', function(req, res){
     var writtenData = JSON.stringify(rateData);
 
     fs.writeFile(path.join(__dirname, 'rates.json'), writtenData, function (err2, bytes2) {
-        if (err2)
-            console.error(err2);
+        //if (err2)
+          // console.error(err2);
     });
 
     var filtered = _.where(rateData, JSON.parse('{"TaskId" : ' + req.query['id'] + "}"));
@@ -66,8 +66,8 @@ router.post('/', function(req, res){
     var writtenData2 = JSON.stringify(taskData);
 
     fs.writeFile(path.join(__dirname, 'tasks.json'), writtenData2, function (err2, bytes2) {
-        if (err2)
-            console.error(err2);
+        //if (err2)
+          //  console.error(err2);
     });
     res.send("Ok");
 });
