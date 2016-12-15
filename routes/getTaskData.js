@@ -34,7 +34,7 @@ router.get('/', function(req, res, next){
     catch(ex){
         console.log(ex);
     }
-    console.log(filtered);
+    console.log("sdafsd" + filtered + filtered2 + filteredComments + user);
     res.json({'myData' : filtered, 'myData2' : filtered2, 'myComments' : filteredComments, 'user' : user});
 });
 

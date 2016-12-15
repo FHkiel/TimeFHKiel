@@ -64,7 +64,7 @@ app.use('/users',isAuthenticated(), users);
 app.use('/upload',isAuthenticated(), uploadGet);
 app.use('/upload',isAuthenticated(), uploadPost);
 app.use('/calendar',isAuthenticated(), calendar);
-app.use('/timeTable',isAuthenticated(), timeTable);
+app.use('/timeTable',isAuthenticated() , timeTable);
 app.use('/getTimes',isAuthenticated(), getTimesPost);
 app.use('/chat',isAuthenticated(),chats);
 app.use('/getClassesName', getClassesName);

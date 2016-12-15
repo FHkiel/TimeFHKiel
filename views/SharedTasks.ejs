@@ -1,6 +1,8 @@
 
 <div class="taskparent">
-    <h3>To Do List</h3>
+    <p class="tooltip">To Do List
+        <span class="tooltiptext">Tooltip text</span>
+    </p>
 
     <ul class="tab">
         <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'ShowTaskPage')"><img src="https://cdn2.iconfinder.com/data/icons/business-office-icons/256/To-do_List-512.png" height="30" width="30"></img></a></li>
@@ -9,7 +11,7 @@
     </ul>
 
 
-    <div class="tabcontent" id="ShowTaskPage" style="display: block;" >
+    <div class="tabcontent" id="ShowTaskPage" style="display: block;" ng-app="myApp" ng-controller="myCtrl">
         <!-- LOOP OVER THE TODOS IN $scope.todos -->
         <table style="width:50%" id="myTbl_todo_2">
             <div data-role="popup" id="modify_todo_popup" class="ui-content" style="min-width:250px;">
@@ -31,8 +33,8 @@
                         }
 
                         today = yyyy+'-'+mm+'-'+dd;
-                     // change it please   document.getElementById("SDate").setAttribute("min", today);
-                     // change it please   document.getElementById("FDate").setAttribute("min", today);
+                        document.getElementById("SDate").setAttribute("min", today);
+                        document.getElementById("FDate").setAttribute("min", today);
                     </script>
                     <br>
                     Name of task <div><input type="text" id="NameTask_modify_" name="NameTask"></div><br>
@@ -80,25 +82,52 @@
                                 row.setAttribute("name", "Row_" + response_my_todo.myData2[i].TaskId);
                                 // Task Infor field
                                 var NameCell = row.insertCell(0);
+                                NameCell.setAttribute("colspan", 3);
                                 var NameTab = document.createElement("a");
                                 NameTab.innerHTML = response_my_todo.myData2[i].NameTask;
+                                NameTab.setAttribute("onclick", "setPara2Popup4Suggestion(" + i + ")");
                                 NameTab.setAttribute("name", "NameTask2_" + response_my_todo.myData2[i].TaskId);
                                 NameTab.setAttribute("id", "NameTask2_" + response_my_todo.myData2[i].TaskId);
                                 NameTab.setAttribute("href", "#suggestion_todo_popup");
                                 NameTab.setAttribute("data-rel", "popup");
                                 NameTab.setAttribute("style", "cursor:pointer");
                                 NameCell.appendChild(NameTab);
+
+                                var date_row = table.insertRow(1);
+                                date_row.setAttribute("name", "Row_" + response_my_todo.myData2[i].TaskId);
+                                var DateCell = date_row.insertCell(0);
+                                DateCell.setAttribute("colspan", 3);
+                                var DateTab = document.createElement("label");
+                                var StartDateTab = document.createElement("small");
+                                StartDateTab.innerHTML = "Start: " + response_my_todo.myData2[i].startDate + " " + response_my_todo.myData2[i].startTime + "<br />Finish: " + response_my_todo.myData2[i].finishDate + " " + response_my_todo.myData2[i].finishTime;
+                                StartDateTab.setAttribute("name", "TimeTask2_" + response_my_todo.myData2[i].TaskId);
+                                StartDateTab.setAttribute("id", "TimeTask2_" + response_my_todo.myData2[i].TaskId);
+                                StartDateTab.appendChild(DateTab);
+                                DateCell.appendChild(StartDateTab);
+
+                                var PriorityTab = document.createElement("label");
+                                PriorityTab.innerHTML = response_my_todo.myData2[i].priorityTask;
+                                PriorityTab.setAttribute("name", "PriorityTask2_" + response_my_todo.myData2[i].TaskId);
+                                PriorityTab.setAttribute("id", "PriorityTask2_" + response_my_todo.myData2[i].TaskId);
+                                DateCell.appendChild(PriorityTab);
                                 // Delete field
-                                var DeleteCell = row.insertCell(1);
-                                var DeleteBtn = document.createElement("BUTTON");
+                                var button_row = table.insertRow(2);
+                                button_row.setAttribute("name", "Row_" + response_my_todo.myData2[i].TaskId);
+                                var DeleteCell = button_row.insertCell(0);
+                                var DeleteBtn = document.createElement("IMG");
                                 DeleteBtn.innerHTML = "Delete";
-                                DeleteBtn.setAttribute("class", "ui-btn ui-btn-inline ui-corner-all");
+                                //DeleteBtn.setAttribute("class", "ui-btn ui-btn-inline ui-corner-all");
+                                DeleteBtn.setAttribute("src", "https://cdn4.iconfinder.com/data/icons/colicon/24/close_delete-128.png");
+                                DeleteBtn.setAttribute("width", 42);
+                                DeleteBtn.setAttribute("height", 42);
+                                DeleteBtn.setAttribute("title", "Delete Task");
                                 DeleteCell.setAttribute("name", "delete_td_" + response_my_todo.myData2[i].TaskId);
                                 DeleteBtn.setAttribute("id", "delete_" + response_my_todo.myData2[i].TaskId);
-                                DeleteBtn.setAttribute("type", "button");
+                                DeleteBtn.setAttribute("style", "cursor:pointer");
+                                //DeleteBtn.setAttribute("type", "button");
                                 DeleteCell.appendChild(DeleteBtn);
                                 // Modify field
-                                var ModifyCell = row.insertCell(2);
+                                var ModifyCell = button_row.insertCell(1);
                                 ModifyCell.setAttribute("name", "modify_td_" + response_my_todo.myData2[i].TaskId);
 
                                 var MainDiv = document.createElement("DIV");
@@ -108,14 +137,25 @@
 
                                 var ModifyButton = document.createElement("A");
                                 MainDiv.appendChild(ModifyButton);
-                                ModifyButton.innerHTML = "Modify";
+                                //ModifyButton.innerHTML = "Modify";
+                                var ModifyImg = document.createElement("IMG");
+                                ModifyImg.setAttribute("src", "http://www.garagemotoguzzi.com/wp-content/themes/moto-guzzi/img/svg/modify-icon.png");
+                                ModifyImg.setAttribute("width", 42);
+                                ModifyImg.setAttribute("height", 42);
+                                /*ModifyButton.setAttribute("class", "tooltip");
+                                 var spanHint = document.createElement("span");
+                                 spanHint.setAttribute("class", "tooltiptext");
+                                 spanHint.innerHTML = "Modify Task";
+                                 ModifyButton.appendChild(spanHint);*/
+                                ModifyImg.setAttribute("title", "Modify Task");
+                                ModifyButton.appendChild(ModifyImg);
                                 ModifyButton.setAttribute("href", "#modify_todo_popup");
-                                ModifyButton.setAttribute("onclick", "setPara2Popup(" + i + ")");
+                                ModifyImg.setAttribute("onclick", "setPara2Popup(" + i + ")");
                                 ModifyButton.setAttribute("data-rel", "popup");
-                                ModifyButton.setAttribute("class", "ui-btn ui-btn-inline ui-corner-all");
+                                //ModifyButton.setAttribute("class", "ui-btn ui-btn-inline ui-corner-all");
                                 ModifyButton.setAttribute("id", "modify_button_" + response_my_todo.myData2[i].TaskId);
                                 // Done field
-                                var DoneCell = row.insertCell(3);
+                                var DoneCell = button_row.insertCell(2);
                                 DoneCell.setAttribute("name", "done_td_" + response_my_todo.myData2[i].TaskId);
 
                                 var MainDoneDiv = document.createElement("DIV");
@@ -125,11 +165,17 @@
 
                                 var DoneButton = document.createElement("A");
                                 MainDoneDiv.appendChild(DoneButton);
+                                var DoneImg = document.createElement("IMG");
+                                DoneImg.setAttribute("src", "https://cdn4.iconfinder.com/data/icons/colicon/24/checkmark_done_complete-512.png");
+                                DoneImg.setAttribute("width", 42);
+                                DoneImg.setAttribute("height", 42);
+                                DoneImg.setAttribute("title", "Done Task");
+                                DoneButton.appendChild(DoneImg);
                                 DoneButton.setAttribute("href", "#done_todo_popup");
-                                DoneButton.setAttribute("onclick", "setPara2Popup4DoneButton(" + i + ")");
-                                DoneButton.innerHTML = "Done";
+                                DoneImg.setAttribute("onclick", "setPara2Popup4DoneButton(" + i + ")");
+                                //DoneButton.innerHTML = "Done";
                                 DoneButton.setAttribute("data-rel", "popup");
-                                DoneButton.setAttribute("class", "ui-btn ui-btn-inline ui-corner-all");
+                                //DoneButton.setAttribute("class", "ui-btn ui-btn-inline ui-corner-all");
                             }
                             catch(ex){
                                 alert(ex);
@@ -240,102 +286,6 @@
                         }
                     }
                     setFunctionForSharedField();
-
-                    var Suggesttable = document.getElementById("sugTbl_todo");
-                    for(var i in response_my_todo.myData) {
-                        try {
-                            // Task Infor field
-                            var NameCell2 = document.createElement("label");
-                            NameCell2.innerHTML = response_my_todo.myData[i].NameTask;
-                            NameCell2.setAttribute("name", "sugNameTask_" + response_my_todo.myData[i].TaskId);
-                            NameCell2.setAttribute("id", "sugNameTask_" + response_my_todo.myData[i].TaskId);
-                            Suggesttable.appendChild(NameCell2);
-                            // Star field
-                            var StarSpan = document.createElement("span");
-                            StarSpan.setAttribute("class", "star-rating");
-                            Suggesttable.appendChild(StarSpan);
-
-                            var Star1 = document.createElement("a");
-                            Star1.setAttribute("href", "javascript: submitRating(" + response_my_todo.myData[i].TaskId + ",1, "+ response_my_todo.user +")");
-                            StarSpan.appendChild(Star1);
-                            var StarImg1 = document.createElement("img");
-                            StarImg1.setAttribute("src", "http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png");
-                            StarImg1.setAttribute("alt", "star1");
-                            StarImg1.setAttribute("height", "10");
-                            StarImg1.setAttribute("width", "10");
-                            Star1.appendChild(StarImg1);
-
-                            var Star4 = document.createElement("a");
-                            Star4.setAttribute("href", "javascript: submitRating(" + response_my_todo.myData[i].TaskId + ",4, "+ response_my_todo.user+")");
-                            StarSpan.appendChild(Star4);
-                            var StarImg4 = document.createElement("img");
-                            StarImg4.setAttribute("src", "http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png");
-                            StarImg4.setAttribute("alt", "star4");
-                            StarImg4.setAttribute("height", "10");
-                            StarImg4.setAttribute("width", "10");
-                            Star4.appendChild(StarImg4);
-
-                            var Star5 = document.createElement("a");
-                            Star5.setAttribute("href", "javascript: submitRating(" + response_my_todo.myData[i].TaskId + ",5, "+ response_my_todo.user+")");
-                            StarSpan.appendChild(Star5);
-                            var StarImg5 = document.createElement("img");
-                            StarImg5.setAttribute("src", "http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png");
-                            StarImg5.setAttribute("alt", "star5");
-                            StarImg5.setAttribute("height", "10");
-                            StarImg5.setAttribute("width", "10");
-                            Star5.appendChild(StarImg5);
-
-                            var Star2 = document.createElement("a");
-                            Star2.setAttribute("href", "javascript: submitRating(" + response_my_todo.myData[i].TaskId + ",2, "+ response_my_todo.user+")");
-                            StarSpan.appendChild(Star2);
-                            var StarImg2 = document.createElement("img");
-                            StarImg2.setAttribute("src", "http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png");
-                            StarImg2.setAttribute("alt", "star2");
-                            StarImg2.setAttribute("height", "10");
-                            StarImg2.setAttribute("width", "10");
-                            Star2.appendChild(StarImg2);
-
-                            var Star3 = document.createElement("a");
-                            Star3.setAttribute("href", "javascript: submitRating(" + response_my_todo.myData[i].TaskId + ",3, "+ response_my_todo.user+")");
-                            StarSpan.appendChild(Star3);
-                            var StarImg3 = document.createElement("img");
-                            StarImg3.setAttribute("src", "http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png");
-                            StarImg3.setAttribute("alt", "star3");
-                            StarImg3.setAttribute("height", "10");
-                            StarImg3.setAttribute("width", "10");
-                            Star3.appendChild(StarImg3);
-                            Suggesttable.appendChild(document.createElement("br"));
-                            // Label field
-                            var LabelCmm = document.createElement("b");
-                            LabelCmm.innerHTML = "Comments";
-                            Suggesttable.appendChild(LabelCmm);
-                            // Comment field
-                            var CmmTable = document.createElement("table");
-                            CmmTable.setAttribute("id", "sugshow_comment_" + response_my_todo.myData[i].TaskId);
-                            Suggesttable.appendChild(CmmTable);
-                            for(var j=0;j < response_my_todo.myComments.length; j++){
-                                for(var k=0;k<response_my_todo.myComments[j].length;k++){
-                                    if(response_my_todo.myComments[j][k].TaskId == response_my_todo.myData[i].TaskId){
-                                        var SubCmmrow = CmmTable.insertRow(0);
-                                        var SubCmmCell = SubCmmrow.insertCell(0);
-                                        SubCmmCell.innerHTML = response_my_todo.myComments[j][k].Comment;
-                                    }
-                                }
-                            }
-                            // Post field
-                            var PostInput = document.createElement("input");
-                            PostInput.setAttribute("type", "text");
-                            PostInput.setAttribute("width", "200px");
-                            PostInput.setAttribute("id", "sugcomment_" + response_my_todo.myData[i].TaskId);
-                            PostInput.setAttribute("name", "sugcomment_" + response_my_todo.myData[i].TaskId);
-                            Suggesttable.appendChild(PostInput);
-                            Suggesttable.appendChild(document.createElement("br"));
-                        }
-                        catch(ex){
-                            alert(ex);
-                        }
-                    }
-                    setFunctionForSuggestionField();
                 }
             };
             xhttp.open("GET", "getTaskData", true);
@@ -363,8 +313,8 @@
                 }
 
                 today = yyyy+'-'+mm+'-'+dd;
-               //change it please document.getElementById("SDate").setAttribute("min", today);
-               // change please document.getElementById("FDate").setAttribute("min", today);
+                document.getElementById("SDate").setAttribute("min", today);
+                document.getElementById("FDate").setAttribute("min", today);
             </script>
             <br>
             Name of task <div><input type="text" id="NameTask_done_" name="NameTask_done_"></div><br>
@@ -468,7 +418,7 @@
                     myNameTasks2.push(td2.getElementsByTagName("a")[0]);
                 }
                 else if (tdName2 && tdName2.indexOf("delete_td_") == 0) {
-                    DeleteBtns.push(td2.getElementsByTagName("button")[0]);
+                    DeleteBtns.push(td2.getElementsByTagName("img")[0]);
                 }
             }
             for (var j2 = 0; j2 < DeleteBtns.length; j2++) {
@@ -484,6 +434,17 @@
                  });*/
             }
         }catch(ex){
+            alert(ex);
+        }
+    }
+
+    function setPara2Popup4Suggestion(ParaSet){
+        try{
+            var id = response_my_todo.myData2[ParaSet].TaskId;
+            var sug = response_my_todo.myData2[ParaSet].NameTask;
+            submitSuggestion(id, sug);
+        }
+        catch(ex){
             alert(ex);
         }
     }
@@ -708,7 +669,115 @@
     }
 
     function submitSuggestion(id, sug){
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var Suggesttable = document.getElementById("sugTbl_todo");
+                var response_my_suggestion = JSON.parse(this.responseText);
+                if(response_my_suggestion.mySuggestion.length < 1){
+                    var NameCell2 = document.createElement("label");
+                    NameCell2.innerHTML = "There is no suggestion";
+                    Suggesttable.appendChild(NameCell2);
+                }
+                for(var i in response_my_suggestion.mySuggestion) {
+                    try {
+                        // Task Infor field
+                        var NameCell2 = document.createElement("label");
+                        NameCell2.innerHTML = response_my_suggestion.mySuggestion[i].NameTask;
+                        NameCell2.setAttribute("name", "sugNameTask_" + response_my_suggestion.mySuggestion[i].TaskId);
+                        NameCell2.setAttribute("id", "sugNameTask_" + response_my_suggestion.mySuggestion[i].TaskId);
+                        Suggesttable.appendChild(NameCell2);
+                        // Star field
+                        var StarSpan = document.createElement("span");
+                        StarSpan.setAttribute("class", "star-rating");
+                        Suggesttable.appendChild(StarSpan);
 
+                        var Star1 = document.createElement("a");
+                        Star1.setAttribute("href", "javascript: submitRating(" + response_my_suggestion.mySuggestion[i].TaskId + ",1, "+ response_my_suggestion.user +")");
+                        StarSpan.appendChild(Star1);
+                        var StarImg1 = document.createElement("img");
+                        StarImg1.setAttribute("src", "http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png");
+                        StarImg1.setAttribute("alt", "star1");
+                        StarImg1.setAttribute("height", "10");
+                        StarImg1.setAttribute("width", "10");
+                        Star1.appendChild(StarImg1);
+
+                        var Star4 = document.createElement("a");
+                        Star4.setAttribute("href", "javascript: submitRating(" + response_my_suggestion.mySuggestion[i].TaskId + ",4, "+ response_my_suggestion.user+")");
+                        StarSpan.appendChild(Star4);
+                        var StarImg4 = document.createElement("img");
+                        StarImg4.setAttribute("src", "http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png");
+                        StarImg4.setAttribute("alt", "star4");
+                        StarImg4.setAttribute("height", "10");
+                        StarImg4.setAttribute("width", "10");
+                        Star4.appendChild(StarImg4);
+
+                        var Star5 = document.createElement("a");
+                        Star5.setAttribute("href", "javascript: submitRating(" + response_my_suggestion.mySuggestion[i].TaskId + ",5, "+ response_my_suggestion.user+")");
+                        StarSpan.appendChild(Star5);
+                        var StarImg5 = document.createElement("img");
+                        StarImg5.setAttribute("src", "http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png");
+                        StarImg5.setAttribute("alt", "star5");
+                        StarImg5.setAttribute("height", "10");
+                        StarImg5.setAttribute("width", "10");
+                        Star5.appendChild(StarImg5);
+
+                        var Star2 = document.createElement("a");
+                        Star2.setAttribute("href", "javascript: submitRating(" + response_my_suggestion.mySuggestion[i].TaskId + ",2, "+ response_my_suggestion.user+")");
+                        StarSpan.appendChild(Star2);
+                        var StarImg2 = document.createElement("img");
+                        StarImg2.setAttribute("src", "http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png");
+                        StarImg2.setAttribute("alt", "star2");
+                        StarImg2.setAttribute("height", "10");
+                        StarImg2.setAttribute("width", "10");
+                        Star2.appendChild(StarImg2);
+
+                        var Star3 = document.createElement("a");
+                        Star3.setAttribute("href", "javascript: submitRating(" + response_my_suggestion.mySuggestion[i].TaskId + ",3, "+ response_my_suggestion.user+")");
+                        StarSpan.appendChild(Star3);
+                        var StarImg3 = document.createElement("img");
+                        StarImg3.setAttribute("src", "http://images.clipartpanda.com/clipart-star-RTA9RqzTL.png");
+                        StarImg3.setAttribute("alt", "star3");
+                        StarImg3.setAttribute("height", "10");
+                        StarImg3.setAttribute("width", "10");
+                        Star3.appendChild(StarImg3);
+                        Suggesttable.appendChild(document.createElement("br"));
+                        // Label field
+                        var LabelCmm = document.createElement("b");
+                        LabelCmm.innerHTML = "Comments";
+                        Suggesttable.appendChild(LabelCmm);
+                        // Comment field
+                        var CmmTable = document.createElement("table");
+                        CmmTable.setAttribute("id", "sugshow_comment_" + response_my_suggestion.mySuggestion[i].TaskId);
+                        Suggesttable.appendChild(CmmTable);
+                        for(var j=0;j < response_my_suggestion.myComments.length; j++){
+                            for(var k=0;k<response_my_suggestion.myComments[j].length;k++){
+                                if(response_my_suggestion.myComments[j][k].TaskId == response_my_suggestion.mySuggestion[i].TaskId){
+                                    var SubCmmrow = CmmTable.insertRow(0);
+                                    var SubCmmCell = SubCmmrow.insertCell(0);
+                                    SubCmmCell.innerHTML = response_my_suggestion.myComments[j][k].Comment;
+                                }
+                            }
+                        }
+                        // Post field
+                        var PostInput = document.createElement("input");
+                        PostInput.setAttribute("type", "text");
+                        PostInput.setAttribute("width", "200px");
+                        PostInput.setAttribute("id", "sugcomment_" + response_my_suggestion.mySuggestion[i].TaskId);
+                        PostInput.setAttribute("name", "sugcomment_" + response_my_suggestion.mySuggestion[i].TaskId);
+                        Suggesttable.appendChild(PostInput);
+                        Suggesttable.appendChild(document.createElement("br"));
+                    }
+                    catch(ex){
+                        alert(ex);
+                    }
+                }
+                setFunctionForSuggestionField();
+            }
+        };
+        xhttp.open("GET", "SuggestTask?id=" + id + "&name=" + sug, true);
+
+        xhttp.send();
     }
 </script>
 
