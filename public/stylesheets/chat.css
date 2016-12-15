@@ -17,6 +17,13 @@
     border: none;
 
 }
+.chatreserved{
+    margin: auto;
+    padding:10px;
+    position: fixed;
+    text-align: center;
+}
+
 #messages{
 
 }
