@@ -38,7 +38,7 @@ router.post('/', function(req, res){
     }catch(ex){
         console.log(ex);
     }
-    res.send('Ok');
+    res.json({'taskId' : objData.length});
 });
 
 module.exports = router;
