@@ -3,17 +3,19 @@ ul.tab {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    border: 1px solid #ccc;
-    background-color: #f1f1f1;
     width: 300px;
 }
 .taskparent{
     background-color: #dddddd;
-    width: 300px;
+    padding: 10px;
 }
 
 /* Float the list items side by side */
-ul.tab li {float: left;}
+ul.tab li {
+    float: left;
+    border: 1px solid #ccc;
+    padding: 5px;
+}
 
 /* Style the links inside the list items */
 ul.tab li a {
@@ -24,6 +26,10 @@ ul.tab li a {
     text-decoration: none;
     transition: 0.3s;
     font-size: 17px;
+}
+ul.tab li a img{
+    width: 30px;
+    height: 30px;
 }
 
 /* Change background color of links on hover */
@@ -37,18 +43,17 @@ ul.tab li a:focus, .active {
 
 }
 
-/* Style the tab content */
+/* Style the tab content
 .row {
     display: none;
     padding: 6px 12px;
     border: 1px solid #ccc;
     border-top: none;
 }
-
-/* Style the tab content */
+Style the tab content */
 .tabcontent {
     display: none;
     padding: 6px 12px;
     border: 1px solid #ccc;
-    border-top: none;
+
 }

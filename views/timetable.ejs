@@ -5,89 +5,89 @@
 
     <script src='/javascripts/jquery.js'></script>
     <script src='/javascripts/jquery-ui.min.js'></script>
-    <script src='/javascripts/moment.min.js'></script>
+    <script src='/javascripts/moment.js'></script>
     <link href='/stylesheets/jquery-ui.min.css' rel='stylesheet' />
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-    <script src='/javascripts/fullcalendar.min.js'></script>
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script src='/javascripts/fullcalendar.js'></script>
+
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <link href='/stylesheets/fullcalendar.css' rel='stylesheet' />
     <link href='/stylesheets/fullcalendar.print.css' rel='stylesheet' media='print' />
     <link href='/stylesheets/style.css' rel='stylesheet' />
+    <link href='/stylesheets/bootstrap.min.css' rel='stylesheet' />
+
+
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    <link rel='stylesheet' href='/stylesheets/todolist.css' />
+    <link href='/stylesheets/chat.css' rel='stylesheet' />
 
 
 
 
-  <script>
-      $(document).ready(function() {
+    <script>
+        $(document).ready(function() {
 
-          var events = [];
-          $('#calendar').fullCalendar({
-
-
-
-              header: {
-                  left: 'prev,next today',
-                  center: 'title',
-                  right: 'month,agendaWeek,agendaDay,listWeek'
-              },
-              defaultDate: '2016-12-02',
-              navLinks: true, // can click day/week names to navigate views
-
-              weekNumbers: true,
-              weekNumbersWithinDays: true,
-              weekNumberCalculation: 'ISO',
-              weekNumberTitle: "W",
-              allDaySlot:false,
-              slotDuration: '00:30:00',
-              minTime: "08:00:00",
-              maxTime: "21:00:00",
+            var events = [];
+            $('#calendar').fullCalendar({
 
 
 
-              editable: true,
-          })
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay,listWeek'
+                },
+                defaultDate: '2016-12-02',
+                navLinks: true, // can click day/week names to navigate views
 
-      });
-  </script>
+                weekNumbers: true,
+                weekNumbersWithinDays: true,
+                weekNumberCalculation: 'ISO',
+                weekNumberTitle: "W",
+                allDaySlot:false,
+                slotDuration: '00:30:00',
+                minTime: "08:00:00",
+                maxTime: "21:00:00",
+
+
+
+                editable: true,
+            })
+
+        });
+    </script>
 
 
 </head>
- <body>
-
-
-
-
-
- <div class="upperCalWrap">
-
-
-
-        <div id='wrap'>
-            <div id="calendar"></div>
-
+<body>
+<div class="row maincontainer">
+    <div class="nonCalWrap col-lg-3">
+        <div class="todotaskWrap">
+            <%include SharedTasks.ejs%>
         </div>
-
-     <div class="classList">
-         <button id="myBtn">Classes</button>
-
-         <!-- The Modal -->
-         <div id="myModal" class="modal">
-
-             <!-- Modal content -->
-
-                 <span class="close">×</span>
-                 <div ng-app="myApp" ng-controller="myCtrl">
-                     <div ng-repeat="x in classes" style="align:right;">
-                         <input type="checkbox" id="{{x}} "name="{{x}}" ng-change="myFunc(x,$index,sts)" ng-model='sts' >{{x}}
-                     </div>
-                 </div>
-
-
-         </div>
-     </div>
-
-     </div>
-
-
+    </div>
+    <div class="upperCalWrap col-lg-6">
+        <div class="classList">
+            <button id="myBtn" class="classbtn">Classes</button>
+            <div id="myModal" class="modal">
+                <span class="close">×</span>
+                <div ng-app="myApp" ng-controller="myCtrl">
+                    <div ng-repeat="x in classes" style="align:right;">
+                        <input type="checkbox" id="{{x}} "name="{{x}}" ng-change="myFunc(x)" ng-model="myValue">{{x}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id='wrap' class="calcontent">
+            <div id="calendar"></div>
+        </div>
+    </div>
+    <div class="chatWrap col-lg-3">
+        <% include chat.ejs%>
+    </div>
+</div>
 
 
 <script>
@@ -98,51 +98,33 @@
                 .then(function(response) {
                     $scope.classes = response.data;
                 });
-        $scope.myFunc = function(x,id, status) {
-            if (status){
-                console.log(id + " is " + status);
-            $http.get("getClassesByName?title=" + x)
-                    .then(function (response) {
-                        pushEvents(response.data, id);
+        $scope.myFunc = function(x) {
+            $http.get("getClassesByName/"+x)
+                    .then(function(response) {
+                        pushEvents( response.data);
                     });
-            }else{
-                removeEvents(id);
-            }
         };
-
-
-
     });
 </script>
 
 <script>
-
-function pushEvents(newEvents,id) {
-
-     for(var i = 0; i< newEvents.length; i++){
-
-         var newObject = newEvents[i];
-         newObject["id"] = id;
-         console.log(JSON.stringify(newObject));
-         $('#calendar').fullCalendar( 'renderEvent',newObject);
-     }
-}
-function removeEvents(id){
-    $('#calendar').fullCalendar( 'removeEvents',id );
-}
+    function pushEvents(newEvents) {
+        for(var i = 0; i< newEvents.length; i++){
+            console.log(JSON.stringify(newEvents[i]));
+            $('#calendar').fullCalendar( 'renderEvent',newEvents[i]);
+        }
+    }
 </script>
 <style>
-
     .classList{
         position: absolute;
         right:10px;
         top:10px;
     }
-        /* The Modal (background) */
     .modal {
         display: none; /* Hidden by default */
         position: fixed; /* Stay in place */
-        z-index: 1; /* Sit on top */
+        z-index: 10; /* Sit on top */
         padding-top: 100px; /* Location of the box */
         right: 10px;
         top: 10px;
@@ -151,13 +133,14 @@ function removeEvents(id){
         overflow: auto; /* Enable scroll if needed */
         background-color: rgb(0,0,0); /* Fallback color */
         background-color: rgba(211,211,211,0.95); /* Black w/ opacity */
+        left:45%;
     }
-        #myBtn{
-            right:0px;
-            color:blue;
-            top:0px;
+    #myBtn{
+        right:0px;
+        color:blue;
+        top:0px;
 
-        }
+    }
 
     /* Modal Content */
     .modal-content {
@@ -175,7 +158,6 @@ function removeEvents(id){
         font-size: 28px;
         font-weight: bold;
     }
-
     .close:hover,
     .close:focus {
         color: #000;
@@ -183,34 +165,25 @@ function removeEvents(id){
         cursor: pointer;
     }
 </style>
- <script>
-     // Get the modal
-     var modal = document.getElementById('myModal');
+<script>
+    var modal = document.getElementById('myModal');
 
-     // Get the button that opens the modal
-     var btn = document.getElementById("myBtn");
+    var btn = document.getElementById("myBtn");
 
-     // Get the <span> element that closes the modal
-     var span = document.getElementsByClassName("close")[0];
+    var span = document.getElementsByClassName("close")[0];
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
 
-     // When the user clicks the button, open the modal
-     btn.onclick = function() {
-         modal.style.display = "block";
-     }
 
-     // When the user clicks on <span> (x), close the modal
-     span.onclick = function() {
-         modal.style.display = "none";
-     }
-
-     // When the user clicks anywhere outside of the modal, close it
-     window.onclick = function(event) {
-         if (event.target == modal) {
-             modal.style.display = "none";
-         }
-     }
- </script>
-
-</div>
- </body>
+</body>
 </html>

@@ -10,7 +10,7 @@ angular
     .module('app', ['angularFileUpload'])
 
 
-    .controller('AppController', ['$scope', 'FileUploader', function($scope, FileUploader,$state) {
+    .controller('AppController', ['$scope', 'FileUploader', function($scope, FileUploader) {
         var uploader = $scope.uploader = new FileUploader({
             url: 'upload'
         });
@@ -46,7 +46,6 @@ angular
             console.info('onProgressAll', progress);
         };
         uploader.onSuccessItem = function(fileItem, response, status, headers) {
-            window.location.href="/calendar";
             console.info('onSuccessItem', fileItem, response, status, headers);
 
         };
