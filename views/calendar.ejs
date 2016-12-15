@@ -100,7 +100,7 @@
 
             /* add custom event*/
             $scope.addEvent = function(event) {
-                $http({url:"getClassesByName",method:"GET",params:{title:event}}).then(function(response){
+                $http({url:"getClassesByName/"+encodeURIComponent(event),method:"GET"}).then(function(response){
                     try{
 
                         var json = $.parseJSON(JSON.stringify(response.data));
