@@ -17,8 +17,17 @@
     border: none;
 
 }
-#messages{
-
+.chatreserved{
+    margin: auto;
+    padding:10px;
+    position: fixed;
+    text-align: center;
+}
+.listareareserved {
+    margin: auto;
+    padding: 10px;
+    position: fixed;
+    text-align: right;
 }
 .chatcontent {
     margin-top: 0px;
