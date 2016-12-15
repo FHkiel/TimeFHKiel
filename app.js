@@ -58,7 +58,6 @@ initPassport(passport);
 // isAuthenticated added by abhishek to protect routes//
 app.use('/', login(passport));
 app.use('/login', login(passport));
-+app.use('/login', login(passport));
 app.use('/home',isAuthenticated(),index);
 app.use('/users',isAuthenticated(), users);
 app.use('/upload',isAuthenticated(), uploadGet);
