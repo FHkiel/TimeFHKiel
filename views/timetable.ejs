@@ -126,13 +126,13 @@
     }
 
     $('body').on('click', 'button.fc-prev-button', function() {
+        $('#calendar').fullCalendar( 'renderEvent',events[0])
 
     });
 
     $('body').on('click', 'button.fc-next-button', function() {
-        alert('love again');
+        $('#calendar').fullCalendar( 'renderEvent',events[0])
     });
-    
 </script>
 <style>
     .classList{
