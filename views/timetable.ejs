@@ -124,15 +124,35 @@
     function removeEvents(id){
         $('#calendar').fullCalendar( 'removeEvents',id );
     }
-
+    var dummy = {"start":"2000-09-15T12:30:00","end":"2000-09-15T14:00:00","title":"a","detail":"a"}
     $('body').on('click', 'button.fc-prev-button', function() {
-        $('#calendar').fullCalendar( 'renderEvent',events[0])
+        $('#calendar').fullCalendar( 'renderEvent',dummy)
+
 
     });
 
+
+    $('body').on('click', 'button.fc-agendaDay-button', function() {
+
+        $('#calendar').fullCalendar( 'renderEvent', dummy)
+    });
+    $('body').on('click', 'button.fc-listWeek-button', function() {
+
+        $('#calendar').fullCalendar( 'renderEvent', dummy)
+    });
+
+
+    $('body').on('click', 'button.fc-agendaWeek-button', function() {
+
+        $('#calendar').fullCalendar( 'renderEvent', dummy)
+    });
     $('body').on('click', 'button.fc-next-button', function() {
-        $('#calendar').fullCalendar( 'renderEvent',events[0])
+        $('#calendar').fullCalendar( 'renderEvent', dummy)
     });
+    $('body').on('click', 'button.fc-month-button', function() {
+        $('#calendar').fullCalendar( 'renderEvent', dummy)
+    });
+
 </script>
 <style>
     .classList{
