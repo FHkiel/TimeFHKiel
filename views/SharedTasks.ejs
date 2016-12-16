@@ -1,8 +1,5 @@
 
 <div class="taskparent">
-    <p class="tooltip">To Do List
-        <span class="tooltiptext">Tooltip text</span>
-    </p>
 
     <ul class="tab">
         <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'ShowTaskPage')"><img src="../images/show_tasks.png" height="20" width="20" title="Show my task"></img></a></li>
@@ -924,7 +921,10 @@
         };
         xhttp.open("POST", "DoneTask", true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send("id="+myId+"&exp="+exp+"&shared="+shared);
+        if(shared)
+            xhttp.send("id="+myId+"&exp="+exp+"&shared=True");
+        else
+            xhttp.send("id="+myId+"&exp="+exp+"&shared=False");
     }
 
     function mySetTask(){
@@ -1259,18 +1259,21 @@
                         StarImg5.setAttribute("height", "10");
                         StarImg5.setAttribute("width", "10");
                         Star5.appendChild(StarImg5);
+                        console.log(i + " " + JSON.stringify(response_my_suggestion.mySuggestion[i].Exp))
                         // Exp field
                         var ExpCell2 = document.createElement("label");
                         if(response_my_suggestion.mySuggestion[i].Exp)
                             ExpCell2.innerHTML = "<b>Experience</b>: " + response_my_suggestion.mySuggestion[i].Exp;
                         ExpCell2.setAttribute("name", "ExpTask_" + response_my_suggestion.mySuggestion[i].TaskId);
                         ExpCell2.setAttribute("id", "ExpTask_" +response_my_suggestion.mySuggestion[i].TaskId);
+                        Suggesttable.appendChild(ExpCell2);
                         // Note field
                         var NoteCell2 = document.createElement("label");
                         if(response_my_suggestion.mySuggestion[i].NoteTask)
                             NoteCell2.innerHTML = "<b>Note</b>: " + response_my_suggestion.mySuggestion[i].NoteTask;
                         NoteCell2.setAttribute("name", "NoteTask_" + response_my_suggestion.mySuggestion[i].TaskId);
                         NoteCell2.setAttribute("id", "NoteTask_" + response_my_suggestion.mySuggestion[i].TaskId);
+                        Suggesttable.appendChild(NoteCell2);
                         // Label field
                         var LabelCmm = document.createElement("b");
                         LabelCmm.innerHTML = "Comments";

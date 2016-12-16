@@ -69,7 +69,7 @@ router.get('/', function(req, res, next) {
                 var tmp_individualDistanceScores = [];
                 for (var k = 0; k < Keywords_of_Task.length; k++) {
                     //console.log(keyTerms[j] + "-" + Keywords_of_Task[k] + " " + natural.JaroWinklerDistance(keyTerms[j], Keywords_of_Task[k]));
-                    var scaled_raw_distance = limit_Exp_distribution*natural.JaroWinklerDistance(keyTerms[j], Keywords_of_Task[k]);
+                    var scaled_raw_distance = limit_Exp_distribution*natural.LevenshteinDistance(keyTerms[j], Keywords_of_Task[k]);
                     var Prob_Exp_distribution = lamda*Math.exp(lamda*scaled_raw_distance) / Sum_Exp_Distribution;
                     tmp_individualDistanceScores.push(Prob_Exp_distribution);
                     var myCorr = getCorrelationScore(keyTerms[j], Keywords_of_Task[k]);
