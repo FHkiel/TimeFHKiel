@@ -22,6 +22,10 @@ var ModifyTask = require('./routes/ModifyTask');
 var app = express();
 var isAuthenticated=require('./middleware/authentication');
 var suggestTask = require('./routes/SuggestTask');
+var ShowTask = require('./routes/ShowTask');
+var SetTask = require('./routes/SetTask');
+var CommentTask = require('./routes/CommentTask');
+var SharedTasks = require('./routes/SharedTasks');
 var calendar = require('./routes/calendar')
 
 var busboy = require('connect-busboy');
@@ -64,14 +68,18 @@ app.use('/users',isAuthenticated(), users);
 app.use('/upload',isAuthenticated(), uploadGet);
 app.use('/upload',isAuthenticated(), uploadPost);
 app.use('/calendar',isAuthenticated(), calendar);
-app.use('/timeTable',isAuthenticated() , timeTable);
+app.use('/timeTable', isAuthenticated(), timeTable);
 app.use('/getTimes',isAuthenticated(), getTimesPost);
 app.use('/chat',isAuthenticated(),chats);
 app.use('/getClassesName', getClassesName);
-app.use('/getTaskData',isAuthenticated() ,getTaskData);
-app.use('/DoneTask',isAuthenticated() ,doneTask);
-app.use('/ModifyTask',isAuthenticated() ,ModifyTask);
-app.use('/suggestTask',isAuthenticated() ,suggestTask);
+app.use('/getTaskData',isAuthenticated(), getTaskData);
+app.use('/DoneTask',isAuthenticated(), doneTask);
+app.use('/ModifyTask',isAuthenticated(), ModifyTask);
+app.use('/SetTask',isAuthenticated(), SetTask);
+app.use('/suggestTask',isAuthenticated(), suggestTask);
+app.use('/CommentTask',isAuthenticated(), CommentTask);
+app.use('/ShowTask',isAuthenticated(), ShowTask);
+app.use('/SharedTasks',isAuthenticated(), SharedTasks);
 app.use('/', getClassesByName);
 
 

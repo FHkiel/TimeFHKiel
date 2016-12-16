@@ -20,6 +20,10 @@ router.get('/', function(req, res, next) {
 router.post('/', function(req, res){
     var myTask = req.query['id'];
     objData[myTask - 1].Status = "Delete";
+    var currentdate = new Date();
+    objData[myTask - 1].finishTime = currentdate.getHours() + ':' + currentdate.getMinutes();
+    objData[myTask - 1].finishDate = currentdate.getFullYear() + '-' + (currentdate.getMonth()+1) + '-' + currentdate.getDate();
+
     var writtenData;
     writtenData = JSON.stringify(objData);
 

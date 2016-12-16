@@ -231,6 +231,10 @@ router.post('/', function(req, res){
         objData[myTask - 1].Exp = req.body['exp'];
         objData[myTask - 1].Shared = req.body['shared'];
         objData[myTask - 1].Status = "Done";
+        var currentdate = new Date();
+        objData[myTask - 1].finishTime = currentdate.getHours() + ':' + currentdate.getMinutes();
+        objData[myTask - 1].finishDate = currentdate.getFullYear() + '-' + (currentdate.getMonth()+1) + '-' + currentdate.getDate();
+
         add_2_DB();
         res.send("ok");
         var disjunct_Sort = disjunctionData;

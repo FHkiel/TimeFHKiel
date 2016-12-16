@@ -5,9 +5,10 @@
     </p>
 
     <ul class="tab">
-        <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'ShowTaskPage')"><img src="../images/show_tasks.png" height="30" width="30" title="Show my task"></img></a></li>
-        <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'SetTaskPage')"><img src="../images/NewTask.png" height="30" width="30" title="Set a new task"></img></a></li>
-        <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'SharedTaskPage')"><img src="../images/Friends_tasks.png" height="30" width="30" title="View friends' tasks"></img></a></li>
+        <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'ShowTaskPage')"><img src="../images/show_tasks.png" height="20" width="20" title="Show my task"></img></a></li>
+        <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'SetTaskPage')"><img src="../images/NewTask.png" height="20" width="20" title="Set a new task"></img></a></li>
+        <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'SharedTaskPage')"><img src="../images/Friends_tasks.png" height="20" width="20" title="View friends' tasks"></img></a></li>
+        <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'ChartPage')"><img src="../images/Productivity.png" height="20" width="20" title="Productivity"></img></a></li>
     </ul>
 
 
@@ -39,14 +40,18 @@
                     <br>
                     Name of task <div><input type="text" id="NameTask_modify_" name="NameTask"></div><br>
                     Priority<br>
-                    <span style="margin-left:2em">
-                                    <input type="radio" id="priority_1_task_modify_" name="priority_task_modify_" value="1"> Urgent</span><br>
-                    <span style="margin-left:2em">
-                                    <input type="radio" id="priority_2_task_modify_" name="priority_task_modify_" value="2"> Pressing </span><br>
-                    <span style="margin-left:2em">
-                                    <input type="radio" id="priority_3_task_modify_" name="priority_task_modify_" value="3"> Normal </span><br>
-                    <span style="margin-left:2em">
-                                    <input type="radio" id="priority_4_task_modify_" name="priority_task_modify_" value="4"> Moderate </span><br>
+                    <input type="radio" id="priority_1_task_modify_" name="priority_task_1" value="1">
+                    <label id="priority_1_task_modify_label"> <img src="../images/Urgent.png" width="50" height="50"/> <div>Urgent</div> </label>
+                    <br>
+                    <input type="radio" id="priority_2_task_modify_" name="priority_task_1" value="2">
+                    <label id="priority_2_task_modify_label"> <img src="../images/Pressing.png" width="50" height="50" /><div>Pressing</div></label>
+                    <br>
+                    <input type="radio" id="priority_3_task_modify_" name="priority_task_1" value="3">
+                    <label id="priority_3_task_modify_label"> <img src="../images/Normal.png" width="50" height="50" /><div>Normal</div></label>
+                    <br>
+                    <input type="radio" id="priority_4_task_modify_" name="priority_task_1" value="4">
+                    <label id="priority_4_task_modify_label"> <img src="../images/Easy.png" width="50" height="50" /><div>Easy</div></label>
+                    <br>
                     Note <br>
                     <div><textarea id="NoteTask_modify_" name="NoteTask_modify_" rows=4 cols=50></textarea></div><br>
                     <br>
@@ -75,11 +80,13 @@
                     var table = document.getElementById("myTbl_todo_2");
                     var Newtable = document.getElementById("myTbl_todo_1");
                     response_my_todo = JSON.parse(this.responseText);
+                    setChart();
                     for(var i in response_my_todo.myData2) {
                         if(response_my_todo.myData2[i].Status == 'NotYet') {
                             try {
                                 var row = table.insertRow(0);
-                                row.setAttribute("name", "Row_" + response_my_todo.myData2[i].TaskId);
+                                row.setAttribute("id", "Row0_" + response_my_todo.myData2[i].TaskId);
+                                row.setAttribute("name", "Row0_" + response_my_todo.myData2[i].TaskId);
                                 // Task Infor field
                                 var NameCell = row.insertCell(0);
                                 NameCell.setAttribute("colspan", 3);
@@ -94,16 +101,15 @@
                                 NameCell.appendChild(NameTab);
 
                                 var date_row = table.insertRow(1);
-                                date_row.setAttribute("name", "Row_" + response_my_todo.myData2[i].TaskId);
+                                date_row.setAttribute("id", "Row1_" + response_my_todo.myData2[i].TaskId);
+                                date_row.setAttribute("name", "Row1_" + response_my_todo.myData2[i].TaskId);
                                 var DateCell = date_row.insertCell(0);
                                 DateCell.setAttribute("colspan", 3);
                                 var DateTab = document.createElement("label");
-                                var StartDateTab = document.createElement("small");
-                                StartDateTab.innerHTML = "Start: " + response_my_todo.myData2[i].startDate + " " + response_my_todo.myData2[i].startTime + "<br />Finish: " + response_my_todo.myData2[i].finishDate + " " + response_my_todo.myData2[i].finishTime;
-                                StartDateTab.setAttribute("name", "TimeTask2_" + response_my_todo.myData2[i].TaskId);
-                                StartDateTab.setAttribute("id", "TimeTask2_" + response_my_todo.myData2[i].TaskId);
-                                StartDateTab.appendChild(DateTab);
-                                DateCell.appendChild(StartDateTab);
+                                DateTab.innerHTML = "<small>Start: " + response_my_todo.myData2[i].startDate + " " + response_my_todo.myData2[i].startTime + "<br />Finish: " + response_my_todo.myData2[i].finishDate + " " + response_my_todo.myData2[i].finishTime + "</small>";
+                                DateTab.setAttribute("name", "TimeTask2_" + response_my_todo.myData2[i].TaskId);
+                                DateTab.setAttribute("id", "TimeTask2_" + response_my_todo.myData2[i].TaskId);
+                                DateCell.appendChild(DateTab);
 
                                 var PriorityTab = document.createElement("IMG");
                                 if(response_my_todo.myData2[i].priorityTask == 4) {
@@ -129,24 +135,24 @@
                                 DateCell.appendChild(PriorityTab);
 
                                 var note_row = table.insertRow(2);
-                                note_row.setAttribute("name", "Row_" + response_my_todo.myData2[i].TaskId);
+                                note_row.setAttribute("id", "Row2_" + response_my_todo.myData2[i].TaskId);
+                                note_row.setAttribute("name", "Row2_" + response_my_todo.myData2[i].TaskId);
                                 var NoteCell = note_row.insertCell(0);
                                 NoteCell.setAttribute("colspan", 3);
                                 var NoteTab = document.createElement("label");
-                                var smallNoteTab = document.createElement("small");
-                                smallNoteTab.innerHTML = "Note: " + response_my_todo.myData2[i].NoteTask;
-                                smallNoteTab.setAttribute("name", "NoteTask2_" + response_my_todo.myData2[i].TaskId);
-                                smallNoteTab.setAttribute("id", "NoteTask2_" + response_my_todo.myData2[i].TaskId);
-                                smallNoteTab.appendChild(NoteTab);
-                                NoteCell.appendChild(smallNoteTab);
+                                NoteTab.innerHTML = "<small>Note: " + response_my_todo.myData2[i].NoteTask + "</small>";
+                                NoteTab.setAttribute("name", "NoteTask2_" + response_my_todo.myData2[i].TaskId);
+                                NoteTab.setAttribute("id", "NoteTask2_" + response_my_todo.myData2[i].TaskId);
+                                NoteCell.appendChild(NoteTab);
                                 // Delete field
                                 var button_row = table.insertRow(3);
-                                button_row.setAttribute("name", "Row_" + response_my_todo.myData2[i].TaskId);
+                                button_row.setAttribute("id", "Row3_" + response_my_todo.myData2[i].TaskId);
+                                button_row.setAttribute("name", "Row3_" + response_my_todo.myData2[i].TaskId);
                                 var DeleteCell = button_row.insertCell(0);
                                 var DeleteBtn = document.createElement("IMG");
                                 DeleteBtn.innerHTML = "Delete";
                                 //DeleteBtn.setAttribute("class", "ui-btn ui-btn-inline ui-corner-all");
-                                DeleteBtn.setAttribute("src", "https://cdn4.iconfinder.com/data/icons/colicon/24/close_delete-128.png");
+                                DeleteBtn.setAttribute("src", "../images/check_delete.png");
                                 DeleteBtn.setAttribute("width", 42);
                                 DeleteBtn.setAttribute("height", 42);
                                 DeleteBtn.setAttribute("title", "Delete Task");
@@ -168,7 +174,7 @@
                                 MainDiv.appendChild(ModifyButton);
                                 //ModifyButton.innerHTML = "Modify";
                                 var ModifyImg = document.createElement("IMG");
-                                ModifyImg.setAttribute("src", "http://www.garagemotoguzzi.com/wp-content/themes/moto-guzzi/img/svg/modify-icon.png");
+                                ModifyImg.setAttribute("src", "../images/modify-icon.png");
                                 ModifyImg.setAttribute("width", 42);
                                 ModifyImg.setAttribute("height", 42);
                                 /*ModifyButton.setAttribute("class", "tooltip");
@@ -195,7 +201,7 @@
                                 var DoneButton = document.createElement("A");
                                 MainDoneDiv.appendChild(DoneButton);
                                 var DoneImg = document.createElement("IMG");
-                                DoneImg.setAttribute("src", "https://cdn4.iconfinder.com/data/icons/colicon/24/checkmark_done_complete-512.png");
+                                DoneImg.setAttribute("src", "../images/check_done.png");
                                 DoneImg.setAttribute("width", 42);
                                 DoneImg.setAttribute("height", 42);
                                 DoneImg.setAttribute("title", "Done Task");
@@ -408,9 +414,86 @@
         <table style="width:50%" id="myTbl_todo_1">
         </table>
     </div>
+    <div class="tabcontent" id="ChartPage">
+        <div id="myChart" style="width: 290px; height: 400px;"></div>
+    </div>
 </div>
 
+
 <script>
+    function setChart() {
+        try{
+            var currentdate = new Date();
+            var heute = currentdate.getDate() + '/' + (currentdate.getMonth()+1);
+            var EXheute = currentdate.getFullYear() + '-' + (currentdate.getMonth()+1) + '-' + currentdate.getDate();
+            var gestern = (currentdate.getDate()-1) + '/' + (currentdate.getMonth()+1);
+            var EXgestern = currentdate.getFullYear() + '-' + (currentdate.getMonth()+1) + '-' + (currentdate.getDate()-1);
+            var gestern1 = (currentdate.getDate()-2) + '/' + (currentdate.getMonth()+1);
+            var EXgestern1 = currentdate.getFullYear() + '-' + (currentdate.getMonth()+1) + '-' + (currentdate.getDate()-2);
+            var gestern2 = (currentdate.getDate()-3) + '/' + (currentdate.getMonth()+1);
+            var EXgestern2 = currentdate.getFullYear() + '-' + (currentdate.getMonth()+1) + '-' + (currentdate.getDate()-3);
+            var gestern3 = (currentdate.getDate()-4) + '/' + (currentdate.getMonth()+1);
+            var EXgestern3 = currentdate.getFullYear() + '-' + (currentdate.getMonth()+1) + '-' + (currentdate.getDate()-4);
+            var Noheute = 0,Deheute = 0;
+            var Nogestern = 0,Degestern = 0;
+            var Nogestern1 = 0,Degestern1 = 0;
+            var Nogestern2 = 0,Degestern2 = 0;
+            var Nogestern3 = 0,Degestern3 = 0;
+            for(var i = 0; i < response_my_todo.myData2.length; i++){
+                if(response_my_todo.myData2[i].finishDate == EXheute) {
+                    if(response_my_todo.myData2[i].Status == "Done")
+                        Noheute++;
+                    else if(response_my_todo.myData2[i].Status == "Delete")
+                        Deheute++;
+                }
+                else if(response_my_todo.myData2[i].finishDate == EXgestern) {
+                    if(response_my_todo.myData2[i].Status == "Done")
+                        Nogestern++;
+                    else if(response_my_todo.myData2[i].Status == "Delete")
+                        Degestern++;
+                }
+                else if(response_my_todo.myData2[i].finishDate == EXgestern1) {
+                    if(response_my_todo.myData2[i].Status == "Done")
+                        Nogestern1++;
+                    else if(response_my_todo.myData2[i].Status == "Delete")
+                        Degestern1++;
+                }
+                else if(response_my_todo.myData2[i].finishDate == EXgestern2) {
+                    if(response_my_todo.myData2[i].Status == "Done")
+                        Nogestern2++;
+                    else if(response_my_todo.myData2[i].Status == "Delete")
+                        Degestern2++;
+                }
+                else if(response_my_todo.myData2[i].finishDate == EXgestern3) {
+                    if(response_my_todo.myData2[i].Status == "Done")
+                        Nogestern3++;
+                    else if(response_my_todo.myData2[i].Status == "Delete")
+                        Degestern3++;
+                }
+            }
+            var trace1 = {
+                x: [gestern3, gestern2, gestern1, gestern, heute],
+                y: [Nogestern3, Nogestern2, Nogestern1, Nogestern, Noheute],
+                type: 'scatter',
+                name: 'Finish'
+            };
+            var trace2 = {
+                x: [gestern3, gestern2, gestern1, gestern, heute],
+                y: [Degestern3, Degestern2, Degestern1, Degestern, Deheute],
+                type: 'scatter',
+                name: 'Delete'
+            };
+            var data = [trace1,trace2];
+            var layout = {
+                title:'Productivity'
+            };
+            Plotly.newPlot('myChart', data, layout);
+        }
+        catch(ex){
+            console.log(ex);
+        }
+    }
+
     function setFunctionForSharedField(){
         try {
             var table = document.getElementById("myTbl_todo_1");
@@ -522,39 +605,41 @@
     function setPara2Popup(ParaSet){
         try {
             var STime_modify_ = document.getElementById("STime_modify_");
-            STime_modify_.setAttribute("value", response_my_todo.myData2[ParaSet].startTime);
+            STime_modify_.value = response_my_todo.myData2[ParaSet].startTime;
 
             var SDate_modify_ = document.getElementById("SDate_modify_");
-            SDate_modify_.setAttribute("value", response_my_todo.myData2[ParaSet].startDate);
+            SDate_modify_.value = response_my_todo.myData2[ParaSet].startDate;
 
             var FTime_modify_ = document.getElementById("FTime_modify_");
-            FTime_modify_.setAttribute("value", response_my_todo.myData2[ParaSet].finishTime);
+            FTime_modify_.value = response_my_todo.myData2[ParaSet].finishTime;
 
             var FDate_modify_ = document.getElementById("FDate_modify_");
-            FDate_modify_.setAttribute("value", response_my_todo.myData2[ParaSet].finishDate);
+            FDate_modify_.value = response_my_todo.myData2[ParaSet].finishDate;
 
-            var NameTask_modify_ = document.getElementById("NameTask_modify_");
-            NameTask_modify_.setAttribute("value", response_my_todo.myData2[ParaSet].NameTask);
+            $("#NameTask_modify_").val(response_my_todo.myData2[ParaSet].NameTask);
 
-            var NoteTask_modify_ = document.getElementById("NoteTask_modify_");
-            NoteTask_modify_.value = response_my_todo.myData2[ParaSet].NoteTask;
+            $("#NoteTask_modify_").val(response_my_todo.myData2[ParaSet].NoteTask);
 
             var SubmitModify = document.getElementById("modify_");
-            SubmitModify.setAttribute("onclick", "myModify(" + response_my_todo.myData2[ParaSet].TaskId + ")");
+            SubmitModify.setAttribute("onclick", "myModify(" + response_my_todo.myData2[ParaSet].TaskId + "," + ParaSet + ")");
             //SubmitModify.setAttribute("data-rel", "back");
 
-            var priority_1_task_modify_ = document.getElementById("priority_1_task_modify_");
-            if (response_my_todo.myData2[ParaSet].priorityTask == 1)
-                priority_1_task_modify_.checked = true;
-            var priority_2_task_modify_ = document.getElementById("priority_2_task_modify_");
-            if (response_my_todo.myData2[ParaSet].priorityTask == 2)
-                priority_2_task_modify_.checked = true;
-            var priority_3_task_modify_ = document.getElementById("priority_3_task_modify_");
-            if (response_my_todo.myData2[ParaSet].priorityTask == 3)
-                priority_3_task_modify_.checked = true;
-            var priority_4_task_modify_ = document.getElementById("priority_4_task_modify_");
-            if (response_my_todo.myData2[ParaSet].priorityTask == 4)
-                priority_4_task_modify_.checked = true;
+            if (response_my_todo.myData2[ParaSet].priorityTask == 1) {
+                document.getElementById("priority_1_task_modify_").checked = true;
+                //document.getElementById("priority_1_task_modify_label").setAttribute("class", "ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-radio-on");
+            }
+            if (response_my_todo.myData2[ParaSet].priorityTask == 2){
+                document.getElementById("priority_2_task_modify_").checked = true;
+                //document.getElementById("priority_2_task_modify_label").setAttribute("class", "ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-radio-on");
+            }
+            if (response_my_todo.myData2[ParaSet].priorityTask == 3){
+                document.getElementById("priority_3_task_modify_").checked = true;
+                //document.getElementById("priority_3_task_modify_label").setAttribute("class", "ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-radio-on");
+            }
+            if (response_my_todo.myData2[ParaSet].priorityTask == 4){
+                document.getElementById("priority_4_task_modify_").checked = true;
+                //document.getElementById("priority_4_task_modify_label").setAttribute("class", "ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-radio-on");
+            }
         }catch(ex){
             alert(ex);
         }
@@ -563,7 +648,7 @@
     function setPara2Popup4DoneButton(ParaSet){
         try {
             var SubmitDone = document.getElementById("done_btn_");
-            SubmitDone.setAttribute("onclick", "myDone(" + response_my_todo.myData2[ParaSet].TaskId + ")");
+            SubmitDone.setAttribute("onclick", "myDone(" + response_my_todo.myData2[ParaSet].TaskId + "," + ParaSet + ")");
         }catch(ex){
             alert(ex);
         }
@@ -575,8 +660,23 @@
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                var row = document.getElementById("Row_" + id);
+                var row = document.getElementById("Row0_" + id);
                 row.parentNode.removeChild(row);
+                var row1 = document.getElementById("Row1_" + id);
+                row1.parentNode.removeChild(row1);
+                var row2 = document.getElementById("Row2_" + id);
+                row2.parentNode.removeChild(row2);
+                var row3 = document.getElementById("Row3_" + id);
+                row3.parentNode.removeChild(row3);
+                for (var i = 0; i < response_my_todo.myData2.length; i++) {
+                    if(response_my_todo.myData2[i].TaskId == id) {
+                        response_my_todo.myData2[i].Status = "Delete";
+                        var currentdate = new Date();
+                        response_my_todo.myData2[i].finishTime = currentdate.getHours() + ':' + currentdate.getMinutes();
+                        response_my_todo.myData2[i].finishDate = currentdate.getFullYear() + '-' + (currentdate.getMonth() + 1) + '-' + currentdate.getDate();
+                    }
+                }
+                setChart();
             }
         };
         xhttp.open("POST", "ShowTask?id=" + id, true);
@@ -584,7 +684,7 @@
         xhttp.send();
     }
 
-    function myModify(id) {
+    function myModify(id, index) {
         var myId = id;
         var STime = $("#STime_modify_").val();
         var SDate = $("#SDate_modify_").val();
@@ -603,10 +703,39 @@
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                // TODO modify task
                 try {
-                    $("#NameTask2_" + myId).val(NameTask);
-                    //$("#modify_todo_popup").close();
+                    // update response_my_todo.myData2
+                    response_my_todo.myData2[index].NameTask = NameTask;
+                    response_my_todo.myData2[index].startTime = STime;
+                    response_my_todo.myData2[index].startDate = SDate;
+                    response_my_todo.myData2[index].priorityTask = priority;
+                    response_my_todo.myData2[index].NoteTask = NoteTask;
+                    response_my_todo.myData2[index].PostponeTime = FTime;
+                    response_my_todo.myData2[index].PostponeDate = FDate;
+                    console.log(JSON.stringify((response_my_todo.myData2)));
+                    // modify task
+                    $('a#NameTask2_' + myId).text(NameTask);
+                    var new_str = '<small>Start: ' + SDate + ' ' + STime + '<br />Finish: ' + FDate + ' ' + FTime + '</small>';
+                    $('label#TimeTask2_' + myId).html(new_str);
+                    var prio_button = document.getElementById("PriorityTask2_" + myId);
+                    if(priority == 4) {
+                        prio_button.setAttribute("src", "../images/Easy.png");
+                        prio_button.setAttribute("title", "Easy Task");
+                    }
+                    else if(priority == 3) {
+                        prio_button.setAttribute("src", "../images/Normal.png");
+                        prio_button.setAttribute("title", "Normal Task");
+                    }
+                    else if(priority == 2) {
+                        prio_button.setAttribute("src", "../images/Pressing.png");
+                        prio_button.setAttribute("title", "Pressing Task");
+                    }
+                    else if(priority == 1) {
+                        prio_button.setAttribute("src", "../images/Urgent.png");
+                        prio_button.setAttribute("title", "Urgent Task");
+                    }
+                    var new_str1 = '<small>Note: ' + NoteTask + '</small>';
+                    $('label#NoteTask2_' + myId).html(new_str1);
                 }
                 catch(ex){
                     alert(ex);
@@ -618,7 +747,7 @@
         xhttp.send("id="+myId+"&STime="+STime+"&SDate="+SDate+"&FTime="+FTime+"&FDate="+FDate+"&NameTask="+NameTask+"&NoteTask="+NoteTask+"&priority="+priority);
     }
 
-    function myDone(id) {
+    function myDone(id, i) {
         var myId = id;
         var exp = $("#ExpTask").val();
         var shared = document.getElementById("IsShareTask").checked;
@@ -626,8 +755,167 @@
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                // TODO done task
                 try {
+                    // clear form
+                    $("#ExpTask").val("");
+                    document.getElementById("IsShareTask").checked = false;
+                    // update response_my_todo.myData
+                    response_my_todo.myData2[i].Exp = exp;
+                    response_my_todo.myData2[i].Shared = shared;
+                    response_my_todo.myData2[i].Status = "Done";
+                    var currentdate = new Date();
+                    response_my_todo.myData2[i].finishTime = currentdate.getHours() + ':' + currentdate.getMinutes();
+                    response_my_todo.myData2[i].finishDate = currentdate.getFullYear() + '-' + (currentdate.getMonth()+1) + '-' + currentdate.getDate();
+                    // remove from my tasks
+                    var table = document.getElementById("myTbl_todo_2");
+                    var row = document.getElementById("Row0_" + myId);
+                    row.parentNode.removeChild(row);
+                    var row1 = document.getElementById("Row1_" + myId);
+                    row1.parentNode.removeChild(row1);
+                    var row2 = document.getElementById("Row2_" + myId);
+                    row2.parentNode.removeChild(row2);
+                    var row3 = document.getElementById("Row3_" + myId);
+                    row3.parentNode.removeChild(row3);
+                    // done task
+                    if(shared) {
+                        // update response_my_todo.myData
+                        response_my_todo.myData.push({"TaskId":response_my_todo.myData2[i].TaskId,"Owner":response_my_todo.user,"NameTask":response_my_todo.myData2[i].NameTask,"startTime":response_my_todo.myData2[i].startTime,"startDate":response_my_todo.myData2[i].startDate,"finishTime":response_my_todo.myData2[i].finishTime,"finishDate":response_my_todo.myData2[i].finishDate,"priorityTask":response_my_todo.myData2[i].priorityTask,"NoteTask":response_my_todo.myData2[i].NoteTask,"Status":response_my_todo.myData2[i].Status,"RateAvg":0,"CmtNo":0,"PostponeTime":response_my_todo.myData2[i].PostponeTime,"PostponeDate":response_my_todo.myData2[i].PostponeDate,"Exp":exp,"Shared":"True"});
+                        // add to share tasks
+                        var Newtable = document.getElementById("myTbl_todo_1");
+                        var row2 = Newtable.insertRow(0);
+                        var NameCell2 = row2.insertCell(0);
+                        NameCell2.setAttribute("colspan", 3);
+                        NameCell2.innerHTML = response_my_todo.myData2[i].NameTask;
+                        NameCell2.setAttribute("name", "NameTask_" + response_my_todo.myData2[i].TaskId);
+                        NameCell2.setAttribute("id", "NameTask_" + response_my_todo.myData2[i].TaskId);
+                        //NameCell2.setAttribute("style", "cursor:pointer");
+                        // Star field
+                        var starRow = Newtable.insertRow(1);
+                        var StarCell = starRow.insertCell(0);
+                        StarCell.setAttribute("colspan", 3);
+                        var StarSpan = document.createElement("span");
+                        StarSpan.setAttribute("class", "star-rating");
+                        StarCell.appendChild(StarSpan);
+
+                        var Star1 = document.createElement("a");
+                        Star1.setAttribute("href", "javascript: submitRating(" + response_my_todo.myData2[i].TaskId + ",1, "+ response_my_todo.user +")");
+                        StarSpan.appendChild(Star1);
+                        var StarImg1 = document.createElement("img");
+                        if(response_my_todo.myData2[i].RateAvg >= 0.5)
+                            StarImg1.setAttribute("src", "../images/bright-star.png");
+                        else
+                            StarImg1.setAttribute("src", "../images/dark-star.png");
+                        StarImg1.setAttribute("alt", "star1");
+                        StarImg1.setAttribute("height", "10");
+                        StarImg1.setAttribute("width", "10");
+                        Star1.appendChild(StarImg1);
+
+                        var Star2 = document.createElement("a");
+                        Star2.setAttribute("href", "javascript: submitRating(" + response_my_todo.myData2[i].TaskId + ",2, "+ response_my_todo.user+")");
+                        StarSpan.appendChild(Star2);
+                        var StarImg2 = document.createElement("img");
+                        if(response_my_todo.myData2[i].RateAvg >= 1.5)
+                            StarImg2.setAttribute("src", "../images/bright-star.png");
+                        else
+                            StarImg2.setAttribute("src", "../images/dark-star.png");
+                        StarImg2.setAttribute("alt", "star2");
+                        StarImg2.setAttribute("height", "10");
+                        StarImg2.setAttribute("width", "10");
+                        Star2.appendChild(StarImg2);
+
+                        var Star3 = document.createElement("a");
+                        Star3.setAttribute("href", "javascript: submitRating(" + response_my_todo.myData2[i].TaskId + ",3, "+ response_my_todo.user+")");
+                        StarSpan.appendChild(Star3);
+                        var StarImg3 = document.createElement("img");
+                        if(response_my_todo.myData2[i].RateAvg >= 2.5)
+                            StarImg3.setAttribute("src", "../images/bright-star.png");
+                        else
+                            StarImg3.setAttribute("src", "../images/dark-star.png");
+                        StarImg3.setAttribute("alt", "star3");
+                        StarImg3.setAttribute("height", "10");
+                        StarImg3.setAttribute("width", "10");
+                        Star3.appendChild(StarImg3);
+
+                        var Star4 = document.createElement("a");
+                        Star4.setAttribute("href", "javascript: submitRating(" + response_my_todo.myData2[i].TaskId + ",4, "+ response_my_todo.user+")");
+                        StarSpan.appendChild(Star4);
+                        var StarImg4 = document.createElement("img");
+                        if(response_my_todo.myData2[i].RateAvg >= 3.5)
+                            StarImg4.setAttribute("src", "../images/bright-star.png");
+                        else
+                            StarImg4.setAttribute("src", "../images/dark-star.png");
+                        StarImg4.setAttribute("alt", "star4");
+                        StarImg4.setAttribute("height", "10");
+                        StarImg4.setAttribute("width", "10");
+                        Star4.appendChild(StarImg4);
+
+                        var Star5 = document.createElement("a");
+                        Star5.setAttribute("href", "javascript: submitRating(" + response_my_todo.myData2[i].TaskId + ",5, "+ response_my_todo.user+")");
+                        StarSpan.appendChild(Star5);
+                        var StarImg5 = document.createElement("img");
+                        if(response_my_todo.myData2[i].RateAvg >= 4.5)
+                            StarImg5.setAttribute("src", "../images/bright-star.png");
+                        else
+                            StarImg5.setAttribute("src", "../images/dark-star.png");
+                        StarImg5.setAttribute("alt", "star5");
+                        StarImg5.setAttribute("height", "10");
+                        StarImg5.setAttribute("width", "10");
+                        Star5.appendChild(StarImg5);
+                        // Exp field
+                        var ExpRow = Newtable.insertRow(2);
+                        var ExpCell2 = ExpRow.insertCell(0);
+                        ExpCell2.setAttribute("colspan", 3);
+                        if(exp)
+                            ExpCell2.innerHTML = "<b>Experience</b>: " + exp;
+                        ExpCell2.setAttribute("name", "ExpTask_" + response_my_todo.myData2[i].TaskId);
+                        ExpCell2.setAttribute("id", "ExpTask_" + response_my_todo.myData2[i].TaskId);
+                        // Note field
+                        var NoteRow = Newtable.insertRow(3);
+                        var NoteCell2 = NoteRow.insertCell(0);
+                        NoteCell2.setAttribute("colspan", 3);
+                        if(response_my_todo.myData2[i].NoteTask)
+                            NoteCell2.innerHTML = "<b>Note</b>: " + response_my_todo.myData2[i].NoteTask;
+                        NoteCell2.setAttribute("name", "NoteTask_" + response_my_todo.myData2[i].TaskId);
+                        NoteCell2.setAttribute("id", "NoteTask_" + response_my_todo.myData2[i].TaskId);
+                        // Label field
+                        var Labelrow = Newtable.insertRow(4);
+                        var LabelCell = Labelrow.insertCell(0);
+                        LabelCell.setAttribute("colspan", 3);
+                        var LabelCmm = document.createElement("b");
+                        LabelCmm.innerHTML = "Comments";
+                        LabelCell.appendChild(LabelCmm);
+                        // Comment field
+                        var Cmmrow = Newtable.insertRow(5);
+                        var CmmCell = Cmmrow.insertCell(0);
+                        CmmCell.setAttribute("colspan", 3);
+                        var CmmTable = document.createElement("table");
+                        CmmTable.setAttribute("id", "show_comment_" + response_my_todo.myData2[i].TaskId);
+                        CmmCell.appendChild(CmmTable);
+                        for(var j=0;j < response_my_todo.myComments.length; j++){
+                            for(var k=0;k<response_my_todo.myComments[j].length;k++){
+                                if(response_my_todo.myComments[j][k].TaskId == response_my_todo.myData2[i].TaskId){
+                                    var SubCmmrow = CmmTable.insertRow(0);
+                                    var SubCmmCell = SubCmmrow.insertCell(0);
+                                    SubCmmCell.innerHTML = response_my_todo.myComments[j][k].Comment;
+                                }
+                            }
+                        }
+                        // Post field
+                        var Postrow = Newtable.insertRow(6);
+                        var PostCell = Postrow.insertCell(0);
+                        PostCell.setAttribute("colspan", 3);
+                        PostCell.setAttribute("colspan", "2");
+                        PostCell.setAttribute("id", "comment_td_" + response_my_todo.myData2[i].TaskId);
+                        PostCell.setAttribute("name", "comment_td_" + response_my_todo.myData2[i].TaskId);
+                        var PostInput = document.createElement("input");
+                        PostCell.appendChild(PostInput);
+                        PostInput.setAttribute("type", "text");
+                        PostInput.setAttribute("width", "200px");
+                        PostInput.setAttribute("id", "comment_" + response_my_todo.myData2[i].TaskId);
+
+                        setFunctionForSharedField();
+                    }
+                    setChart();
                 }
                 catch(ex){
                     alert(ex);
@@ -680,7 +968,8 @@
                     var taskId = JSON.parse(this.responseText).taskId;
                     var table = document.getElementById("myTbl_todo_2");
                     var row = table.insertRow(0);
-                    row.setAttribute("name", "Row_" + taskId);
+                    row.setAttribute("name", "Row0_" + taskId);
+                    row.setAttribute("id", "Row0_" + taskId);
                     // Task Infor field
                     var NameCell = row.insertCell(0);
                     NameCell.setAttribute("colspan", 3);
@@ -695,16 +984,15 @@
                     NameCell.appendChild(NameTab);
 
                     var date_row = table.insertRow(1);
-                    date_row.setAttribute("name", "Row_" + taskId);
+                    date_row.setAttribute("name", "Row1_" + taskId);
+                    date_row.setAttribute("id", "Row1_" + taskId);
                     var DateCell = date_row.insertCell(0);
                     DateCell.setAttribute("colspan", 3);
                     var DateTab = document.createElement("label");
-                    var StartDateTab = document.createElement("small");
-                    StartDateTab.innerHTML = "Start: " + SDate + " " + STime + "<br />Finish: " + FDate + " " + FTime;
-                    StartDateTab.setAttribute("name", "TimeTask2_" + taskId);
-                    StartDateTab.setAttribute("id", "TimeTask2_" + taskId);
-                    StartDateTab.appendChild(DateTab);
-                    DateCell.appendChild(StartDateTab);
+                    DateTab.innerHTML = "<small>Start: " + SDate + " " + STime + "<br />Finish: " + FDate + " " + FTime + "</small>";
+                    DateTab.setAttribute("name", "TimeTask2_" + taskId);
+                    DateTab.setAttribute("id", "TimeTask2_" + taskId);
+                    DateCell.appendChild(DateTab);
 
                     var PriorityTab = document.createElement("IMG");
                     if(priority == 4) {
@@ -730,24 +1018,24 @@
                     DateCell.appendChild(PriorityTab);
 
                     var note_row = table.insertRow(2);
-                    note_row.setAttribute("name", "Row_" + taskId);
+                    note_row.setAttribute("name", "Row2_" + taskId);
+                    note_row.setAttribute("id", "Row2_" + taskId);
                     var NoteCell = note_row.insertCell(0);
                     NoteCell.setAttribute("colspan", 3);
                     var NoteTab = document.createElement("label");
-                    var smallNoteTab = document.createElement("small");
-                    smallNoteTab.innerHTML = "Note: " + NoteTask;
-                    smallNoteTab.setAttribute("name", "NoteTask2_" + taskId);
-                    smallNoteTab.setAttribute("id", "NoteTask2_" + taskId);
-                    smallNoteTab.appendChild(NoteTab);
-                    NoteCell.appendChild(smallNoteTab);
+                    NoteTab.innerHTML = "<small>Note: " + NoteTask + "</small>";
+                    NoteTab.setAttribute("name", "NoteTask2_" + taskId);
+                    NoteTab.setAttribute("id", "NoteTask2_" + taskId);
+                    NoteCell.appendChild(NoteTab);
                     // Delete field
                     var button_row = table.insertRow(3);
-                    button_row.setAttribute("name", "Row_" + taskId);
+                    button_row.setAttribute("name", "Row3_" + taskId);
+                    button_row.setAttribute("id", "Row3_" + taskId);
                     var DeleteCell = button_row.insertCell(0);
                     var DeleteBtn = document.createElement("IMG");
                     DeleteBtn.innerHTML = "Delete";
                     //DeleteBtn.setAttribute("class", "ui-btn ui-btn-inline ui-corner-all");
-                    DeleteBtn.setAttribute("src", "https://cdn4.iconfinder.com/data/icons/colicon/24/close_delete-128.png");
+                    DeleteBtn.setAttribute("src", "../images/check_delete.png");
                     DeleteBtn.setAttribute("width", 42);
                     DeleteBtn.setAttribute("height", 42);
                     DeleteBtn.setAttribute("title", "Delete Task");
@@ -769,7 +1057,7 @@
                     MainDiv.appendChild(ModifyButton);
                     //ModifyButton.innerHTML = "Modify";
                     var ModifyImg = document.createElement("IMG");
-                    ModifyImg.setAttribute("src", "http://www.garagemotoguzzi.com/wp-content/themes/moto-guzzi/img/svg/modify-icon.png");
+                    ModifyImg.setAttribute("src", "../images/modify-icon.png");
                     ModifyImg.setAttribute("width", 42);
                     ModifyImg.setAttribute("height", 42);
                     ModifyImg.setAttribute("title", "Modify Task");
@@ -791,7 +1079,7 @@
                     var DoneButton = document.createElement("A");
                     MainDoneDiv.appendChild(DoneButton);
                     var DoneImg = document.createElement("IMG");
-                    DoneImg.setAttribute("src", "https://cdn4.iconfinder.com/data/icons/colicon/24/checkmark_done_complete-512.png");
+                    DoneImg.setAttribute("src", "../images/check_done.png");
                     DoneImg.setAttribute("width", 42);
                     DoneImg.setAttribute("height", 42);
                     DoneImg.setAttribute("title", "Done Task");
@@ -800,6 +1088,8 @@
                     DoneImg.setAttribute("onclick", "setPara2Popup4DoneButton(" + i + ")");
                     //DoneButton.innerHTML = "Done";
                     DoneButton.setAttribute("data-rel", "popup");
+
+                    setFunction();
                 }
                 catch(ex){
                     alert(ex);
@@ -882,6 +1172,9 @@
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 var Suggesttable = document.getElementById("sugTbl_todo");
+                while (Suggesttable.firstChild) {
+                    Suggesttable.removeChild(Suggesttable.firstChild);
+                }
                 var response_my_suggestion = JSON.parse(this.responseText);
                 if(response_my_suggestion.mySuggestion.length < 1){
                     var NameCell2 = document.createElement("label");
