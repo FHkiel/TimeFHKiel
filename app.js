@@ -63,15 +63,15 @@ initPassport(passport);
 // isAuthenticated added by abhishek to protect routes//
 app.use('/', login(passport));
 app.use('/login', login(passport));
-app.use('/home',isAuthenticated(),timeTable);
+app.use('/home',isAuthenticated(),timeTable); //routes to main page
 app.use('/users',isAuthenticated(), users);
-app.use('/upload',isAuthenticated(), uploadGet);
-app.use('/upload',isAuthenticated(), uploadPost);
-app.use('/calendar',isAuthenticated(), calendar);
-app.use('/timeTable', isAuthenticated(), timeTable);
-app.use('/getTimes',isAuthenticated(), getTimesPost);
-app.use('/chat',isAuthenticated(),chats);
-app.use('/getClassesName', getClassesName);
+app.use('/upload',isAuthenticated(), uploadGet); //the user interface to upload pdf files for conversion
+app.use('/upload',isAuthenticated(), uploadPost); // RESTful post method that receives pdf file from http client
+app.use('/calendar',isAuthenticated(), calendar); //test page
+app.use('/timeTable', isAuthenticated(), timeTable); //html GUI for calendar
+app.use('/getTimes',isAuthenticated(), getTimesPost); // test page
+app.use('/chat',isAuthenticated(),chats);  // contains client side webSocket logic and GUI for chat
+app.use('/getClassesName', getClassesName); // RESTful get method that provides all classes name in the DB
 app.use('/getTaskData',isAuthenticated(), getTaskData);
 app.use('/DoneTask',isAuthenticated(), doneTask);
 app.use('/ModifyTask',isAuthenticated(), ModifyTask);

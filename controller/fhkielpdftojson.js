@@ -5,9 +5,9 @@ var moment = require('moment');
 var fs = require('fs');
 var path = require('path');
 
-var pages = [];
+var pages = []; //convert JSON from PDF contains array of element called pages that represent JSON version of FH Kiel class time table
 
-var timetable = [];
+var timetable = []; //stores refined timetable ready to be inserted in DB
 
 
 
@@ -15,28 +15,28 @@ var timetable = [];
 function convertPDF2JSON(objdata) {
 
     pages = objdata.formImage.Pages;
-    for (var p = 0; p < pages.length; p++) {
+    for (var p = 0; p < pages.length; p++) { // iterates each page
 
         var lines = removeDuplicates(pages[p].VLines); //pdf2Json does not represent PDF line as it is, so remove duplicate lines
         var daysInWeek = getNumberOfWeekDays(lines);    //finds number of days by detecting vertical lines with estimated length
-        var dayCounter = 0;
-        var lineHeight;
-        var lineDistance;
-        var exactLineDistance;
-        var xStartPosition = lines[0].x;
+        var dayCounter = 0; //store that how many days of week a single calendar page holds
+        var lineHeight; //height of line in a single day in calendar page
+        var lineDistance; // distance between vertical lines
+        var exactLineDistance; //
+        var xStartPosition = lines[0].x; // first occurance of a verticle line in the page
 
         //loop to detect vertical line height and distance in single day of a page
         for (var i = 50; i < 100; i++) {
-            if (lines[i].l > 4) {
+            if (lines[i].l > 4) { // normally a line height should be greater than 4 to be considered a day
                 lineHeight = lines[i].l;
-                lineDistance = ((lines[i + 1].x + 0.1 - lines[i].x).toFixed(2)); //exaggerated line
+                lineDistance = ((lines[i + 1].x + 0.1 - lines[i].x).toFixed(2)); // distance between two adjecent vertical line and adds 0.1 to be compared with other lines
                 exactLineDistance = (lines[i + 1].x - lines[i].x);
                 break;
             }
 
         }
 
-        //detect where vertical lines has gap, the gap will represent a class
+        //detect where vertical lines has gap greater than lineDistance variable, the gap will represent a class
 
         for (var w = 0; w < lines.length - 1; w++) {
 
@@ -106,6 +106,7 @@ function compare(a, b) {
     return 0;
 }
 
+// "pdf2json" Github project parses somelines twice or three times, there for removeDuplicates method is used to delete duplicate lines
 function removeDuplicates(vLines) { //receives Vlines
     var arrResult = [];
     var nonDuplicatedArray = [];
@@ -130,7 +131,7 @@ function removeDuplicates(vLines) { //receives Vlines
 
 
 //console.log(unescape(objdata.formImage.Pages[0].Texts));
-
+// in every page of calendar there is a week number written, the getCalWeeks methods finds that number and convert than in date
 function getCalWeeks(txt){
     var weeks = [];
     var extTxt;
@@ -169,7 +170,7 @@ function getCalWeeks(txt){
     return weeks;
 }
 
-
+// once a class is found on calendar page the getClassDetails method utilizes x,y positions and reads the text
 function getClassDetails(txt, x1, x2, y1, y2){
     var extTxt;
 
@@ -197,7 +198,7 @@ function getClassDetails(txt, x1, x2, y1, y2){
 
 }
 
-
+// the calendar pages contains either 5,6, or 7 days of week, thus getNumberOfWeeksDays finds number of days in a week
 function getNumberOfWeekDays(lines) {
 
 
@@ -213,6 +214,7 @@ function getNumberOfWeekDays(lines) {
     return days;
 }
 
+//receives w as weeks number and y as year and returns starting date of the week
 function getDateOfISOWeek(w, y) {
 
     var simple = new Date(y, 0, 1 + (w - 1) * 7);
@@ -227,6 +229,7 @@ function getDateOfISOWeek(w, y) {
     return ISOWeekStart;
 } // thanks to Jordan Trudgatt
 
+//this method looks into calendar page and finds which year the calendar page belongs to
 function getYear(txt){
     var extTxt;
     var result=0;

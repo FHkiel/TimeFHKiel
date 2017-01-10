@@ -7,12 +7,6 @@ var fs2 = require('fs'), PDFParser = require("pdf2json");
 
 var pdfParser = new PDFParser();
 
-
-
-
-
-
-
 exports.file = function(req, res) {
     req.pipe(req.busboy);
     var filePath;
